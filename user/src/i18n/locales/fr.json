@@ -1,0 +1,60 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "poles": "Pôles",
+    "services": "Services",
+    "sectors": "Secteurs",
+    "trainings": "Formations",
+    "preregistration": "Pré-inscription",
+    "recruitment": "Recrutement",
+    "methodology": "Méthodologie",
+    "certifications": "Certifications",
+    "whyus": "Pourquoi nous",
+    "achievements": "Réalisations",
+    "news": "Actualités",
+    "smepacks": "Packs PME",
+    "downloads": "Téléchargements",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "myspace": "Mon espace",
+    "profile": "Profil",
+    "trainer": "Formateur",
+    "login": "Connexion",
+    "admin": "Admin",
+    "requestQuote": "Demander un devis",
+    "menu": "Menu",
+    "businessCenter": "Business Center",
+    "myFiles": "Mes dossiers",
+    "candidateArea": "Espace candidat",
+    "internships": "Stages",
+    "resources": "Ressources",
+    "logout": "Déconnexion"
+  },
+  "footer": {
+    "tagline": "Cabinet conseil RH, formation et recrutement au Congo.",
+    "explore": "Explorer",
+    "institutional": "Institutionnel",
+    "services": "Services",
+    "contact": "Contact",
+    "legal": "Mentions légales",
+    "rights": "Tous droits réservés."
+  },
+  "language": {
+    "switchTo": "Changer de langue",
+    "fr": "Français",
+    "en": "English"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "submit": "Envoyer",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "back": "Retour",
+    "next": "Suivant",
+    "search": "Rechercher",
+    "viewDetails": "Voir le détail",
+    "learnMore": "En savoir plus",
+    "comingSoon": "Bientôt disponible"
+  }
+}
