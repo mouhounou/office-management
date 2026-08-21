@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Phone, Mail, MapPin, Clock, Facebook, Instagram, ArrowUpRight } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 
 type FooterLink = { to: string; label: string };
 
@@ -130,6 +131,11 @@ export function Footer() {
             {t("footer.contact")} <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
+      </div>
+
+      {/* Newsletter */}
+      <div className="relative container mx-auto px-4 pb-12">
+        <NewsletterSignup source="footer" />
       </div>
 
       {/* Bottom bar */}

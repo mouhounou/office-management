@@ -9,7 +9,8 @@ import { useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { GraduationCap, CheckCircle2, Send, User, IdCard, BookOpen, ShieldCheck, Clock, BadgeCheck } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { errorMessage } from "@/lib/api";
+import { submitPreRegistration } from "@/lib/submissions";
 
 export const Route = createFileRoute("/pre-inscription")({
   head: () => ({
@@ -85,17 +86,31 @@ function PreInscription() {
       return;
     }
     setSubmitting(true);
-    const { data: sessionData } = await supabase.auth.getSession();
-    const submitter_id = sessionData.session?.user.id ?? null;
-    const { error } = await supabase.from("pre_registrations").insert({ ...parsed.data, submitter_id });
-    setSubmitting(false);
-    if (error) {
-      console.error("[pre-inscription] insert error", error);
-      toast.error("Erreur lors de l'envoi. Réessayez ou appelez-nous au 069480905.");
-      return;
+    try {
+      // Le formulaire est en snake_case, l'API attend du camelCase.
+      const d = parsed.data;
+      await submitPreRegistration({
+        fullName: d.full_name,
+        email: d.email,
+        phone: d.phone,
+        dateOfBirth: d.date_of_birth,
+        placeOfBirth: d.place_of_birth,
+        neighborhood: d.neighborhood,
+        profession: d.profession,
+        financingType: d.financing_type,
+        idDocumentType: d.id_document_type,
+        idDocumentNumber: d.id_document_number,
+        training: d.training,
+        duration: d.duration,
+        startDate: d.start_date,
+      });
+      setDone(true);
+      toast.success("Pré-inscription enregistrée ! Nous vous recontactons rapidement.");
+    } catch (error) {
+      toast.error(errorMessage(error));
+    } finally {
+      setSubmitting(false);
     }
-    setDone(true);
-    toast.success("Pré-inscription enregistrée ! Nous vous recontactons rapidement.");
   };
 
   if (done) {

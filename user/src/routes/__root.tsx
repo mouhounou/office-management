@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -9,7 +10,7 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
-import "@/i18n";
+import { applyPreferredLanguage } from "@/i18n";
 
 function NotFoundComponent() {
   return (
@@ -126,6 +127,12 @@ import { Toaster } from "@/components/ui/sonner";
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  // Le rendu serveur est toujours en français : on bascule sur la langue du
+  // visiteur après l'hydratation, sans provoquer d'écart serveur/client.
+  useEffect(() => {
+    applyPreferredLanguage();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

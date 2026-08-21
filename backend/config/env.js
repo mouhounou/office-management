@@ -17,6 +17,11 @@ module.exports = {
   jwtSecret: process.env.JWT_SECRET,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d",
   // Plusieurs origines possibles, séparées par des virgules (admin, site user…).
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_NAME,
+    apiKey: process.env.CLOUDINARY_API_KEY,
+    apiSecret: process.env.CLOUDINARY_API_SECRET,
+  },
   corsOrigins: (process.env.CORS_ORIGIN || "http://localhost:3000")
     .split(",")
     .map((o) => o.trim())

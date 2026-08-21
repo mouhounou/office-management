@@ -3,22 +3,24 @@ import { Section } from "@/components/Section";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, Tag, ArrowLeft, ArrowRight } from "lucide-react";
-import { getPost, posts } from "@/lib/blog";
+import { fetchPost, fetchPosts, parseContent, type Post } from "@/lib/content";
+import { formatFrenchDate, postImage } from "@/lib/content-images";
 
 export const Route = createFileRoute("/blog_/$slug")({
-  loader: ({ params }) => {
-    const post = getPost(params.slug);
+  loader: async ({ params }) => {
+    const post = await fetchPost(params.slug).catch(() => null);
     if (!post) throw notFound();
-    return { post };
+    const others = await fetchPosts().catch(() => [] as Post[]);
+    return { post, others };
   },
   head: ({ loaderData }) => ({
     meta: loaderData
       ? [
-          { title: `${loaderData.post.t} — Office Management` },
-          { name: "description", content: loaderData.post.e },
-          { property: "og:title", content: loaderData.post.t },
-          { property: "og:description", content: loaderData.post.e },
-          { property: "og:image", content: loaderData.post.img },
+          { title: `${loaderData.post.title} — Office Management` },
+          { name: "description", content: loaderData.post.excerpt },
+          { property: "og:title", content: loaderData.post.title },
+          { property: "og:description", content: loaderData.post.excerpt },
+          { property: "og:image", content: postImage(loaderData.post.imageUrl, loaderData.post.category) },
           { property: "og:type", content: "article" },
         ]
       : [],
@@ -27,16 +29,17 @@ export const Route = createFileRoute("/blog_/$slug")({
 });
 
 function BlogPost() {
-  const { post } = Route.useLoaderData();
-  const related = posts.filter((p) => p.slug !== post.slug && p.c === post.c).slice(0, 4);
-  const fallback = posts.filter((p) => p.slug !== post.slug).slice(0, 4);
+  const { post, others } = Route.useLoaderData();
+  const blocks = parseContent(post.content);
+  const related = others.filter((p) => p.slug !== post.slug && p.category === post.category).slice(0, 4);
+  const fallback = others.filter((p) => p.slug !== post.slug).slice(0, 4);
   const suggestions = related.length > 0 ? related : fallback;
 
   return (
     <>
       {/* HERO */}
       <section className="relative overflow-hidden py-20 md:py-24">
-        <img src={post.img} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-25" />
+        <img src={postImage(post.imageUrl, post.category)} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-25" />
         <div className="absolute inset-0 -z-10 gradient-hero opacity-95" />
         <div className="absolute inset-0 -z-10 bg-grid" />
         <div className="pointer-events-none absolute -top-24 -left-20 h-96 w-96 rounded-full bg-primary/20 blur-3xl animate-float" />
@@ -46,11 +49,11 @@ function BlogPost() {
             <Link to="/blog"><ArrowLeft className="h-4 w-4 mr-1" /> Tous les articles</Link>
           </Button>
           <div className="inline-flex items-center gap-2 glass rounded-full px-3 py-1 mb-5 text-xs font-medium uppercase tracking-widest text-primary">
-            <Tag className="h-3 w-3" /> {post.c}
+            <Tag className="h-3 w-3" /> {post.category}
           </div>
-          <h1 className="font-display text-3xl md:text-5xl font-extrabold leading-[1.08] mb-5">{post.t}</h1>
+          <h1 className="font-display text-3xl md:text-5xl font-extrabold leading-[1.08] mb-5">{post.title}</h1>
           <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5"><Calendar className="h-4 w-4 text-primary" /> {post.d}</span>
+            <span className="flex items-center gap-1.5"><Calendar className="h-4 w-4 text-primary" /> {formatFrenchDate(post.publishedAt ?? post.createdAt)}</span>
             <span className="flex items-center gap-1.5"><Clock className="h-4 w-4 text-primary" /> {post.readTime} de lecture</span>
           </div>
         </div>
@@ -61,11 +64,11 @@ function BlogPost() {
         <div className="grid lg:grid-cols-[minmax(0,1fr)_340px] gap-10 xl:gap-14 items-start">
           {/* Article */}
           <div className="min-w-0">
-            <img src={post.img} alt={post.t} className="w-full rounded-2xl shadow-elegant mb-10 aspect-video object-cover" />
+            <img src={postImage(post.imageUrl, post.category)} alt={post.title} className="w-full rounded-2xl shadow-elegant mb-10 aspect-video object-cover" />
 
             <article className="space-y-5 max-w-3xl">
-              <p className="text-lg text-muted-foreground leading-relaxed border-l-2 border-primary pl-4">{post.e}</p>
-              {post.content.map((block, i) => {
+              <p className="text-lg text-muted-foreground leading-relaxed border-l-2 border-primary pl-4">{post.excerpt}</p>
+              {blocks.map((block, i) => {
                 if (block.type === "h") {
                   return <h2 key={i} className="font-display text-2xl font-bold mt-8 mb-2">{block.text}</h2>;
                 }
@@ -106,10 +109,10 @@ function BlogPost() {
                 <div className="space-y-4">
                   {suggestions.map((p) => (
                     <Link key={p.slug} to="/blog/$slug" params={{ slug: p.slug }} className="group flex gap-3">
-                      <img src={p.img} alt="" className="h-16 w-20 rounded-lg object-cover shrink-0" loading="lazy" />
+                      <img src={postImage(p.imageUrl, p.category)} alt="" className="h-16 w-20 rounded-lg object-cover shrink-0" loading="lazy" />
                       <div className="min-w-0">
-                        <div className="text-[11px] uppercase tracking-wider text-primary mb-1">{p.c}</div>
-                        <div className="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-primary transition-colors">{p.t}</div>
+                        <div className="text-[11px] uppercase tracking-wider text-primary mb-1">{p.category}</div>
+                        <div className="text-sm font-semibold leading-snug line-clamp-2 group-hover:text-primary transition-colors">{p.title}</div>
                       </div>
                     </Link>
                   ))}

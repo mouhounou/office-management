@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
+import { errorMessage } from "@/lib/api";
+import { subscribeToNewsletter } from "@/lib/submissions";
 
 const schema = z.object({ email: z.string().trim().email("Email invalide").max(255) });
 
@@ -20,17 +21,16 @@ export function NewsletterSignup({ source = "footer" }: { source?: string }) {
       return;
     }
     setLoading(true);
-    const { error } = await supabase
-      .from("newsletter_subscribers")
-      .insert({ email: parsed.data.email, source });
-    setLoading(false);
-    if (error) {
-      if (error.code === "23505") toast.info("Vous êtes déjà inscrit. Merci !");
-      else toast.error("Erreur, réessayez plus tard.");
-      return;
+    try {
+      const alreadySubscribed = await subscribeToNewsletter(parsed.data.email, source);
+      if (alreadySubscribed) toast.info("Vous êtes déjà inscrit. Merci !");
+      else toast.success("Merci ! Vous êtes inscrit à notre newsletter.");
+      setEmail("");
+    } catch (error) {
+      toast.error(errorMessage(error));
+    } finally {
+      setLoading(false);
     }
-    toast.success("Merci ! Vous êtes inscrit à notre newsletter.");
-    setEmail("");
   };
 
   return (

@@ -18,6 +18,39 @@ import imgLangues from "@/assets/reunion-conseil.jpg";
 import imgDigital from "@/assets/hero.jpg";
 import imgEntrepreneuriat from "@/assets/training.jpg";
 
+import { fetchFormations, type Formation } from "@/lib/content";
+import { formationImage } from "@/lib/content-images";
+
+/**
+ * Icône associée à chaque catégorie du catalogue. Les intitulés et programmes
+ * sont administrés dans le back-office ; seule l'illustration reste locale.
+ */
+const CATEGORY_ICONS: Record<string, typeof Users> = {
+  "Ressources Humaines & Administration": Users,
+  "Comptabilité & Gestion": Calculator,
+  "Informatique & Bureautique": Monitor,
+  "Commerce & Marketing": ShoppingBag,
+  "Logistique & Transit": Truck,
+  "QHSE & Industrie": ShieldCheck,
+  "Langues & Communication": Languages,
+  "Digital & Innovation": Code2,
+  Entrepreneuriat: Rocket,
+  "Formations Techniques": GraduationCap,
+};
+
+type CategoryGroup = { title: string; items: Formation[] };
+
+/** Regroupe les formations par catégorie, dans l'ordre d'affichage choisi en admin. */
+function groupByCategory(formations: Formation[]): CategoryGroup[] {
+  const groups = new Map<string, Formation[]>();
+  for (const formation of formations) {
+    const list = groups.get(formation.category) ?? [];
+    list.push(formation);
+    groups.set(formation.category, list);
+  }
+  return [...groups.entries()].map(([title, items]) => ({ title, items }));
+}
+
 export const Route = createFileRoute("/formations")({
   head: () => ({
     meta: [
@@ -27,90 +60,20 @@ export const Route = createFileRoute("/formations")({
       { property: "og:description", content: "Programmes certifiants pour développer vos compétences." },
     ],
   }),
+  loader: async () => {
+    try {
+      return { formations: await fetchFormations() };
+    } catch {
+      return { formations: [] as Formation[] };
+    }
+  },
   component: Formations,
 });
 
-const categories = [
-  { icon: Users, image: imgRH, title: "Ressources Humaines & Administration", items: [
-      "Assistant(e) RH (Sage 100 i7 Paie & RH et Excel)",
-      "Management RH (Sage 100 i7 Paie & RH)",
-      "Gestion administrative du personnel (Excel)",
-      "Secrétariat et Assistant(e) de Direction",
-      "Secrétariat Comptable",
-      "Techniques de recrutement et gestion des talents",
-      "Gestion des conflits en entreprise",
-      "Communication professionnelle",
-  ]},
-  { icon: Calculator, image: imgCompta, title: "Comptabilité & Gestion", items: [
-      "Comptabilité (Sage 100 i7 Comptabilité)",
-      "Gestion de Caisse (Sage 100 i7 Saisie de Caisse)",
-      "Fiscalité d'entreprise",
-      "Analyse financière",
-      "Comptabilité générale et analytique",
-      "Gestion budgétaire",
-      "Initiation à l'audit comptable",
-  ]},
-  { icon: Monitor, image: imgInfo, title: "Informatique & Bureautique", items: [
-      "Excel Débutant à Avancé",
-      "Gestion de paie sur Excel",
-      "Bureautique complète (Word, Excel, PowerPoint)",
-      "Power BI & Tableaux de bord",
-      "Informatique de base",
-      "Maintenance informatique",
-      "Initiation aux réseaux informatiques",
-  ]},
-  { icon: ShoppingBag, image: imgCommerce, title: "Commerce & Marketing", items: [
-      "Gestion Commerciale (Sage 100 i7 Gescom)",
-      "Vente en ligne",
-      "E-commerce",
-      "Community Management",
-      "Marketing Digital",
-      "Techniques de vente et négociation",
-      "Service client et relation commerciale",
-  ]},
-  { icon: Truck, image: imgLogistique, title: "Logistique & Transit", items: [
-      "Assistant(e) Logistique (Gescom et Excel)",
-      "Gestion des Stocks & Approvisionnements",
-      "Logistique et Transport",
-      "Procédures douanières & Transit",
-      "Gestion des opérations portuaires",
-      "Chaîne logistique et Supply Chain",
-  ]},
-  { icon: ShieldCheck, image: imgQHSE, title: "QHSE & Industrie", items: [
-      "Superviseur QHSE (Excel)",
-      "QHSE : Qualité, Hygiène, Sécurité et Environnement",
-      "Sécurité au travail",
-      "Gestion des risques professionnels",
-      "Sensibilisation HSE en entreprise",
-  ]},
-  { icon: Languages, image: imgLangues, title: "Langues & Communication", items: [
-      "Anglais professionnel",
-      "Anglais des affaires",
-      "Communication d'entreprise",
-      "Techniques de prise de parole en public",
-  ]},
-  { icon: Code2, image: imgDigital, title: "Développement Digital & Technologie", items: [
-      "Programmation",
-      "Création de sites web",
-      "Design graphique",
-      "Montage vidéo",
-      "Infographie",
-      "Initiation à l'intelligence artificielle",
-  ]},
-  { icon: Rocket, image: imgEntrepreneuriat, title: "Entrepreneuriat & Développement Personnel", items: [
-      "Création et gestion d'entreprise",
-      "Leadership professionnel",
-      "Gestion de projet",
-      "Entrepreneuriat digital",
-      "Développement personnel et coaching professionnel",
-  ]},
-];
 
-const totalModules = categories.reduce((n, c) => n + c.items.length, 0);
-
-const highlights = [
-  { icon: GraduationCap, v: `${categories.length}`, l: "Domaines d'expertise" },
-  { icon: BadgeCheck, v: `${totalModules}+`, l: "Formations disponibles" },
+const buildHighlights = (groupCount: number, total: number) => [
+  { icon: GraduationCap, v: `${groupCount}`, l: "Domaines d'expertise" },
+  { icon: BadgeCheck, v: `${total}+`, l: "Formations disponibles" },
   { icon: MonitorPlay, v: "Présentiel & en ligne", l: "Modalités flexibles" },
   { icon: Award, v: "Certifiantes", l: "Diplômes reconnus" },
 ];
@@ -125,6 +88,10 @@ const advantages = [
 ];
 
 function Formations() {
+  const { formations } = Route.useLoaderData();
+  const groups = groupByCategory(formations);
+  const highlights = buildHighlights(groups.length, formations.length);
+
   return (
     <>
       {/* HERO */}
@@ -175,13 +142,16 @@ function Formations() {
       <Section className="pt-0!">
         <SectionTitle eyebrow="Nos domaines" title="Un catalogue complet et certifiant" subtitle="Neuf domaines d'expertise pour construire ou faire évoluer votre carrière." />
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {categories.map((cat) => (
+          {groups.map((cat) => (
             <Card key={cat.title} className="group gradient-card border-border overflow-hidden hover-lift flex flex-col">
               <div className="relative h-44 overflow-hidden">
-                <img src={cat.image} alt={cat.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width={640} height={360} />
+                <img src={formationImage(cat.items[0]?.imageUrl, cat.title)} alt={cat.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" width={640} height={360} />
                 <div className="absolute inset-0 bg-linear-to-t from-background via-background/40 to-transparent" />
                 <div className="absolute top-3 left-3 h-11 w-11 rounded-xl gradient-cyan flex items-center justify-center glow-cyan">
-                  <cat.icon className="h-5 w-5 text-primary-foreground" />
+                  {(() => {
+                    const Icon = CATEGORY_ICONS[cat.title] ?? GraduationCap;
+                    return <Icon className="h-5 w-5 text-primary-foreground" />;
+                  })()}
                 </div>
                 <div className="absolute top-3 right-3 rounded-full bg-background/70 backdrop-blur px-2.5 py-1 text-[11px] font-semibold text-primary">
                   {cat.items.length} formations
@@ -191,8 +161,8 @@ function Formations() {
               <div className="p-6 flex-1 flex flex-col">
                 <ul className="space-y-2 text-sm text-muted-foreground flex-1">
                   {cat.items.slice(0, 5).map((it) => (
-                    <li key={it} className="flex items-start gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> {it}
+                    <li key={it.id} className="flex items-start gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> {it.title}
                     </li>
                   ))}
                   {cat.items.length > 5 && (

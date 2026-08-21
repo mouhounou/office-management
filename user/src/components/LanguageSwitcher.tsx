@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Globe } from "lucide-react";
+import { setLanguage, type Language } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,10 +13,7 @@ export function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
   const { i18n, t } = useTranslation();
   const current = i18n.language?.startsWith("en") ? "en" : "fr";
 
-  const change = (lng: "fr" | "en") => {
-    i18n.changeLanguage(lng);
-    if (typeof document !== "undefined") document.documentElement.lang = lng;
-  };
+  const change = (lng: Language) => setLanguage(lng);
 
   return (
     <DropdownMenu>

@@ -9,6 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2, CheckCircle2, Building2 } from "lucide-react";
 import { type RequestType, TYPE_LABELS } from "@/lib/business";
+import { errorMessage } from "@/lib/api";
+import { submitBusinessRequest } from "@/lib/submissions";
 
 const requestSchema = z.object({
   contact_name: z.string().trim().min(2, "Nom requis").max(120),
@@ -37,11 +39,29 @@ export function BusinessRequestForm({ type }: { type: RequestType }) {
       return;
     }
     setSubmitting(true);
-    // Envoi simulé (le backend Node.js branchera l'API plus tard).
-    await new Promise((r) => setTimeout(r, 600));
-    setSubmitting(false);
-    setDone(true);
-    toast.success("Demande envoyée ! Notre équipe vous recontacte sous 48h.");
+    try {
+      const d = parsed.data;
+      await submitBusinessRequest({
+        companyName: d.company,
+        contactName: d.contact_name,
+        contactEmail: d.contact_email,
+        contactPhone: d.contact_phone,
+        type,
+        title: d.title,
+        description: d.description,
+        priority: d.priority,
+        budget: d.budget || undefined,
+        deadline: d.deadline || undefined,
+        // Champs propres au type de demande (postes recherchés, effectif…).
+        details: extra,
+      });
+      setDone(true);
+      toast.success("Demande envoyée ! Notre équipe vous recontacte sous 48h.");
+    } catch (error) {
+      toast.error(errorMessage(error));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (done) {

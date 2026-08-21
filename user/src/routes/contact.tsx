@@ -8,6 +8,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Phone, Mail, MapPin, Clock, MessageCircle, Send, CheckCircle2, Headset } from "lucide-react";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+import { errorMessage } from "@/lib/api";
+import { submitContactMessage } from "@/lib/submissions";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -30,6 +33,31 @@ const infos = [
 
 function Contact() {
   const [done, setDone] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+
+    setSending(true);
+    try {
+      await submitContactMessage({
+        name: String(fd.get("name") ?? ""),
+        phone: String(fd.get("phone") ?? ""),
+        email: String(fd.get("email") ?? ""),
+        subject: String(fd.get("subject") ?? ""),
+        message: String(fd.get("message") ?? ""),
+      });
+      setDone(true);
+      toast.success("Message envoyé ! Nous vous recontactons rapidement.");
+      form.reset();
+    } catch (error) {
+      toast.error(errorMessage(error));
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <>
@@ -89,17 +117,18 @@ function Contact() {
                 <Button onClick={() => setDone(false)} variant="outline" className="border-primary/40 hover:bg-primary/10">Envoyer un autre message</Button>
               </div>
             ) : (
-              <form onSubmit={(e) => { e.preventDefault(); setDone(true); toast.success("Message envoyé ! Nous vous recontactons rapidement."); (e.target as HTMLFormElement).reset(); }} className="space-y-5">
+              <form onSubmit={onSubmit} className="space-y-5">
                 <h2 className="font-display text-2xl font-bold">Écrivez-nous</h2>
                 <div className="grid sm:grid-cols-2 gap-4">
-                  <div><Label className="mb-2 block">Nom</Label><Input required placeholder="Jean Dupont" /></div>
-                  <div><Label className="mb-2 block">Téléphone</Label><Input required placeholder="06 ..." /></div>
+                  <div><Label className="mb-2 block">Nom</Label><Input name="name" required placeholder="Jean Dupont" /></div>
+                  <div><Label className="mb-2 block">Téléphone</Label><Input name="phone" required placeholder="06 ..." /></div>
                 </div>
-                <div><Label className="mb-2 block">Email</Label><Input type="email" required placeholder="email@exemple.com" /></div>
-                <div><Label className="mb-2 block">Sujet</Label><Input required placeholder="Demande de devis, inscription, ..." /></div>
-                <div><Label className="mb-2 block">Message</Label><Textarea required rows={5} placeholder="Décrivez votre besoin..." /></div>
-                <Button type="submit" className="w-full gradient-cyan text-primary-foreground glow-cyan font-semibold hover:opacity-90">
-                  <Send className="h-4 w-4 mr-2" />Envoyer le message
+                <div><Label className="mb-2 block">Email</Label><Input name="email" type="email" required placeholder="email@exemple.com" /></div>
+                <div><Label className="mb-2 block">Sujet</Label><Input name="subject" required placeholder="Demande de devis, inscription, ..." /></div>
+                <div><Label className="mb-2 block">Message</Label><Textarea name="message" required rows={5} placeholder="Décrivez votre besoin..." /></div>
+                <Button type="submit" disabled={sending} className="w-full gradient-cyan text-primary-foreground glow-cyan font-semibold hover:opacity-90">
+                  {sending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Send className="h-4 w-4 mr-2" />}
+                  {sending ? "Envoi en cours…" : "Envoyer le message"}
                 </Button>
                 <p className="text-xs text-center text-muted-foreground">Vos informations restent strictement confidentielles.</p>
               </form>

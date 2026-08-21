@@ -4,7 +4,8 @@ import { Section, SectionTitle } from "@/components/Section";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowRight, Tag, Clock, Newspaper } from "lucide-react";
-import { posts, categories } from "@/lib/blog";
+import { fetchPosts, type Post } from "@/lib/content";
+import { formatFrenchDate, postImage } from "@/lib/content-images";
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
@@ -15,13 +16,25 @@ export const Route = createFileRoute("/blog")({
       { property: "og:description", content: "Articles, analyses et conseils RH par Office Management." },
     ],
   }),
+  loader: async () => {
+    try {
+      return { posts: await fetchPosts(), unavailable: false };
+    } catch {
+      // Le blog ne doit pas casser la page si l'API est momentanément absente.
+      return { posts: [] as Post[], unavailable: true };
+    }
+  },
   component: Blog,
 });
 
 function Blog() {
+  const { posts, unavailable } = Route.useLoaderData();
   const [active, setActive] = useState("Tous");
-  const filtered = active === "Tous" ? posts : posts.filter((p) => p.c === active);
-  const featured = posts.find((p) => p.featured)!;
+
+  // Les catégories affichées sont celles réellement présentes dans les articles.
+  const categories = ["Tous", ...Array.from(new Set(posts.map((p) => p.category)))];
+  const filtered = active === "Tous" ? posts : posts.filter((p) => p.category === active);
+  const featured = posts.find((p) => p.featured) ?? posts[0];
 
   return (
     <>
@@ -46,20 +59,21 @@ function Blog() {
       </section>
 
       {/* FEATURED */}
+      {featured ? (
       <Section className="pt-14!">
         <Link to="/blog/$slug" params={{ slug: featured.slug }} className="block">
           <Card className="group gradient-card border-border overflow-hidden grid md:grid-cols-2 hover-lift">
             <div className="relative h-64 md:h-auto overflow-hidden">
-              <img src={featured.img} alt={featured.t} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="eager" />
+              <img src={postImage(featured.imageUrl, featured.category)} alt={featured.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="eager" />
               <div className="absolute top-4 left-4 px-3 py-1 rounded-full gradient-cyan text-primary-foreground text-xs font-bold uppercase tracking-wider">À la une</div>
             </div>
             <div className="p-8 md:p-10 flex flex-col justify-center">
-              <div className="text-xs uppercase tracking-widest text-primary mb-3 flex items-center gap-2"><Tag className="h-3 w-3" /> {featured.c}</div>
-              <h2 className="font-display text-2xl md:text-3xl font-extrabold mb-4 group-hover:text-primary transition-colors">{featured.t}</h2>
-              <p className="text-muted-foreground mb-6">{featured.e}</p>
+              <div className="text-xs uppercase tracking-widest text-primary mb-3 flex items-center gap-2"><Tag className="h-3 w-3" /> {featured.category}</div>
+              <h2 className="font-display text-2xl md:text-3xl font-extrabold mb-4 group-hover:text-primary transition-colors">{featured.title}</h2>
+              <p className="text-muted-foreground mb-6">{featured.excerpt}</p>
               <div className="flex items-center justify-between text-sm">
                 <span className="flex items-center gap-3 text-muted-foreground">
-                  <span className="flex items-center gap-1"><Calendar className="h-4 w-4" /> {featured.d}</span>
+                  <span className="flex items-center gap-1"><Calendar className="h-4 w-4" /> {formatFrenchDate(featured.publishedAt ?? featured.createdAt)}</span>
                   <span className="flex items-center gap-1"><Clock className="h-4 w-4" /> {featured.readTime}</span>
                 </span>
                 <span className="inline-flex items-center gap-1 text-primary font-semibold">Lire l'article <ArrowRight className="h-4 w-4" /></span>
@@ -68,6 +82,7 @@ function Blog() {
           </Card>
         </Link>
       </Section>
+      ) : null}
 
       {/* CATEGORIES + GRID */}
       <Section className="pt-0!">
@@ -90,14 +105,14 @@ function Blog() {
             <Link key={p.slug} to="/blog/$slug" params={{ slug: p.slug }} className="block">
               <Card className="group gradient-card border-border overflow-hidden hover-lift flex flex-col h-full">
                 <div className="relative h-48 overflow-hidden">
-                  <img src={p.img} alt={p.t} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-background/80 backdrop-blur text-xs font-semibold text-primary">{p.c}</div>
+                  <img src={postImage(p.imageUrl, p.category)} alt={p.title} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-background/80 backdrop-blur text-xs font-semibold text-primary">{p.category}</div>
                 </div>
                 <div className="p-6 flex flex-col flex-1">
-                  <h3 className="font-display text-lg font-bold mb-3 group-hover:text-primary transition-colors">{p.t}</h3>
-                  <p className="text-sm text-muted-foreground mb-4 flex-1">{p.e}</p>
+                  <h3 className="font-display text-lg font-bold mb-3 group-hover:text-primary transition-colors">{p.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-4 flex-1">{p.excerpt}</p>
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {p.d}</span>
+                    <span className="flex items-center gap-1"><Calendar className="h-3 w-3" /> {formatFrenchDate(p.publishedAt ?? p.createdAt)}</span>
                     <span className="inline-flex items-center gap-1 text-primary font-semibold">Lire <ArrowRight className="h-3 w-3" /></span>
                   </div>
                 </div>
@@ -106,7 +121,11 @@ function Blog() {
           ))}
         </div>
         {filtered.length === 0 && (
-          <p className="text-center text-muted-foreground mt-8">Aucun article dans cette catégorie pour le moment.</p>
+          <p className="text-center text-muted-foreground mt-8">
+            {unavailable
+              ? "Les articles ne sont pas disponibles pour le moment. Réessayez dans quelques instants."
+              : "Aucun article dans cette catégorie pour le moment."}
+          </p>
         )}
       </Section>
 

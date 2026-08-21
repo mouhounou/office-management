@@ -10,6 +10,9 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+import { errorMessage } from "@/lib/api";
+import { submitAppointment } from "@/lib/submissions";
 import { Briefcase, Compass, GraduationCap, Search, CalendarClock } from "lucide-react";
 
 export const Route = createFileRoute("/rendez-vous")({
@@ -33,6 +36,32 @@ const motifs = [
 
 function RendezVous() {
   const [motif, setMotif] = useState("Conseils RH");
+  const [sending, setSending] = useState(false);
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+
+    setSending(true);
+    try {
+      await submitAppointment({
+        name: String(fd.get("name") ?? ""),
+        phone: String(fd.get("phone") ?? ""),
+        email: String(fd.get("email") ?? ""),
+        reason: motif,
+        preferredDate: String(fd.get("preferredDate") ?? ""),
+        timeSlot: (fd.get("timeSlot") as "matin" | "apres-midi") ?? "matin",
+        message: String(fd.get("message") ?? ""),
+      });
+      toast.success("Demande de rendez-vous envoyée ! Nous vous recontactons sous 48h.");
+      form.reset();
+    } catch (error) {
+      toast.error(errorMessage(error));
+    } finally {
+      setSending(false);
+    }
+  };
   return (
     <>
       <section className="py-24 gradient-hero">
@@ -57,22 +86,15 @@ function RendezVous() {
         </div>
 
         <Card className="gradient-card border-border p-8 max-w-2xl mx-auto">
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              toast.success("Demande de rendez-vous envoyée ! Nous vous recontactons sous 48h.");
-              (e.target as HTMLFormElement).reset();
-            }}
-            className="space-y-4"
-          >
+          <form onSubmit={onSubmit} className="space-y-4">
             <h2 className="font-display text-2xl font-bold mb-2 flex items-center gap-2">
               <CalendarClock className="h-6 w-6 text-primary" /> Réserver un rendez-vous
             </h2>
             <div className="grid sm:grid-cols-2 gap-4">
-              <div><Label>Nom complet</Label><Input required placeholder="Jean Dupont" /></div>
-              <div><Label>Téléphone</Label><Input required placeholder="06 ..." /></div>
+              <div><Label>Nom complet</Label><Input name="name" required placeholder="Jean Dupont" /></div>
+              <div><Label>Téléphone</Label><Input name="phone" required placeholder="06 ..." /></div>
             </div>
-            <div><Label>Email</Label><Input type="email" required placeholder="email@exemple.com" /></div>
+            <div><Label>Email</Label><Input name="email" type="email" required placeholder="email@exemple.com" /></div>
             <div>
               <Label>Motif</Label>
               <Select value={motif} onValueChange={setMotif}>
@@ -83,9 +105,9 @@ function RendezVous() {
               </Select>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
-              <div><Label>Date souhaitée</Label><Input type="date" required /></div>
+              <div><Label>Date souhaitée</Label><Input name="preferredDate" type="date" required /></div>
               <div><Label>Créneau</Label>
-                <Select defaultValue="matin">
+                <Select name="timeSlot" defaultValue="matin">
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="matin">Matin (8h - 12h)</SelectItem>
@@ -94,8 +116,11 @@ function RendezVous() {
                 </Select>
               </div>
             </div>
-            <div><Label>Message (facultatif)</Label><Textarea rows={4} placeholder="Précisez votre besoin..." /></div>
-            <Button type="submit" className="w-full gradient-cyan text-primary-foreground glow-cyan">Confirmer le rendez-vous</Button>
+            <div><Label>Message (facultatif)</Label><Textarea name="message" rows={4} placeholder="Précisez votre besoin..." /></div>
+            <Button type="submit" disabled={sending} className="w-full gradient-cyan text-primary-foreground glow-cyan">
+              {sending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+              {sending ? "Envoi en cours…" : "Confirmer le rendez-vous"}
+            </Button>
           </form>
         </Card>
       </Section>

@@ -8,6 +8,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+import { errorMessage } from "@/lib/api";
+import { submitApplication, submitBusinessRequest } from "@/lib/submissions";
 import { Briefcase, Users, UserCheck, Search, Send, ArrowRight, Clock, ShieldCheck, Network, Target } from "lucide-react";
 import entretien from "@/assets/entretien-recrutement.jpg";
 
@@ -45,6 +48,53 @@ const ASIDE = {
 
 function Recrutement() {
   const [tab, setTab] = useState<"candidat" | "entreprise">("candidat");
+  const [sending, setSending] = useState(false);
+
+  /**
+   * Deux destinations selon l'onglet : un candidat dépose une candidature
+   * spontanée, une entreprise ouvre une demande de recrutement dans le
+   * Business Center.
+   */
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const name = String(fd.get("name") ?? "");
+    const email = String(fd.get("email") ?? "");
+    const phoneOrCompany = String(fd.get("phoneOrCompany") ?? "");
+    const position = String(fd.get("position") ?? "");
+    const details = String(fd.get("details") ?? "");
+
+    setSending(true);
+    try {
+      if (tab === "candidat") {
+        await submitApplication({
+          fullName: name,
+          email,
+          phone: phoneOrCompany,
+          coverLetter: `Poste recherché : ${position}
+
+${details}`,
+        });
+      } else {
+        await submitBusinessRequest({
+          companyName: phoneOrCompany,
+          contactName: name,
+          contactEmail: email,
+          contactPhone: String(fd.get("phone") ?? ""),
+          type: "recrutement",
+          title: `Recrutement — ${position}`,
+          description: details,
+        });
+      }
+      toast.success("Votre demande a bien été envoyée ! Nous vous recontactons sous 48h.");
+      form.reset();
+    } catch (error) {
+      toast.error(errorMessage(error));
+    } finally {
+      setSending(false);
+    }
+  };
   return (
     <>
       {/* HERO */}
@@ -128,17 +178,21 @@ function Recrutement() {
 
           {/* Form */}
           <Card className="gradient-card border-border p-8 md:p-10">
-            <form onSubmit={(e) => { e.preventDefault(); toast.success("Votre demande a bien été envoyée ! Nous vous recontactons sous 48h."); (e.target as HTMLFormElement).reset(); }} className="space-y-5">
+            <form onSubmit={onSubmit} className="space-y-5">
               <h2 className="font-display text-2xl font-bold mb-2">{tab === "candidat" ? "Déposer ma candidature" : "Décrire mon besoin de recrutement"}</h2>
               <div className="grid sm:grid-cols-2 gap-4">
-                <div><Label className="mb-2 block">Nom complet</Label><Input required placeholder="Jean Dupont" /></div>
-                <div><Label className="mb-2 block">{tab === "candidat" ? "Téléphone" : "Entreprise"}</Label><Input required placeholder={tab === "candidat" ? "06 ..." : "Société SARL"} /></div>
+                <div><Label className="mb-2 block">Nom complet</Label><Input name="name" required placeholder="Jean Dupont" /></div>
+                <div><Label className="mb-2 block">{tab === "candidat" ? "Téléphone" : "Entreprise"}</Label><Input name="phoneOrCompany" required placeholder={tab === "candidat" ? "06 ..." : "Société SARL"} /></div>
               </div>
-              <div><Label className="mb-2 block">Email</Label><Input type="email" required placeholder="email@exemple.com" /></div>
-              <div><Label className="mb-2 block">{tab === "candidat" ? "Poste recherché" : "Poste à pourvoir"}</Label><Input required placeholder="Ex : Comptable" /></div>
-              <div><Label className="mb-2 block">{tab === "candidat" ? "Présentation / parcours" : "Description du besoin"}</Label><Textarea required rows={4} placeholder="Décrivez votre profil ou votre besoin..." /></div>
-              <Button type="submit" className="w-full gradient-cyan text-primary-foreground glow-cyan font-semibold hover:opacity-90">
-                <Send className="h-4 w-4 mr-2" />Envoyer ma demande
+              {tab === "entreprise" ? (
+                <div><Label className="mb-2 block">Téléphone</Label><Input name="phone" required placeholder="06 ..." /></div>
+              ) : null}
+              <div><Label className="mb-2 block">Email</Label><Input name="email" type="email" required placeholder="email@exemple.com" /></div>
+              <div><Label className="mb-2 block">{tab === "candidat" ? "Poste recherché" : "Poste à pourvoir"}</Label><Input name="position" required placeholder="Ex : Comptable" /></div>
+              <div><Label className="mb-2 block">{tab === "candidat" ? "Présentation / parcours" : "Description du besoin"}</Label><Textarea name="details" required rows={4} minLength={20} placeholder="Décrivez votre profil ou votre besoin (20 caractères minimum)..." /></div>
+              <Button type="submit" disabled={sending} className="w-full gradient-cyan text-primary-foreground glow-cyan font-semibold hover:opacity-90">
+                {sending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Send className="h-4 w-4 mr-2" />}
+                {sending ? "Envoi en cours…" : "Envoyer ma demande"}
               </Button>
               <p className="text-xs text-center text-muted-foreground">
                 Une question ? <Link to="/contact" className="text-primary font-medium">Contactez notre équipe <ArrowRight className="inline h-3 w-3" /></Link>

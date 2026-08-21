@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { fetchSettings } from "@/lib/content";
 
-type Settings = {
-  signature_url: string | null;
-  display_name: string;
-  display_title: string;
+type Signature = {
+  signatureUrl: string | null;
+  displayName: string;
+  displayTitle: string;
 };
 
-const DEFAULTS: Settings = {
-  signature_url: null,
-  display_name: "Hassan Monlay I AKIANA",
-  display_title: "Président Directeur Général — Office Management",
+// Valeurs de repli tant que l'administration n'a rien renseigné.
+const DEFAULTS: Signature = {
+  signatureUrl: null,
+  displayName: "Hassan Monlay I AKIANA",
+  displayTitle: "Président Directeur Général — Office Management",
 };
 
 /** Pure SVG cursive signature — no image asset required. */
@@ -65,28 +66,33 @@ function SignatureSVG({ name }: { name: string }) {
 }
 
 export function CeoSignature() {
-  const [s, setS] = useState<Settings>(DEFAULTS);
+  const [s, setS] = useState<Signature>(DEFAULTS);
 
   useEffect(() => {
     let cancelled = false;
-    supabase
-      .from("site_settings")
-      .select("signature_url, display_name, display_title")
-      .eq("key", "ceo_signature")
-      .maybeSingle()
-      .then(({ data }) => {
-        if (!cancelled && data) setS(data as Settings);
-      });
-    return () => { cancelled = true; };
+    fetchSettings()
+      .then(({ ceo }) => {
+        if (cancelled || !ceo) return;
+        // Un champ vide côté admin ne doit pas effacer la valeur par défaut.
+        setS({
+          signatureUrl: ceo.signatureUrl || null,
+          displayName: ceo.displayName || DEFAULTS.displayName,
+          displayTitle: ceo.displayTitle || DEFAULTS.displayTitle,
+        });
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
     <div>
       <div className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground mb-2">Signature</div>
-      {s.signature_url ? (
+      {s.signatureUrl ? (
         <img
-          src={s.signature_url}
-          alt={`Signature manuscrite de ${s.display_name}`}
+          src={s.signatureUrl}
+          alt={`Signature manuscrite de ${s.displayName}`}
           className="h-20 md:h-24 w-auto object-contain mix-blend-multiply dark:mix-blend-screen dark:invert select-none"
           width={320}
           height={120}
@@ -94,11 +100,11 @@ export function CeoSignature() {
           draggable={false}
         />
       ) : (
-        <SignatureSVG name={s.display_name} />
+        <SignatureSVG name={s.displayName} />
       )}
       <div className="mt-2 text-sm">
-        <div className="font-semibold text-foreground">{s.display_name}</div>
-        <div className="text-muted-foreground">{s.display_title}</div>
+        <div className="font-semibold text-foreground">{s.displayName}</div>
+        <div className="text-muted-foreground">{s.displayTitle}</div>
       </div>
     </div>
   );

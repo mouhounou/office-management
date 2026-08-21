@@ -10,7 +10,8 @@ import { useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { FileText, CheckCircle2, Send } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { errorMessage, fieldErrorsOf } from "@/lib/api";
+import { submitQuote } from "@/lib/submissions";
 
 export const Route = createFileRoute("/devis")({
   head: () => ({
@@ -72,27 +73,17 @@ function Devis() {
       return;
     }
     setSubmitting(true);
-    const { data: sessionData } = await supabase.auth.getSession();
-    const submitter_id = sessionData.session?.user.id ?? null;
-    const { error } = await supabase.from("quote_requests").insert({
-      pole: parsed.data.pole,
-      name: parsed.data.name,
-      company: parsed.data.company || null,
-      email: parsed.data.email,
-      phone: parsed.data.phone,
-      budget: parsed.data.budget || null,
-      deadline: parsed.data.deadline || null,
-      message: parsed.data.message,
-      submitter_id,
-    });
-    setSubmitting(false);
-    if (error) {
-      console.error("[devis] insert error", error);
-      toast.error("Erreur lors de l'envoi. Réessayez ou appelez-nous au 069480905.");
-      return;
+    try {
+      await submitQuote(parsed.data);
+      setDone(true);
+      toast.success("Demande envoyée ! Nous vous recontactons sous 48h.");
+    } catch (error) {
+      // L'API revalide les données : ses erreurs par champ sont réaffichées ici.
+      setErrors(fieldErrorsOf(error) as Errors);
+      toast.error(errorMessage(error));
+    } finally {
+      setSubmitting(false);
     }
-    setDone(true);
-    toast.success("Demande envoyée ! Nous vous recontactons sous 48h.");
   };
 
   if (done) {
