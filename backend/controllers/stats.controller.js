@@ -18,7 +18,9 @@ function toStatusMap(rows) {
 const groupByStatus = (model) =>
   model.aggregate([{ $group: { _id: "$status", count: { $sum: 1 } } }]);
 
-/** Agrégats du tableau de bord : compteurs, répartitions et derniers arrivages. */
+/** Agrégats du tableau de bord : compteurs, répartitions et derniers arrivages.
+ *  Huit éléments par flux : la liste du tableau de bord est bornée en hauteur et
+ *  défile, autant y mettre de la matière. */
 const dashboard = asyncHandler(async (_req, res) => {
   const since = new Date();
   since.setDate(since.getDate() - 30);
@@ -75,10 +77,10 @@ const dashboard = asyncHandler(async (_req, res) => {
     Subscriber.countDocuments({ createdAt: { $gte: since } }),
     Media.countDocuments(),
     User.countDocuments({ active: true }),
-    BusinessRequest.find().sort({ createdAt: -1 }).limit(5).select("title companyName type status createdAt"),
-    QuoteRequest.find().sort({ createdAt: -1 }).limit(5).select("name company pole status createdAt"),
-    PreRegistration.find().sort({ createdAt: -1 }).limit(5).select("fullName training status createdAt"),
-    Application.find().sort({ createdAt: -1 }).limit(5).select("fullName email status createdAt"),
+    BusinessRequest.find().sort({ createdAt: -1 }).limit(8).select("title companyName type status createdAt"),
+    QuoteRequest.find().sort({ createdAt: -1 }).limit(8).select("name company pole status createdAt"),
+    PreRegistration.find().sort({ createdAt: -1 }).limit(8).select("fullName training status createdAt"),
+    Application.find().sort({ createdAt: -1 }).limit(8).select("fullName email status createdAt"),
   ]);
 
   res.json({
@@ -109,4 +111,66 @@ const dashboard = asyncHandler(async (_req, res) => {
   });
 });
 
-module.exports = { dashboard };
+/**
+ * Activité hebdomadaire des dépôts, pour le graphique du tableau de bord.
+ *
+ * Le regroupement est fait en JavaScript sur les seules dates de création :
+ * les volumes sont faibles et cela évite de dépendre de `$dateTrunc`, absent
+ * des versions de MongoDB antérieures à la 5.0.
+ */
+const activity = asyncHandler(async (req, res) => {
+  const weeks = Math.min(26, Math.max(4, Number(req.query.weeks) || 12));
+
+  // Semaines commençant le lundi.
+  const startOfWeek = (date) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    const day = (d.getDay() + 6) % 7;
+    d.setDate(d.getDate() - day);
+    return d;
+  };
+
+  const firstWeek = startOfWeek(new Date());
+  firstWeek.setDate(firstWeek.getDate() - (weeks - 1) * 7);
+
+  const buckets = Array.from({ length: weeks }, (_, index) => {
+    const start = new Date(firstWeek);
+    start.setDate(start.getDate() + index * 7);
+    return {
+      week: start.toISOString().slice(0, 10),
+      businessRequests: 0,
+      quotes: 0,
+      preRegistrations: 0,
+      applications: 0,
+    };
+  });
+
+  const indexOfWeek = (date) => {
+    const diff = startOfWeek(date).getTime() - firstWeek.getTime();
+    return Math.floor(diff / (7 * 24 * 60 * 60 * 1000));
+  };
+
+  const since = { createdAt: { $gte: firstWeek } };
+  const [business, quotes, preRegistrations, applications] = await Promise.all([
+    BusinessRequest.find(since).select("createdAt").lean(),
+    QuoteRequest.find(since).select("createdAt").lean(),
+    PreRegistration.find(since).select("createdAt").lean(),
+    Application.find(since).select("createdAt").lean(),
+  ]);
+
+  const fill = (rows, key) => {
+    for (const row of rows) {
+      const index = indexOfWeek(row.createdAt);
+      if (index >= 0 && index < buckets.length) buckets[index][key] += 1;
+    }
+  };
+
+  fill(business, "businessRequests");
+  fill(quotes, "quotes");
+  fill(preRegistrations, "preRegistrations");
+  fill(applications, "applications");
+
+  res.json({ weeks: buckets, from: firstWeek.toISOString() });
+});
+
+module.exports = { dashboard, activity };

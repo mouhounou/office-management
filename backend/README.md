@@ -89,12 +89,80 @@ La suppression est réservée aux admins, sauf pour la newsletter et les
 notifications (éditeurs). Un changement de statut ou d'assignation sur une
 demande business est automatiquement journalisé dans ses événements.
 
+## Site public
+
+Le site vitrine (`user/`) consomme `/api/public`, ouvert sans authentification.
+Deux principes : en lecture, seuls les contenus **publiés** sortent, avec une
+sélection de champs (ni notes internes ni données de traitement) ; en écriture,
+uniquement des dépôts de formulaires, créés au statut initial `new`.
+
+| Méthode | Route | Rôle |
+| --- | --- | --- |
+| GET | `/api/public/formations` · `/formations/:slug` | catalogue publié |
+| GET | `/api/public/posts` · `/posts/:slug` | articles publiés |
+| GET | `/api/public/offers` · `/offers/:id` | offres publiées et non expirées |
+| GET | `/api/public/settings` | coordonnées, mentions légales, réseaux, signature |
+| POST | `/api/public/quotes` | demande de devis |
+| POST | `/api/public/pre-registrations` | pré-inscription formation |
+| POST | `/api/public/business-requests` | demande du Business Center |
+| POST | `/api/public/applications` | candidature |
+| POST | `/api/public/messages` | message de contact |
+| POST | `/api/public/appointments` | demande de rendez-vous |
+| POST | `/api/public/subscribers` | inscription newsletter |
+
+Les schémas de dépôt dérivent de ceux du back-office **moins** les champs de
+traitement (`status`, `adminNotes`, assignation) : un visiteur ne peut pas
+créer une demande déjà « terminée » ni écrire dans les notes internes.
+Les dépôts sont limités à 20 par quart d'heure et par adresse IP.
+
+Pensez à déclarer l'origine du site dans `CORS_ORIGIN` (`.env`) : une origine
+inconnue ne reçoit simplement pas d'en-tête CORS et le navigateur bloque.
+
 ## Fichiers
 
 Les téléversements passent par multer (en mémoire) puis Cloudinary
 (`config/cloudinary.js`), dans le dossier `office-management/`. La suppression
 d'un média ou d'une pièce jointe supprime aussi le fichier chez Cloudinary.
 Images : 8 Mo max ; documents (PDF, Word, Excel, CSV) : 15 Mo max.
+
+## Emails
+
+Envoi via **nodemailer** (`services/mailer.js`), configuré dans `.env` :
+
+```
+EMAIL_HOST=smtp.exemple.com
+EMAIL_PORT=465          # 465 = SSL implicite, 587 = STARTTLS
+EMAIL_USE_TLS=true
+EMAIL_HOST_USER=
+EMAIL_HOST_PASSWORD=
+EMAIL_FROM=             # facultatif, sinon EMAIL_HOST_USER
+EMAIL_FROM_NAME=Office Management
+EMAIL_ADMIN=            # destinataire des notifications internes
+```
+
+Sans `EMAIL_ADMIN`, les notifications partent vers l'email de contact des
+paramètres du site : le changer dans le back-office suffit à rediriger les
+alertes.
+
+Chaque dépôt du site déclenche deux messages : un **accusé de réception** au
+visiteur et une **notification à l'équipe**, dont le `Reply-To` est l'adresse du
+visiteur — répondre à l'alerte écrit directement au client. S'y ajoutent le mot
+de bienvenue à l'inscription newsletter et un email de suivi au contact quand
+une demande business change d'état.
+
+Un envoi qui échoue **ne fait jamais échouer la requête** : le visiteur voit sa
+demande enregistrée même si le serveur de messagerie est injoignable, et l'échec
+est journalisé (`[mail] échec …`). Les messages partent en arrière-plan, la
+réponse HTTP ne les attend pas.
+
+```bash
+pnpm mail:check                      # teste la connexion SMTP, sans rien envoyer
+pnpm mail:check --preview            # écrit un aperçu HTML de chaque email dans tmp/
+pnpm mail:check --send vous@ex.cg    # envoi de test réel
+```
+
+Les gabarits (`services/email-templates.js`) sont en tableaux HTML et couleurs
+hexadécimales : Outlook ignore flexbox, grid et les variables CSS.
 
 ## Jeux de données
 

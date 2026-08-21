@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLoaderData } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Phone, Mail, MapPin, Clock, Facebook, Instagram, ArrowUpRight } from "lucide-react";
 import logo from "@/assets/logo.png";
@@ -24,8 +24,28 @@ function LinkList({ links }: { links: FooterLink[] }) {
   );
 }
 
+const FALLBACK = {
+  email: "hassanakiana@gmail.com",
+  phone: "06 948 09 05",
+  address: "Songolo, BP 97116, Pointe-Noire, Congo",
+  hours: "Lun – Ven : 8h – 17h",
+  rccm: "CG-PNR 01-25-A11-00062",
+  niu: "P24000000506144",
+  approval: "Nº 123 MJSECFQE/CAB/DGFQE/DDFQE-PN/SD",
+  facebook: "https://www.facebook.com/share/1NiHHG8bHe/",
+  instagram: "https://www.instagram.com/officemanagement2278",
+  tiktok: "https://www.tiktok.com/@officemanagement93",
+  linkedin: "",
+};
+
 export function Footer() {
   const { t } = useTranslation();
+  // Coordonnées administrées depuis le back-office (écran Paramètres du site).
+  const { settings } = useLoaderData({ from: "__root__" });
+  const contact = { ...FALLBACK, ...(settings?.contact ?? {}) };
+  const legal = { ...FALLBACK, ...(settings?.legal ?? {}) };
+  const social = { ...FALLBACK, ...(settings?.social ?? {}) };
+  const telHref = `tel:${(contact.phone ?? "").replace(/[^+d]/g, "")}`;
 
   const explore: FooterLink[] = [
     { to: "/business-center", label: t("nav.businessCenter") },
@@ -45,10 +65,14 @@ export function Footer() {
   ];
 
   const socials = [
-    { href: "https://www.facebook.com/share/1NiHHG8bHe/", label: "Facebook", icon: <Facebook className="h-4 w-4" /> },
-    { href: "https://www.instagram.com/officemanagement2278", label: "Instagram", icon: <Instagram className="h-4 w-4" /> },
-    { href: "https://www.tiktok.com/@officemanagement93", label: "TikTok", icon: <span className="text-xs font-bold">TT</span> },
-  ];
+    { href: social.facebook, label: "Facebook", icon: <Facebook className="h-4 w-4" /> },
+    { href: social.instagram, label: "Instagram", icon: <Instagram className="h-4 w-4" /> },
+    { href: social.tiktok, label: "TikTok", icon: <span className="text-xs font-bold">TT</span> },
+    ...(social.linkedin
+      ? [{ href: social.linkedin, label: "LinkedIn", icon: <span className="text-xs font-bold">in</span> }]
+      : []),
+    // Un réseau vidé dans l'administration disparaît du pied de page.
+  ].filter((s) => Boolean(s.href));
 
   return (
     <footer className="relative mt-24 overflow-hidden border-t border-border bg-[oklch(0.11_0.035_255)]">
@@ -84,9 +108,9 @@ export function Footer() {
           </div>
 
           <div className="rounded-xl border border-border bg-card/30 p-4 text-xs text-muted-foreground/80 space-y-1">
-            <div>RCCM : CG-PNR 01-25-A11-00062</div>
-            <div>NIU : P24000000506144</div>
-            <div>Agrément : Nº 123 MJSECFQE/CAB/DGFQE/DDFQE-PN/SD</div>
+            <div>RCCM : {legal.rccm}</div>
+            <div>NIU : {legal.niu}</div>
+            <div>Agrément : {legal.approval}</div>
           </div>
         </div>
 
@@ -107,20 +131,20 @@ export function Footer() {
           <h4 className="font-display font-bold mb-4 text-sm uppercase tracking-wider text-foreground">{t("footer.contact")}</h4>
           <ul className="space-y-3 text-sm text-muted-foreground">
             <li className="flex items-start gap-2.5">
-              <MapPin className="h-4 w-4 mt-0.5 text-primary shrink-0" /> Songolo, BP 97116, Pointe-Noire, Congo
+              <MapPin className="h-4 w-4 mt-0.5 text-primary shrink-0" /> {contact.address}
             </li>
             <li>
-              <a href="tel:+242069480905" className="flex items-center gap-2.5 hover:text-primary transition-colors">
-                <Phone className="h-4 w-4 text-primary shrink-0" /> 06 948 09 05
+              <a href={telHref} className="flex items-center gap-2.5 hover:text-primary transition-colors">
+                <Phone className="h-4 w-4 text-primary shrink-0" /> {contact.phone}
               </a>
             </li>
             <li>
-              <a href="mailto:hassanakiana@gmail.com" className="flex items-center gap-2.5 hover:text-primary transition-colors">
-                <Mail className="h-4 w-4 text-primary shrink-0" /> hassanakiana@gmail.com
+              <a href={`mailto:${contact.email}`} className="flex items-center gap-2.5 hover:text-primary transition-colors">
+                <Mail className="h-4 w-4 text-primary shrink-0" /> {contact.email}
               </a>
             </li>
             <li className="flex items-center gap-2.5">
-              <Clock className="h-4 w-4 text-primary shrink-0" /> Lun – Ven : 8h – 17h
+              <Clock className="h-4 w-4 text-primary shrink-0" /> {contact.hours}
             </li>
           </ul>
 

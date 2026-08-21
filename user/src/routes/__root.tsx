@@ -11,6 +11,7 @@ import {
 
 import appCss from "../styles.css?url";
 import { applyPreferredLanguage } from "@/i18n";
+import { fetchSettings, type SiteSettings } from "@/lib/content";
 
 function NotFoundComponent() {
   return (
@@ -70,6 +71,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  loader: async (): Promise<{ settings: SiteSettings | null }> => ({
+    settings: await fetchSettings().catch(() => null),
+  }),
   head: () => ({
     meta: [
       { charSet: "utf-8" },

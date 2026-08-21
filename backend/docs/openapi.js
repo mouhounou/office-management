@@ -515,6 +515,47 @@ function otherPaths() {
         responses: { 200: { description: "En ligne", ...json({ type: "object", properties: { status: { type: "string" }, uptime: { type: "number" } } }) } },
       },
     },
+    "/stats/activity": {
+      get: {
+        tags: ["Système"],
+        summary: "Activité hebdomadaire des dépôts",
+        description:
+          "Nombre de demandes, devis, pré-inscriptions et candidatures reçus par semaine (semaines commençant le lundi). Alimente le graphique du tableau de bord.",
+        parameters: [
+          {
+            name: "weeks",
+            in: "query",
+            description: "Nombre de semaines à couvrir (4 à 26).",
+            schema: { type: "integer", minimum: 4, maximum: 26, default: 12 },
+          },
+        ],
+        responses: {
+          200: {
+            description: "Série hebdomadaire",
+            ...json({
+              type: "object",
+              properties: {
+                weeks: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      week: { type: "string", format: "date", description: "Lundi de la semaine" },
+                      businessRequests: { type: "integer" },
+                      quotes: { type: "integer" },
+                      preRegistrations: { type: "integer" },
+                      applications: { type: "integer" },
+                    },
+                  },
+                },
+                from: { type: "string", format: "date-time" },
+              },
+            }),
+          },
+          401: RESPONSES[401],
+        },
+      },
+    },
     "/stats/dashboard": {
       get: {
         tags: ["Système"],

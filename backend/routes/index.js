@@ -23,6 +23,7 @@ router.use("/auth", authRoutes);
 // Site public : lecture des contenus publiés et dépôt des formulaires.
 router.use("/public", publicRoutes);
 router.get("/stats/dashboard", canView, statsCtrl.dashboard);
+router.get("/stats/activity", canView, statsCtrl.activity);
 
 // --- Demandes business (CRUD + journal + pièces jointes) --------------------
 const business = express.Router();

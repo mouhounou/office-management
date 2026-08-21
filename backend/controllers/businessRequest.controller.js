@@ -4,6 +4,16 @@ const RequestDocument = require("../models/RequestDocument");
 const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
 const { crudController } = require("./crud.factory");
+const { notifyStatusChange } = require("../services/mail.service");
+
+// Libellés envoyés au client dans l'email de suivi.
+const STATUS_LABELS = {
+  new: "Reçue",
+  in_review: "En cours d'analyse",
+  in_progress: "En cours de traitement",
+  completed: "Terminée",
+  cancelled: "Annulée",
+};
 
 /** Journalise l'action d'un membre du back-office sur une demande. */
 async function logEvent(request, req, payload) {
@@ -31,6 +41,10 @@ const crud = crudController({
         fromStatus: previous.status,
         toStatus: doc.status,
       });
+      // Le contact est prévenu de l'avancement, sauf remise à l'état initial.
+      if (doc.status !== "new") {
+        notifyStatusChange(doc, doc.status, STATUS_LABELS[doc.status] ?? doc.status);
+      }
     }
     if (String(previous.assignedTo ?? "") !== String(doc.assignedTo ?? "")) {
       await logEvent(doc, req, {

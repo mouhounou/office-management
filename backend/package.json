@@ -9,7 +9,8 @@
     "dev": "nodemon server.js",
     "seed:content": "node scripts/seed-content.js",
     "seed:demo": "node scripts/seed-demo.js",
-    "docs:check": "node scripts/check-docs.js"
+    "docs:check": "node scripts/check-docs.js",
+    "mail:check": "node scripts/check-mail.js"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +27,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.7.4",
     "multer": "^2.2.0",
+    "nodemailer": "^9.0.5",
     "nodemon": "^3.1.14",
     "swagger-ui-express": "^5.0.1",
     "zod": "^4.4.3"

@@ -17,6 +17,21 @@ module.exports = {
   jwtSecret: process.env.JWT_SECRET,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d",
   // Plusieurs origines possibles, séparées par des virgules (admin, site user…).
+  mail: {
+    host: process.env.EMAIL_HOST,
+    // Le port 465 impose SSL dès la connexion ; 587 passe par STARTTLS.
+    port: Number(process.env.EMAIL_PORT) || 587,
+    secure: Number(process.env.EMAIL_PORT) === 465,
+    requireTls: String(process.env.EMAIL_USE_TLS).toLowerCase() === "true",
+    user: process.env.EMAIL_HOST_USER,
+    password: process.env.EMAIL_HOST_PASSWORD,
+    // Expéditeur affiché ; à défaut, le compte SMTP lui-même.
+    from: process.env.EMAIL_FROM || process.env.EMAIL_HOST_USER,
+    fromName: process.env.EMAIL_FROM_NAME || "Office Management",
+    // Destinataire des notifications internes ; à défaut, l'email de contact
+    // renseigné dans les paramètres du site (voir services/mail.service.js).
+    adminRecipient: process.env.EMAIL_ADMIN,
+  },
   cloudinary: {
     cloudName: process.env.CLOUDINARY_NAME,
     apiKey: process.env.CLOUDINARY_API_KEY,
