@@ -2,14 +2,16 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
-const { corsOrigins } = require("./config/env");
+const { corsOrigins, trustProxy } = require("./config/env");
 const routes = require("./routes");
 const { mountDocs } = require("./docs");
 const { notFound, errorHandler } = require("./middlewares/error");
+const ApiError = require("./utils/ApiError");
 
 const app = express();
 
 app.disable("x-powered-by");
+if (trustProxy) app.set("trust proxy", trustProxy);
 app.use(
   cors({
     origin(origin, cb) {
@@ -24,6 +26,16 @@ app.use(
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Le cookie de session part en SameSite=None en production : sans ce contrôle,
+// un formulaire posté depuis un autre site agirait au nom d'un admin connecté
+// (CSRF). Les navigateurs joignent toujours Origin à un POST cross-site.
+const SAFE_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
+app.use((req, _res, next) => {
+  const { origin } = req.headers;
+  if (SAFE_METHODS.has(req.method) || !origin || corsOrigins.includes(origin)) return next();
+  next(ApiError.forbidden("Origine non autorisée"));
+});
 
 // Documentation interactive : /api/docs (et /api/docs.json).
 mountDocs(app);

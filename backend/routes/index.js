@@ -13,8 +13,7 @@ const mediaCtrl = require("../controllers/media.controller");
 const userCtrl = require("../controllers/user.controller");
 const settingCtrl = require("../controllers/setting.controller");
 const statsCtrl = require("../controllers/stats.controller");
-const Notification = require("../models/Notification");
-const { crudController } = require("../controllers/crud.factory");
+const notificationCtrl = require("../controllers/notification.controller");
 
 const router = express.Router();
 
@@ -48,27 +47,14 @@ media.patch("/:id", canEdit, validate(schemas.mediaUpdate), mediaCtrl.update);
 media.delete("/:id", canEdit, mediaCtrl.remove);
 router.use("/media", media);
 
-// --- Notifications internes ------------------------------------------------
-const notificationCrud = crudController({
-  model: Notification,
-  searchFields: ["title", "message"],
-  filterFields: ["type", "user"],
-  sortFields: ["createdAt"],
-  populate: { path: "user", select: "fullName email" },
-});
+// --- Notifications internes (lu / non lu par compte) -----------------------
 const notifications = express.Router();
-notifications.get("/", canView, notificationCrud.list);
-notifications.post(
-  "/",
-  canEdit,
-  validate(schemas.notificationCreate),
-  (req, _res, next) => {
-    req.body.createdBy = req.user._id;
-    next();
-  },
-  notificationCrud.create,
-);
-notifications.delete("/:id", canEdit, notificationCrud.remove);
+notifications.get("/", canView, notificationCtrl.list);
+notifications.get("/unread-count", canView, notificationCtrl.unreadCount);
+notifications.post("/read-all", canView, notificationCtrl.markAllRead);
+notifications.post("/", canEdit, validate(schemas.notificationCreate), notificationCtrl.create);
+notifications.post("/:id/read", canView, notificationCtrl.markRead);
+notifications.delete("/:id", canEdit, notificationCtrl.remove);
 router.use("/notifications", notifications);
 
 // --- Utilisateurs (réservé aux admins, sauf la liste d'assignation) ---------

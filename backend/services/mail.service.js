@@ -2,7 +2,7 @@ const { mail } = require("../config/env");
 const Setting = require("../models/Setting");
 const { DEFAULTS } = require("../controllers/setting.controller");
 const { sendMailInBackground } = require("./mailer");
-const { layout, detailsTable, button } = require("./email-templates");
+const { layout, detailsTable, button, escapeHtml } = require("./email-templates");
 
 /**
  * Emails déclenchés par les dépôts du site public.
@@ -224,7 +224,7 @@ function notifyStatusChange(request, status, statusLabel) {
     subject: `Votre demande « ${request.title} » : ${statusLabel}`,
     html: layout({
       title: "Suivi de votre demande",
-      intro: `L'état de votre demande <strong>${request.title}</strong> est désormais : <strong>${statusLabel}</strong>.`,
+      intro: `L'état de votre demande <strong>${escapeHtml(request.title)}</strong> est désormais : <strong>${escapeHtml(statusLabel)}</strong>.`,
       contentHtml: `${detailsTable([
         ["Demande", request.title],
         ["Entreprise", request.companyName],

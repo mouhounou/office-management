@@ -37,7 +37,10 @@ module.exports = {
     apiKey: process.env.CLOUDINARY_API_KEY,
     apiSecret: process.env.CLOUDINARY_API_SECRET,
   },
-  corsOrigins: (process.env.CORS_ORIGIN || "http://localhost:3000")
+  // Derrière un proxy (Render, Railway, Nginx…), nombre de sauts à croire pour
+  // l'IP du visiteur : indispensable au bon fonctionnement des limites de débit.
+  trustProxy: Number(process.env.TRUST_PROXY) || 0,
+  corsOrigins: (process.env.CORS_ORIGIN || "http://localhost:3000,http://localhost:5173")
     .split(",")
     .map((o) => o.trim())
     .filter(Boolean),

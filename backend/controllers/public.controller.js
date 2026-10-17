@@ -14,6 +14,7 @@ const { parsePagination } = require("../utils/pagination");
 const settingCtrl = require("./setting.controller");
 const { notifySubmission, welcomeSubscriber } = require("../services/mail.service");
 const Setting = require("../models/Setting");
+const { notifyTeam } = require("../services/notification.service");
 
 /**
  * Endpoints consommés par le site public (user/), sans authentification.
@@ -99,15 +100,20 @@ const getSettings = asyncHandler(async (_req, res) => {
 
 const created = (res, item) => res.status(201).json({ item });
 
+/** Emails (visiteur + équipe) et notification dans le back-office. */
+async function afterSubmit(kind, doc) {
+  await Promise.all([notifySubmission(kind, doc), notifyTeam(kind, doc)]);
+}
+
 const submitQuote = asyncHandler(async (req, res) => {
   const doc = await QuoteRequest.create(req.body);
-  await notifySubmission("quote", doc);
+  await afterSubmit("quote", doc);
   created(res, doc);
 });
 
 const submitPreRegistration = asyncHandler(async (req, res) => {
   const doc = await PreRegistration.create(req.body);
-  await notifySubmission("preRegistration", doc);
+  await afterSubmit("preRegistration", doc);
   created(res, doc);
 });
 
@@ -120,13 +126,13 @@ const submitBusinessRequest = asyncHandler(async (req, res) => {
     toStatus: doc.status,
     actorName: "Site public",
   });
-  await notifySubmission("businessRequest", doc);
+  await afterSubmit("businessRequest", doc);
   created(res, doc);
 });
 
 const submitApplication = asyncHandler(async (req, res) => {
   const doc = await Application.create(req.body);
-  await notifySubmission("application", doc);
+  await afterSubmit("application", doc);
   created(res, doc);
 });
 
@@ -155,13 +161,13 @@ const subscribe = asyncHandler(async (req, res) => {
 
 const submitContact = asyncHandler(async (req, res) => {
   const doc = await Message.create({ ...req.body, kind: "contact" });
-  await notifySubmission("contact", doc);
+  await afterSubmit("contact", doc);
   created(res, doc);
 });
 
 const submitAppointment = asyncHandler(async (req, res) => {
   const doc = await Message.create({ ...req.body, kind: "rendez-vous" });
-  await notifySubmission("appointment", doc);
+  await afterSubmit("appointment", doc);
   created(res, doc);
 });
 

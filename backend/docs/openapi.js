@@ -560,8 +560,8 @@ function otherPaths() {
       get: {
         tags: ["Système"],
         summary: "Statistiques du tableau de bord",
-        description: "Compteurs par ressource, répartitions par statut et cinq derniers éléments de chaque flux.",
-        responses: { 200: { description: "Agrégats", ...json({ type: "object", properties: { counts: item, byStatus: item, latest: item } }) }, 401: RESPONSES[401] },
+        description: "Compteurs par ressource, répartitions par statut, derniers éléments de chaque flux, tendances sur 30 jours (`current` / `previous`), prochain rendez-vous et charge de l'équipe (demandes ouvertes par personne assignée).",
+        responses: { 200: { description: "Agrégats", ...json({ type: "object", properties: { counts: item, byStatus: item, latest: item, trends: item, nextAppointment: item, team: { type: "array", items: item } } }) }, 401: RESPONSES[401] },
       },
     },
     "/media": {
@@ -633,12 +633,12 @@ function otherPaths() {
     "/notifications": {
       get: {
         tags: ["Notifications"],
-        summary: "Lister les notifications internes",
+        summary: "Lister mes notifications",
+        description: "Notifications diffusées à l'équipe et celles adressées au compte connecté, avec un booléen `read` et le total `unread`.",
         parameters: [
-          ...COMMON_QUERY,
-          sortParam(["createdAt"]),
-          { name: "type", in: "query", schema: { type: "string", enum: C.NOTIFICATION_TYPES } },
-          { name: "user", in: "query", description: "Destinataire ; vide = diffusée à toute l'équipe.", schema: { type: "string" } },
+          { name: "page", in: "query", schema: { type: "integer", minimum: 1, default: 1 } },
+          { name: "limit", in: "query", schema: { type: "integer", minimum: 1, maximum: 100, default: 20 } },
+          { name: "unread", in: "query", description: "`true` pour ne garder que les non lues.", schema: { type: "string", enum: ["true", "false"] } },
         ],
         responses: { 200: { description: "Liste paginée", ...json(listSchema(item)) }, 401: RESPONSES[401] },
       },
@@ -648,6 +648,15 @@ function otherPaths() {
         requestBody: body({ $ref: "#/components/schemas/NotificationCreate" }),
         responses: { 201: { description: "Publiée", ...json({ type: "object", properties: { item } }) }, 400: RESPONSES[400], 403: RESPONSES[403] },
       },
+    },
+    "/notifications/unread-count": {
+      get: { tags: ["Notifications"], summary: "Nombre de notifications non lues", responses: { 200: { description: "Compteur", ...json({ type: "object", properties: { unread: { type: "integer" } } }) }, 401: RESPONSES[401] } },
+    },
+    "/notifications/read-all": {
+      post: { tags: ["Notifications"], summary: "Tout marquer comme lu", responses: { 200: { description: "Nombre de notifications mises à jour", ...json({ type: "object", properties: { updated: { type: "integer" } } }) }, 401: RESPONSES[401] } },
+    },
+    "/notifications/{id}/read": {
+      post: { tags: ["Notifications"], summary: "Marquer une notification comme lue", parameters: [idParam], responses: { 200: { description: "Notification", ...json({ type: "object", properties: { item } }) }, 401: RESPONSES[401], 404: RESPONSES[404] } },
     },
     "/notifications/{id}": {
       delete: { tags: ["Notifications"], summary: "Supprimer une notification", parameters: [idParam], responses: { 204: { description: "Supprimée" }, 403: RESPONSES[403], 404: RESPONSES[404] } },

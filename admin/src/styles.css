@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Charte Office Management : navy profond, navy, cyan, argent (repris du site
+ * public, src/styles.css). Toutes les couleurs de l'interface sont des teintes
+ * de ces quatre valeurs ; le rouge est réservé aux actions destructrices et
+ * aux alertes (urgent, refusé).
+ */
+@theme inline {
+  --font-sans: "Poppins", system-ui, sans-serif;
+  --font-display: "Montserrat", system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-accent: var(--brand-soft);
+  --color-destructive: var(--destructive);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-cyan: var(--cyan);
+  --color-cyan-glow: var(--cyan-glow);
+  --color-silver: var(--silver);
+}
+
+:root {
+  --navy-deep: oklch(0.18 0.04 255);
+  --navy: oklch(0.24 0.05 255);
+  --cyan: oklch(0.68 0.13 220);
+  --cyan-glow: oklch(0.78 0.15 215);
+  --silver: oklch(0.78 0.01 250);
+
+  /* Fond gris clair autour des panneaux, comme une maquette posée sur la page. */
+  --background: oklch(0.94 0.006 250);
+  --surface: oklch(0.975 0.004 250);
+  --card: oklch(1 0 0);
+  --foreground: oklch(0.2 0.04 255);
+  --muted: oklch(0.955 0.006 250);
+  --muted-foreground: oklch(0.52 0.02 255);
+  --border: oklch(0.915 0.007 250);
+  --input: oklch(0.88 0.01 250);
+
+  --primary: var(--navy);
+  --primary-foreground: oklch(0.99 0 0);
+  --brand: var(--cyan);
+  /* Cyan assombri : lisible en texte sur fond blanc. */
+  --brand-strong: oklch(0.5 0.11 228);
+  --brand-soft: oklch(0.95 0.03 220);
+  --destructive: oklch(0.58 0.2 27);
+
+  --hatch: oklch(0.8 0.012 250);
+
+  color-scheme: light;
+}
+
+.dark {
+  --background: oklch(0.11 0.025 255);
+  --surface: oklch(0.15 0.035 255);
+  --card: oklch(0.19 0.04 255);
+  --foreground: oklch(0.96 0.01 250);
+  --muted: oklch(0.23 0.04 255);
+  --muted-foreground: oklch(0.72 0.02 250);
+  --border: oklch(0.28 0.04 255);
+  --input: oklch(0.33 0.04 255);
+
+  --primary: var(--cyan);
+  --primary-foreground: var(--navy-deep);
+  --brand: var(--cyan);
+  --brand-strong: var(--cyan-glow);
+  --brand-soft: oklch(0.27 0.06 230);
+  --destructive: oklch(0.66 0.19 27);
+
+  --hatch: oklch(0.42 0.03 250);
+
+  color-scheme: dark;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+}
+
+/* Hachures des valeurs nulles ou « en attente » dans les graphiques. */
+.hatched {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--hatch) 0 2px,
+    transparent 2px 7px
+  );
+  box-shadow: inset 0 0 0 1px var(--hatch);
+}
