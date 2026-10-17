@@ -1,7 +1,8 @@
 # Site public Office Management
 
-TanStack Start (React 19, Vite 7), rendu côté serveur, déployé sur Cloudflare
-Workers.
+TanStack Start (React 19, Vite 7), publié en **site statique** : chaque page est
+pré-générée en HTML au build, puis l'application prend le relais dans le
+navigateur.
 
 ## Démarrage
 
@@ -17,6 +18,35 @@ formulaires.
 # .env
 VITE_API_URL=http://localhost:5000/api
 ```
+
+## Build et mise en ligne
+
+```bash
+npm install --legacy-peer-deps
+npm run build       # produit dist/
+```
+
+`dist/` est le site complet, à déposer tel quel chez n'importe quel hébergeur
+statique (cPanel, Netlify, Nginx, Apache…) :
+
+- une page `index.html` par adresse (`/`, `/blog/…`, `/formations`, `/contact`…) ;
+- `_shell.html` (et sa copie `404.html`) : la coquille de l'application, servie
+  pour les adresses non pré-générées — article publié après le build, détail
+  d'une demande, liens de vérification et de réinitialisation ;
+- `.htaccess` (Apache / cPanel) et `_redirects` (Netlify, Cloudflare Pages)
+  font déjà ce renvoi vers `_shell.html`. Avec Nginx :
+  `try_files $uri $uri/ /_shell.html;`.
+
+Points à connaître :
+
+- **`VITE_API_URL` est figée au build** : pointez-la vers l'API de production
+  avant `npm run build`, et déclarez l'adresse du site dans `CORS_ORIGIN` côté API.
+- **L'API doit répondre pendant le build** pour que les articles du blog et les
+  formations soient pré-générés (sinon les pages sont générées vides et se
+  remplissent dans le navigateur).
+- Les contenus sont relus auprès de l'API à chaque visite : un article publié
+  ou des coordonnées modifiées dans l'admin apparaissent sans nouveau build.
+  Un nouveau build reste utile pour le référencement des nouveaux articles.
 
 ## Connexion à l'API
 

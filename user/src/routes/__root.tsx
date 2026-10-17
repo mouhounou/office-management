@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -132,6 +132,13 @@ import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Toaster } from "@/components/ui/sonner";
 import { AccountProvider } from "@/lib/account-context";
 
+declare global {
+  interface Window {
+    /** Posé par scripts/postbuild.mjs dans _shell.html et 404.html. */
+    __OM_SHELL__?: boolean;
+  }
+}
+
 // Espace client et pages d'accès : plein écran, sans l'en-tête ni le pied du site.
 const APP_PATHS = ["/espace", "/connexion", "/inscription", "/mot-de-passe-oublie", "/reinitialiser-mot-de-passe", "/verifier-email"];
 
@@ -140,12 +147,25 @@ function RootComponent() {
 
   // Le rendu serveur est toujours en français : on bascule sur la langue du
   // visiteur après l'hydratation, sans provoquer d'écart serveur/client.
+  const router = useRouter();
   useEffect(() => {
     applyPreferredLanguage();
-  }, []);
+    // Site statique : les pages sont pré-générées au build. On relit les
+    // données de l'API (coordonnées, blog, formations) pour afficher l'état
+    // à jour, sans attendre le prochain build.
+    void router.invalidate();
+  }, [router]);
 
   const { pathname } = useLocation();
-  const appLayout = APP_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+  // Page servie par la coquille (_shell.html, générée depuis /espace) : le
+  // premier rendu doit reproduire celui de la coquille, sans en-tête ni pied,
+  // sinon React signale un écart d'hydratation. La vraie mise en page suit.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
+  const fromShell = typeof window !== "undefined" && window.__OM_SHELL__ === true;
+  const appLayout =
+    (fromShell && !hydrated) ||
+    APP_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
 
   return (
     <QueryClientProvider client={queryClient}>
