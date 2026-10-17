@@ -28,7 +28,7 @@ function ServiceHero({ id, eyebrow, title, desc, image, reverse, bullets }: {
   id: string; eyebrow: string; title: string; desc: string; image: string; reverse?: boolean; bullets: string[];
 }) {
   return (
-    <section id={id} className="container mx-auto px-4 py-20 scroll-mt-24">
+    <section id={id} className="container mx-auto overflow-x-clip px-4 py-20 scroll-mt-24">
       <div className={`grid lg:grid-cols-2 gap-12 items-center ${reverse ? "lg:[&>*:first-child]:order-2" : ""}`}>
         <div>
           <div className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-3">{eyebrow}</div>

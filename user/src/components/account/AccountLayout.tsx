@@ -63,7 +63,7 @@ export function AccountLayout() {
 
   if (loading || !member) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="theme-dark flex min-h-screen items-center justify-center bg-background">
         <LoadingBlock label="Ouverture de votre espace…" />
       </div>
     );
@@ -159,7 +159,7 @@ export function AccountLayout() {
   );
 
   return (
-    <div className="min-h-screen bg-background lg:flex lg:gap-4 lg:p-4">
+    <div className="theme-dark min-h-screen bg-background lg:flex lg:gap-4 lg:p-4">
       <aside className="hidden w-64 shrink-0 lg:block">
         <div className="sticky top-4 h-[calc(100vh-2rem)] overflow-hidden rounded-3xl border border-border bg-surface">
           {sidebar}

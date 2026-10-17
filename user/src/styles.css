@@ -41,7 +41,7 @@
   /* Espace client : mêmes jetons que le back-office (admin/src/styles.css). */
   --color-surface: var(--surface);
   --color-brand: var(--cyan);
-  --color-brand-strong: var(--cyan-glow);
+  --color-brand-strong: var(--brand-strong);
   --color-brand-soft: var(--brand-soft);
 
   --shadow-glow: 0 0 40px -10px var(--cyan);
@@ -51,13 +51,61 @@
 :root {
   --radius: 0.75rem;
 
-  /* Brand colors from logo */
+  /* Couleurs de la charte (logo) */
   --navy-deep: oklch(0.18 0.04 255);
   --navy: oklch(0.24 0.05 255);
   --cyan: oklch(0.68 0.13 220);
   --cyan-glow: oklch(0.78 0.15 215);
   --silver: oklch(0.78 0.01 250);
 
+  /*
+   * Thème clair (par défaut) : fonds blancs, textes navy, cyan approfondi pour
+   * rester lisible sur blanc. Les bandes navy, les en-têtes de page et
+   * l'espace client repassent en sombre (voir .theme-dark plus bas).
+   */
+  --background: oklch(0.985 0.004 250);
+  --foreground: oklch(0.22 0.05 255);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.05 255);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.05 255);
+  --primary: oklch(0.56 0.12 228);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.95 0.01 250);
+  --secondary-foreground: oklch(0.22 0.05 255);
+  --muted: oklch(0.96 0.006 250);
+  --muted-foreground: oklch(0.47 0.03 255);
+  --accent: oklch(0.94 0.03 220);
+  --accent-foreground: oklch(0.22 0.05 255);
+  --destructive: oklch(0.58 0.21 27);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.9 0.01 250);
+  --input: oklch(0.88 0.012 250);
+  --ring: oklch(0.56 0.12 228);
+
+  --surface: oklch(0.97 0.006 250);
+  --brand-soft: oklch(0.94 0.035 220);
+  --brand-strong: oklch(0.5 0.11 228);
+  --hatch: oklch(0.82 0.012 250);
+
+  --gradient-hero: linear-gradient(135deg, oklch(0.14 0.04 255) 0%, oklch(0.20 0.06 245) 50%, oklch(0.26 0.08 230) 100%);
+  --gradient-cyan: linear-gradient(135deg, oklch(0.54 0.12 230) 0%, oklch(0.62 0.13 222) 100%);
+  --gradient-card: linear-gradient(160deg, oklch(1 0 0) 0%, oklch(0.975 0.006 250) 100%);
+  --gradient-text: linear-gradient(135deg, oklch(0.5 0.12 232) 0%, oklch(0.6 0.13 220) 100%);
+  --glass-bg: oklch(1 0 0 / 0.75);
+  --glass-border: oklch(0.9 0.01 250);
+  --shadow-card: 0 1px 2px oklch(0.22 0.05 255 / 0.04), 0 12px 32px -16px oklch(0.22 0.05 255 / 0.18);
+
+  color-scheme: light;
+}
+
+/*
+ * Zones sombres : pied de page, bandes navy, espace client, et toute section
+ * dont le fond est le dégradé navy des en-têtes de page (gradient-hero).
+ */
+.theme-dark,
+section:has(> .gradient-hero),
+section.gradient-hero {
   --background: oklch(0.14 0.04 255);
   --foreground: oklch(0.97 0.01 250);
   --card: oklch(0.20 0.045 255);
@@ -69,26 +117,32 @@
   --secondary: oklch(0.26 0.05 255);
   --secondary-foreground: oklch(0.97 0.01 250);
   --muted: oklch(0.24 0.04 255);
-  --muted-foreground: oklch(0.72 0.02 250);
+  --muted-foreground: oklch(0.74 0.02 250);
   --accent: oklch(0.30 0.06 230);
   --accent-foreground: oklch(0.97 0.01 250);
   --destructive: oklch(0.65 0.22 27);
-  --destructive-foreground: oklch(0.98 0 0);
   --border: oklch(0.30 0.04 255 / 0.6);
   --input: oklch(0.26 0.04 255);
   --ring: oklch(0.68 0.13 220);
 
   --surface: oklch(0.17 0.04 255);
   --brand-soft: oklch(0.27 0.06 230);
+  --brand-strong: oklch(0.78 0.15 215);
   --hatch: oklch(0.42 0.03 250);
 
-  --gradient-hero: linear-gradient(135deg, oklch(0.14 0.04 255) 0%, oklch(0.20 0.06 245) 50%, oklch(0.26 0.08 230) 100%);
   --gradient-cyan: linear-gradient(135deg, var(--cyan) 0%, var(--cyan-glow) 100%);
   --gradient-card: linear-gradient(160deg, oklch(0.22 0.05 255 / 0.8) 0%, oklch(0.18 0.04 255 / 0.6) 100%);
+  --gradient-text: linear-gradient(135deg, var(--cyan) 0%, var(--cyan-glow) 100%);
+  --glass-bg: oklch(0.22 0.05 255 / 0.4);
+  --glass-border: oklch(0.68 0.13 220 / 0.15);
+  --shadow-card: 0 25px 60px -15px oklch(0 0 0 / 0.5);
+
+  color: var(--foreground);
+  color-scheme: dark;
 }
 
 .dark {
-  /* same as :root - dark by default */
+  /* Le thème sombre passe par .theme-dark (voir ci-dessus). */
 }
 
 @layer base {
@@ -109,15 +163,34 @@
   .gradient-cyan { background: var(--gradient-cyan); }
   .gradient-card { background: var(--gradient-card); }
   .text-gradient-cyan {
-    background: var(--gradient-cyan);
+    background: var(--gradient-text);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
   .glass {
-    background: oklch(0.22 0.05 255 / 0.4);
+    background: var(--glass-bg);
     backdrop-filter: blur(16px);
-    border: 1px solid oklch(0.68 0.13 220 / 0.15);
+    border: 1px solid var(--glass-border);
+  }
+  .shadow-card { box-shadow: var(--shadow-card); }
+  /* Petit titre de section « — NOS SERVICES », comme la maquette. */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--brand-strong);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.75rem;
+    height: 2px;
+    border-radius: 999px;
+    background: var(--gradient-cyan);
   }
   .glow-cyan { box-shadow: 0 0 40px -8px var(--cyan); }
   /* Hachures des valeurs « en attente », comme dans le back-office. */
@@ -134,7 +207,7 @@
     -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black, transparent 78%);
   }
   .hover-lift { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-  .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -15px oklch(0.68 0.13 220 / 0.4); }
+  .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -15px oklch(0.56 0.12 228 / 0.35); }
 }
 
 @keyframes fade-in-up {
