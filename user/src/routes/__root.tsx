@@ -7,6 +7,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  useLocation,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 
@@ -129,6 +130,10 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { Toaster } from "@/components/ui/sonner";
+import { AccountProvider } from "@/lib/account-context";
+
+// Espace client et pages d'accès : plein écran, sans l'en-tête ni le pied du site.
+const APP_PATHS = ["/espace", "/connexion", "/inscription", "/mot-de-passe-oublie", "/reinitialiser-mot-de-passe", "/verifier-email"];
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
@@ -139,15 +144,24 @@ function RootComponent() {
     applyPreferredLanguage();
   }, []);
 
+  const { pathname } = useLocation();
+  const appLayout = APP_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-1"><Outlet /></main>
-        <Footer />
-        <WhatsAppButton />
+      <AccountProvider>
+        {appLayout ? (
+          <Outlet />
+        ) : (
+          <div className="min-h-screen flex flex-col">
+            <Header />
+            <main className="flex-1"><Outlet /></main>
+            <Footer />
+            <WhatsAppButton />
+          </div>
+        )}
         <Toaster richColors position="top-right" />
-      </div>
+      </AccountProvider>
     </QueryClientProvider>
   );
 }

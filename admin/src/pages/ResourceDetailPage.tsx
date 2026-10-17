@@ -19,7 +19,7 @@ export function ResourceDetailPage() {
   const { resource: key = "", id = "" } = useParams();
   const def = RESOURCE_BY_KEY[key];
   if (!def) return <NotFoundPage />;
-  if (id === "new") return def.mode === "content" ? <CreateView def={def} /> : <NotFoundPage />;
+  if (id === "new") return def.mode === "content" && !def.noCreate ? <CreateView def={def} /> : <NotFoundPage />;
   return <ExistingView key={`${def.key}-${id}`} def={def} id={id} />;
 }
 

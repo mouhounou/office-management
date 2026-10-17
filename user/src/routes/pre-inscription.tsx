@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { GraduationCap, CheckCircle2, Send, User, IdCard, BookOpen, ShieldCheck, Clock, BadgeCheck } from "lucide-react";
 import { errorMessage } from "@/lib/api";
+import { useMemberPrefill } from "@/lib/account-context";
 import { submitPreRegistration } from "@/lib/submissions";
 
 export const Route = createFileRoute("/pre-inscription")({
@@ -66,6 +67,12 @@ function PreInscription() {
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+
+  // Compte client connecté : coordonnées pré-remplies (sans écraser une saisie).
+  const prefill = useMemberPrefill();
+  useEffect(() => {
+    if (prefill.key !== "anonyme") setData((d) => ({ ...d, full_name: d.full_name || prefill.name, email: d.email || prefill.email, phone: d.phone || prefill.phone }));
+  }, [prefill]);
 
   const set = <K extends keyof FormData>(k: K, v: FormData[K]) => {
     setData(d => ({ ...d, [k]: v }));

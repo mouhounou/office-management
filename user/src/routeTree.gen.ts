@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VerifierEmailRouteImport } from './routes/verifier-email'
 import { Route as ValeursEnActionRouteImport } from './routes/valeurs-en-action'
 import { Route as TelechargementsRouteImport } from './routes/telechargements'
 import { Route as TechnicalServicesRouteImport } from './routes/technical-services'
@@ -17,6 +18,7 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SecteursRouteImport } from './routes/secteurs'
 import { Route as SalleDePresseRouteImport } from './routes/salle-de-presse'
 import { Route as RendezVousRouteImport } from './routes/rendez-vous'
+import { Route as ReinitialiserMotDePasseRouteImport } from './routes/reinitialiser-mot-de-passe'
 import { Route as ReferencesRouteImport } from './routes/references'
 import { Route as RecrutementRouteImport } from './routes/recrutement'
 import { Route as RecruitmentAgencyRouteImport } from './routes/recruitment-agency'
@@ -40,10 +42,12 @@ import { Route as Objectifs2030RouteImport } from './routes/objectifs-2030'
 import { Route as NotreHistoireRouteImport } from './routes/notre-histoire'
 import { Route as NosPolitiquesRouteImport } from './routes/nos-politiques'
 import { Route as NosExpertsRouteImport } from './routes/nos-experts'
+import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oublie'
 import { Route as MediathequeRouteImport } from './routes/mediatheque'
 import { Route as LaureatsRouteImport } from './routes/laureats'
 import { Route as JeunesTalentsRouteImport } from './routes/jeunes-talents'
 import { Route as InstituteRouteImport } from './routes/institute'
+import { Route as InscriptionRouteImport } from './routes/inscription'
 import { Route as InnovationDigitaleRouteImport } from './routes/innovation-digitale'
 import { Route as GouvernanceRouteImport } from './routes/gouvernance'
 import { Route as GalerieRouteImport } from './routes/galerie'
@@ -54,12 +58,14 @@ import { Route as FormateursRouteImport } from './routes/formateurs'
 import { Route as FaqInteractiveRouteImport } from './routes/faq-interactive'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as EvenementsRouteImport } from './routes/evenements'
+import { Route as EspaceRouteImport } from './routes/espace'
 import { Route as EngagementsFormationRouteImport } from './routes/engagements-formation'
 import { Route as EngagementsEntreprisesRouteImport } from './routes/engagements-entreprises'
 import { Route as EngagementsClientsRouteImport } from './routes/engagements-clients'
 import { Route as EcosystemeRouteImport } from './routes/ecosysteme'
 import { Route as DevisRouteImport } from './routes/devis'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as ConnexionRouteImport } from './routes/connexion'
 import { Route as CertificationsRouteImport } from './routes/certifications'
 import { Route as CertificationQualiteRouteImport } from './routes/certification-qualite'
 import { Route as CentreExcellenceRouteImport } from './routes/centre-excellence'
@@ -75,11 +81,22 @@ import { Route as AppelsOffresRouteImport } from './routes/appels-offres'
 import { Route as AcademyTvRouteImport } from './routes/academy-tv'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EspaceIndexRouteImport } from './routes/espace.index'
+import { Route as EspaceSecuriteRouteImport } from './routes/espace.securite'
+import { Route as EspaceProfilRouteImport } from './routes/espace.profil'
+import { Route as EspaceNouvelleDemandeRouteImport } from './routes/espace.nouvelle-demande'
 import { Route as BusinessCenterRecrutementRouteImport } from './routes/business-center.recrutement'
 import { Route as BusinessCenterFormationRouteImport } from './routes/business-center.formation'
 import { Route as BusinessCenterAuditRhRouteImport } from './routes/business-center.audit-rh'
 import { Route as BlogSlugRouteImport } from './routes/blog_.$slug'
+import { Route as EspaceDemandesIndexRouteImport } from './routes/espace.demandes.index'
+import { Route as EspaceDemandesKindIdRouteImport } from './routes/espace.demandes.$kind.$id'
 
+const VerifierEmailRoute = VerifierEmailRouteImport.update({
+  id: '/verifier-email',
+  path: '/verifier-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ValeursEnActionRoute = ValeursEnActionRouteImport.update({
   id: '/valeurs-en-action',
   path: '/valeurs-en-action',
@@ -118,6 +135,11 @@ const SalleDePresseRoute = SalleDePresseRouteImport.update({
 const RendezVousRoute = RendezVousRouteImport.update({
   id: '/rendez-vous',
   path: '/rendez-vous',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReinitialiserMotDePasseRoute = ReinitialiserMotDePasseRouteImport.update({
+  id: '/reinitialiser-mot-de-passe',
+  path: '/reinitialiser-mot-de-passe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReferencesRoute = ReferencesRouteImport.update({
@@ -235,6 +257,11 @@ const NosExpertsRoute = NosExpertsRouteImport.update({
   path: '/nos-experts',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MotDePasseOublieRoute = MotDePasseOublieRouteImport.update({
+  id: '/mot-de-passe-oublie',
+  path: '/mot-de-passe-oublie',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MediathequeRoute = MediathequeRouteImport.update({
   id: '/mediatheque',
   path: '/mediatheque',
@@ -253,6 +280,11 @@ const JeunesTalentsRoute = JeunesTalentsRouteImport.update({
 const InstituteRoute = InstituteRouteImport.update({
   id: '/institute',
   path: '/institute',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InscriptionRoute = InscriptionRouteImport.update({
+  id: '/inscription',
+  path: '/inscription',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InnovationDigitaleRoute = InnovationDigitaleRouteImport.update({
@@ -305,6 +337,11 @@ const EvenementsRoute = EvenementsRouteImport.update({
   path: '/evenements',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EspaceRoute = EspaceRouteImport.update({
+  id: '/espace',
+  path: '/espace',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EngagementsFormationRoute = EngagementsFormationRouteImport.update({
   id: '/engagements-formation',
   path: '/engagements-formation',
@@ -333,6 +370,11 @@ const DevisRoute = DevisRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnexionRoute = ConnexionRouteImport.update({
+  id: '/connexion',
+  path: '/connexion',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CertificationsRoute = CertificationsRouteImport.update({
@@ -410,6 +452,26 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EspaceIndexRoute = EspaceIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => EspaceRoute,
+} as any)
+const EspaceSecuriteRoute = EspaceSecuriteRouteImport.update({
+  id: '/securite',
+  path: '/securite',
+  getParentRoute: () => EspaceRoute,
+} as any)
+const EspaceProfilRoute = EspaceProfilRouteImport.update({
+  id: '/profil',
+  path: '/profil',
+  getParentRoute: () => EspaceRoute,
+} as any)
+const EspaceNouvelleDemandeRoute = EspaceNouvelleDemandeRouteImport.update({
+  id: '/nouvelle-demande',
+  path: '/nouvelle-demande',
+  getParentRoute: () => EspaceRoute,
+} as any)
 const BusinessCenterRecrutementRoute =
   BusinessCenterRecrutementRouteImport.update({
     id: '/recrutement',
@@ -431,6 +493,16 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EspaceDemandesIndexRoute = EspaceDemandesIndexRouteImport.update({
+  id: '/demandes/',
+  path: '/demandes/',
+  getParentRoute: () => EspaceRoute,
+} as any)
+const EspaceDemandesKindIdRoute = EspaceDemandesKindIdRouteImport.update({
+  id: '/demandes/$kind/$id',
+  path: '/demandes/$kind/$id',
+  getParentRoute: () => EspaceRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -448,12 +520,14 @@ export interface FileRoutesByFullPath {
   '/centre-excellence': typeof CentreExcellenceRoute
   '/certification-qualite': typeof CertificationQualiteRoute
   '/certifications': typeof CertificationsRoute
+  '/connexion': typeof ConnexionRoute
   '/contact': typeof ContactRoute
   '/devis': typeof DevisRoute
   '/ecosysteme': typeof EcosystemeRoute
   '/engagements-clients': typeof EngagementsClientsRoute
   '/engagements-entreprises': typeof EngagementsEntreprisesRoute
   '/engagements-formation': typeof EngagementsFormationRoute
+  '/espace': typeof EspaceRouteWithChildren
   '/evenements': typeof EvenementsRoute
   '/faq': typeof FaqRoute
   '/faq-interactive': typeof FaqInteractiveRoute
@@ -464,10 +538,12 @@ export interface FileRoutesByFullPath {
   '/galerie': typeof GalerieRoute
   '/gouvernance': typeof GouvernanceRoute
   '/innovation-digitale': typeof InnovationDigitaleRoute
+  '/inscription': typeof InscriptionRoute
   '/institute': typeof InstituteRoute
   '/jeunes-talents': typeof JeunesTalentsRoute
   '/laureats': typeof LaureatsRoute
   '/mediatheque': typeof MediathequeRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nos-experts': typeof NosExpertsRoute
   '/nos-politiques': typeof NosPolitiquesRoute
   '/notre-histoire': typeof NotreHistoireRoute
@@ -491,6 +567,7 @@ export interface FileRoutesByFullPath {
   '/recruitment-agency': typeof RecruitmentAgencyRoute
   '/recrutement': typeof RecrutementRoute
   '/references': typeof ReferencesRoute
+  '/reinitialiser-mot-de-passe': typeof ReinitialiserMotDePasseRoute
   '/rendez-vous': typeof RendezVousRoute
   '/salle-de-presse': typeof SalleDePresseRoute
   '/secteurs': typeof SecteursRoute
@@ -499,10 +576,17 @@ export interface FileRoutesByFullPath {
   '/technical-services': typeof TechnicalServicesRoute
   '/telechargements': typeof TelechargementsRoute
   '/valeurs-en-action': typeof ValeursEnActionRoute
+  '/verifier-email': typeof VerifierEmailRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/business-center/audit-rh': typeof BusinessCenterAuditRhRoute
   '/business-center/formation': typeof BusinessCenterFormationRoute
   '/business-center/recrutement': typeof BusinessCenterRecrutementRoute
+  '/espace/nouvelle-demande': typeof EspaceNouvelleDemandeRoute
+  '/espace/profil': typeof EspaceProfilRoute
+  '/espace/securite': typeof EspaceSecuriteRoute
+  '/espace/': typeof EspaceIndexRoute
+  '/espace/demandes/': typeof EspaceDemandesIndexRoute
+  '/espace/demandes/$kind/$id': typeof EspaceDemandesKindIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -520,6 +604,7 @@ export interface FileRoutesByTo {
   '/centre-excellence': typeof CentreExcellenceRoute
   '/certification-qualite': typeof CertificationQualiteRoute
   '/certifications': typeof CertificationsRoute
+  '/connexion': typeof ConnexionRoute
   '/contact': typeof ContactRoute
   '/devis': typeof DevisRoute
   '/ecosysteme': typeof EcosystemeRoute
@@ -536,10 +621,12 @@ export interface FileRoutesByTo {
   '/galerie': typeof GalerieRoute
   '/gouvernance': typeof GouvernanceRoute
   '/innovation-digitale': typeof InnovationDigitaleRoute
+  '/inscription': typeof InscriptionRoute
   '/institute': typeof InstituteRoute
   '/jeunes-talents': typeof JeunesTalentsRoute
   '/laureats': typeof LaureatsRoute
   '/mediatheque': typeof MediathequeRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nos-experts': typeof NosExpertsRoute
   '/nos-politiques': typeof NosPolitiquesRoute
   '/notre-histoire': typeof NotreHistoireRoute
@@ -563,6 +650,7 @@ export interface FileRoutesByTo {
   '/recruitment-agency': typeof RecruitmentAgencyRoute
   '/recrutement': typeof RecrutementRoute
   '/references': typeof ReferencesRoute
+  '/reinitialiser-mot-de-passe': typeof ReinitialiserMotDePasseRoute
   '/rendez-vous': typeof RendezVousRoute
   '/salle-de-presse': typeof SalleDePresseRoute
   '/secteurs': typeof SecteursRoute
@@ -571,10 +659,17 @@ export interface FileRoutesByTo {
   '/technical-services': typeof TechnicalServicesRoute
   '/telechargements': typeof TelechargementsRoute
   '/valeurs-en-action': typeof ValeursEnActionRoute
+  '/verifier-email': typeof VerifierEmailRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/business-center/audit-rh': typeof BusinessCenterAuditRhRoute
   '/business-center/formation': typeof BusinessCenterFormationRoute
   '/business-center/recrutement': typeof BusinessCenterRecrutementRoute
+  '/espace/nouvelle-demande': typeof EspaceNouvelleDemandeRoute
+  '/espace/profil': typeof EspaceProfilRoute
+  '/espace/securite': typeof EspaceSecuriteRoute
+  '/espace': typeof EspaceIndexRoute
+  '/espace/demandes': typeof EspaceDemandesIndexRoute
+  '/espace/demandes/$kind/$id': typeof EspaceDemandesKindIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -593,12 +688,14 @@ export interface FileRoutesById {
   '/centre-excellence': typeof CentreExcellenceRoute
   '/certification-qualite': typeof CertificationQualiteRoute
   '/certifications': typeof CertificationsRoute
+  '/connexion': typeof ConnexionRoute
   '/contact': typeof ContactRoute
   '/devis': typeof DevisRoute
   '/ecosysteme': typeof EcosystemeRoute
   '/engagements-clients': typeof EngagementsClientsRoute
   '/engagements-entreprises': typeof EngagementsEntreprisesRoute
   '/engagements-formation': typeof EngagementsFormationRoute
+  '/espace': typeof EspaceRouteWithChildren
   '/evenements': typeof EvenementsRoute
   '/faq': typeof FaqRoute
   '/faq-interactive': typeof FaqInteractiveRoute
@@ -609,10 +706,12 @@ export interface FileRoutesById {
   '/galerie': typeof GalerieRoute
   '/gouvernance': typeof GouvernanceRoute
   '/innovation-digitale': typeof InnovationDigitaleRoute
+  '/inscription': typeof InscriptionRoute
   '/institute': typeof InstituteRoute
   '/jeunes-talents': typeof JeunesTalentsRoute
   '/laureats': typeof LaureatsRoute
   '/mediatheque': typeof MediathequeRoute
+  '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
   '/nos-experts': typeof NosExpertsRoute
   '/nos-politiques': typeof NosPolitiquesRoute
   '/notre-histoire': typeof NotreHistoireRoute
@@ -636,6 +735,7 @@ export interface FileRoutesById {
   '/recruitment-agency': typeof RecruitmentAgencyRoute
   '/recrutement': typeof RecrutementRoute
   '/references': typeof ReferencesRoute
+  '/reinitialiser-mot-de-passe': typeof ReinitialiserMotDePasseRoute
   '/rendez-vous': typeof RendezVousRoute
   '/salle-de-presse': typeof SalleDePresseRoute
   '/secteurs': typeof SecteursRoute
@@ -644,10 +744,17 @@ export interface FileRoutesById {
   '/technical-services': typeof TechnicalServicesRoute
   '/telechargements': typeof TelechargementsRoute
   '/valeurs-en-action': typeof ValeursEnActionRoute
+  '/verifier-email': typeof VerifierEmailRoute
   '/blog_/$slug': typeof BlogSlugRoute
   '/business-center/audit-rh': typeof BusinessCenterAuditRhRoute
   '/business-center/formation': typeof BusinessCenterFormationRoute
   '/business-center/recrutement': typeof BusinessCenterRecrutementRoute
+  '/espace/nouvelle-demande': typeof EspaceNouvelleDemandeRoute
+  '/espace/profil': typeof EspaceProfilRoute
+  '/espace/securite': typeof EspaceSecuriteRoute
+  '/espace/': typeof EspaceIndexRoute
+  '/espace/demandes/': typeof EspaceDemandesIndexRoute
+  '/espace/demandes/$kind/$id': typeof EspaceDemandesKindIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -667,12 +774,14 @@ export interface FileRouteTypes {
     | '/centre-excellence'
     | '/certification-qualite'
     | '/certifications'
+    | '/connexion'
     | '/contact'
     | '/devis'
     | '/ecosysteme'
     | '/engagements-clients'
     | '/engagements-entreprises'
     | '/engagements-formation'
+    | '/espace'
     | '/evenements'
     | '/faq'
     | '/faq-interactive'
@@ -683,10 +792,12 @@ export interface FileRouteTypes {
     | '/galerie'
     | '/gouvernance'
     | '/innovation-digitale'
+    | '/inscription'
     | '/institute'
     | '/jeunes-talents'
     | '/laureats'
     | '/mediatheque'
+    | '/mot-de-passe-oublie'
     | '/nos-experts'
     | '/nos-politiques'
     | '/notre-histoire'
@@ -710,6 +821,7 @@ export interface FileRouteTypes {
     | '/recruitment-agency'
     | '/recrutement'
     | '/references'
+    | '/reinitialiser-mot-de-passe'
     | '/rendez-vous'
     | '/salle-de-presse'
     | '/secteurs'
@@ -718,10 +830,17 @@ export interface FileRouteTypes {
     | '/technical-services'
     | '/telechargements'
     | '/valeurs-en-action'
+    | '/verifier-email'
     | '/blog/$slug'
     | '/business-center/audit-rh'
     | '/business-center/formation'
     | '/business-center/recrutement'
+    | '/espace/nouvelle-demande'
+    | '/espace/profil'
+    | '/espace/securite'
+    | '/espace/'
+    | '/espace/demandes/'
+    | '/espace/demandes/$kind/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -739,6 +858,7 @@ export interface FileRouteTypes {
     | '/centre-excellence'
     | '/certification-qualite'
     | '/certifications'
+    | '/connexion'
     | '/contact'
     | '/devis'
     | '/ecosysteme'
@@ -755,10 +875,12 @@ export interface FileRouteTypes {
     | '/galerie'
     | '/gouvernance'
     | '/innovation-digitale'
+    | '/inscription'
     | '/institute'
     | '/jeunes-talents'
     | '/laureats'
     | '/mediatheque'
+    | '/mot-de-passe-oublie'
     | '/nos-experts'
     | '/nos-politiques'
     | '/notre-histoire'
@@ -782,6 +904,7 @@ export interface FileRouteTypes {
     | '/recruitment-agency'
     | '/recrutement'
     | '/references'
+    | '/reinitialiser-mot-de-passe'
     | '/rendez-vous'
     | '/salle-de-presse'
     | '/secteurs'
@@ -790,10 +913,17 @@ export interface FileRouteTypes {
     | '/technical-services'
     | '/telechargements'
     | '/valeurs-en-action'
+    | '/verifier-email'
     | '/blog/$slug'
     | '/business-center/audit-rh'
     | '/business-center/formation'
     | '/business-center/recrutement'
+    | '/espace/nouvelle-demande'
+    | '/espace/profil'
+    | '/espace/securite'
+    | '/espace'
+    | '/espace/demandes'
+    | '/espace/demandes/$kind/$id'
   id:
     | '__root__'
     | '/'
@@ -811,12 +941,14 @@ export interface FileRouteTypes {
     | '/centre-excellence'
     | '/certification-qualite'
     | '/certifications'
+    | '/connexion'
     | '/contact'
     | '/devis'
     | '/ecosysteme'
     | '/engagements-clients'
     | '/engagements-entreprises'
     | '/engagements-formation'
+    | '/espace'
     | '/evenements'
     | '/faq'
     | '/faq-interactive'
@@ -827,10 +959,12 @@ export interface FileRouteTypes {
     | '/galerie'
     | '/gouvernance'
     | '/innovation-digitale'
+    | '/inscription'
     | '/institute'
     | '/jeunes-talents'
     | '/laureats'
     | '/mediatheque'
+    | '/mot-de-passe-oublie'
     | '/nos-experts'
     | '/nos-politiques'
     | '/notre-histoire'
@@ -854,6 +988,7 @@ export interface FileRouteTypes {
     | '/recruitment-agency'
     | '/recrutement'
     | '/references'
+    | '/reinitialiser-mot-de-passe'
     | '/rendez-vous'
     | '/salle-de-presse'
     | '/secteurs'
@@ -862,10 +997,17 @@ export interface FileRouteTypes {
     | '/technical-services'
     | '/telechargements'
     | '/valeurs-en-action'
+    | '/verifier-email'
     | '/blog_/$slug'
     | '/business-center/audit-rh'
     | '/business-center/formation'
     | '/business-center/recrutement'
+    | '/espace/nouvelle-demande'
+    | '/espace/profil'
+    | '/espace/securite'
+    | '/espace/'
+    | '/espace/demandes/'
+    | '/espace/demandes/$kind/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -884,12 +1026,14 @@ export interface RootRouteChildren {
   CentreExcellenceRoute: typeof CentreExcellenceRoute
   CertificationQualiteRoute: typeof CertificationQualiteRoute
   CertificationsRoute: typeof CertificationsRoute
+  ConnexionRoute: typeof ConnexionRoute
   ContactRoute: typeof ContactRoute
   DevisRoute: typeof DevisRoute
   EcosystemeRoute: typeof EcosystemeRoute
   EngagementsClientsRoute: typeof EngagementsClientsRoute
   EngagementsEntreprisesRoute: typeof EngagementsEntreprisesRoute
   EngagementsFormationRoute: typeof EngagementsFormationRoute
+  EspaceRoute: typeof EspaceRouteWithChildren
   EvenementsRoute: typeof EvenementsRoute
   FaqRoute: typeof FaqRoute
   FaqInteractiveRoute: typeof FaqInteractiveRoute
@@ -900,10 +1044,12 @@ export interface RootRouteChildren {
   GalerieRoute: typeof GalerieRoute
   GouvernanceRoute: typeof GouvernanceRoute
   InnovationDigitaleRoute: typeof InnovationDigitaleRoute
+  InscriptionRoute: typeof InscriptionRoute
   InstituteRoute: typeof InstituteRoute
   JeunesTalentsRoute: typeof JeunesTalentsRoute
   LaureatsRoute: typeof LaureatsRoute
   MediathequeRoute: typeof MediathequeRoute
+  MotDePasseOublieRoute: typeof MotDePasseOublieRoute
   NosExpertsRoute: typeof NosExpertsRoute
   NosPolitiquesRoute: typeof NosPolitiquesRoute
   NotreHistoireRoute: typeof NotreHistoireRoute
@@ -927,6 +1073,7 @@ export interface RootRouteChildren {
   RecruitmentAgencyRoute: typeof RecruitmentAgencyRoute
   RecrutementRoute: typeof RecrutementRoute
   ReferencesRoute: typeof ReferencesRoute
+  ReinitialiserMotDePasseRoute: typeof ReinitialiserMotDePasseRoute
   RendezVousRoute: typeof RendezVousRoute
   SalleDePresseRoute: typeof SalleDePresseRoute
   SecteursRoute: typeof SecteursRoute
@@ -935,11 +1082,19 @@ export interface RootRouteChildren {
   TechnicalServicesRoute: typeof TechnicalServicesRoute
   TelechargementsRoute: typeof TelechargementsRoute
   ValeursEnActionRoute: typeof ValeursEnActionRoute
+  VerifierEmailRoute: typeof VerifierEmailRoute
   BlogSlugRoute: typeof BlogSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/verifier-email': {
+      id: '/verifier-email'
+      path: '/verifier-email'
+      fullPath: '/verifier-email'
+      preLoaderRoute: typeof VerifierEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/valeurs-en-action': {
       id: '/valeurs-en-action'
       path: '/valeurs-en-action'
@@ -994,6 +1149,13 @@ declare module '@tanstack/react-router' {
       path: '/rendez-vous'
       fullPath: '/rendez-vous'
       preLoaderRoute: typeof RendezVousRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reinitialiser-mot-de-passe': {
+      id: '/reinitialiser-mot-de-passe'
+      path: '/reinitialiser-mot-de-passe'
+      fullPath: '/reinitialiser-mot-de-passe'
+      preLoaderRoute: typeof ReinitialiserMotDePasseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/references': {
@@ -1157,6 +1319,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NosExpertsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mot-de-passe-oublie': {
+      id: '/mot-de-passe-oublie'
+      path: '/mot-de-passe-oublie'
+      fullPath: '/mot-de-passe-oublie'
+      preLoaderRoute: typeof MotDePasseOublieRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mediatheque': {
       id: '/mediatheque'
       path: '/mediatheque'
@@ -1183,6 +1352,13 @@ declare module '@tanstack/react-router' {
       path: '/institute'
       fullPath: '/institute'
       preLoaderRoute: typeof InstituteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inscription': {
+      id: '/inscription'
+      path: '/inscription'
+      fullPath: '/inscription'
+      preLoaderRoute: typeof InscriptionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/innovation-digitale': {
@@ -1255,6 +1431,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EvenementsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/espace': {
+      id: '/espace'
+      path: '/espace'
+      fullPath: '/espace'
+      preLoaderRoute: typeof EspaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/engagements-formation': {
       id: '/engagements-formation'
       path: '/engagements-formation'
@@ -1295,6 +1478,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connexion': {
+      id: '/connexion'
+      path: '/connexion'
+      fullPath: '/connexion'
+      preLoaderRoute: typeof ConnexionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/certifications': {
@@ -1402,6 +1592,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/espace/': {
+      id: '/espace/'
+      path: '/'
+      fullPath: '/espace/'
+      preLoaderRoute: typeof EspaceIndexRouteImport
+      parentRoute: typeof EspaceRoute
+    }
+    '/espace/securite': {
+      id: '/espace/securite'
+      path: '/securite'
+      fullPath: '/espace/securite'
+      preLoaderRoute: typeof EspaceSecuriteRouteImport
+      parentRoute: typeof EspaceRoute
+    }
+    '/espace/profil': {
+      id: '/espace/profil'
+      path: '/profil'
+      fullPath: '/espace/profil'
+      preLoaderRoute: typeof EspaceProfilRouteImport
+      parentRoute: typeof EspaceRoute
+    }
+    '/espace/nouvelle-demande': {
+      id: '/espace/nouvelle-demande'
+      path: '/nouvelle-demande'
+      fullPath: '/espace/nouvelle-demande'
+      preLoaderRoute: typeof EspaceNouvelleDemandeRouteImport
+      parentRoute: typeof EspaceRoute
+    }
     '/business-center/recrutement': {
       id: '/business-center/recrutement'
       path: '/recrutement'
@@ -1430,6 +1648,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/espace/demandes/': {
+      id: '/espace/demandes/'
+      path: '/demandes'
+      fullPath: '/espace/demandes/'
+      preLoaderRoute: typeof EspaceDemandesIndexRouteImport
+      parentRoute: typeof EspaceRoute
+    }
+    '/espace/demandes/$kind/$id': {
+      id: '/espace/demandes/$kind/$id'
+      path: '/demandes/$kind/$id'
+      fullPath: '/espace/demandes/$kind/$id'
+      preLoaderRoute: typeof EspaceDemandesKindIdRouteImport
+      parentRoute: typeof EspaceRoute
+    }
   }
 }
 
@@ -1449,6 +1681,27 @@ const BusinessCenterRouteWithChildren = BusinessCenterRoute._addFileChildren(
   BusinessCenterRouteChildren,
 )
 
+interface EspaceRouteChildren {
+  EspaceNouvelleDemandeRoute: typeof EspaceNouvelleDemandeRoute
+  EspaceProfilRoute: typeof EspaceProfilRoute
+  EspaceSecuriteRoute: typeof EspaceSecuriteRoute
+  EspaceIndexRoute: typeof EspaceIndexRoute
+  EspaceDemandesIndexRoute: typeof EspaceDemandesIndexRoute
+  EspaceDemandesKindIdRoute: typeof EspaceDemandesKindIdRoute
+}
+
+const EspaceRouteChildren: EspaceRouteChildren = {
+  EspaceNouvelleDemandeRoute: EspaceNouvelleDemandeRoute,
+  EspaceProfilRoute: EspaceProfilRoute,
+  EspaceSecuriteRoute: EspaceSecuriteRoute,
+  EspaceIndexRoute: EspaceIndexRoute,
+  EspaceDemandesIndexRoute: EspaceDemandesIndexRoute,
+  EspaceDemandesKindIdRoute: EspaceDemandesKindIdRoute,
+}
+
+const EspaceRouteWithChildren =
+  EspaceRoute._addFileChildren(EspaceRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
@@ -1465,12 +1718,14 @@ const rootRouteChildren: RootRouteChildren = {
   CentreExcellenceRoute: CentreExcellenceRoute,
   CertificationQualiteRoute: CertificationQualiteRoute,
   CertificationsRoute: CertificationsRoute,
+  ConnexionRoute: ConnexionRoute,
   ContactRoute: ContactRoute,
   DevisRoute: DevisRoute,
   EcosystemeRoute: EcosystemeRoute,
   EngagementsClientsRoute: EngagementsClientsRoute,
   EngagementsEntreprisesRoute: EngagementsEntreprisesRoute,
   EngagementsFormationRoute: EngagementsFormationRoute,
+  EspaceRoute: EspaceRouteWithChildren,
   EvenementsRoute: EvenementsRoute,
   FaqRoute: FaqRoute,
   FaqInteractiveRoute: FaqInteractiveRoute,
@@ -1481,10 +1736,12 @@ const rootRouteChildren: RootRouteChildren = {
   GalerieRoute: GalerieRoute,
   GouvernanceRoute: GouvernanceRoute,
   InnovationDigitaleRoute: InnovationDigitaleRoute,
+  InscriptionRoute: InscriptionRoute,
   InstituteRoute: InstituteRoute,
   JeunesTalentsRoute: JeunesTalentsRoute,
   LaureatsRoute: LaureatsRoute,
   MediathequeRoute: MediathequeRoute,
+  MotDePasseOublieRoute: MotDePasseOublieRoute,
   NosExpertsRoute: NosExpertsRoute,
   NosPolitiquesRoute: NosPolitiquesRoute,
   NotreHistoireRoute: NotreHistoireRoute,
@@ -1508,6 +1765,7 @@ const rootRouteChildren: RootRouteChildren = {
   RecruitmentAgencyRoute: RecruitmentAgencyRoute,
   RecrutementRoute: RecrutementRoute,
   ReferencesRoute: ReferencesRoute,
+  ReinitialiserMotDePasseRoute: ReinitialiserMotDePasseRoute,
   RendezVousRoute: RendezVousRoute,
   SalleDePresseRoute: SalleDePresseRoute,
   SecteursRoute: SecteursRoute,
@@ -1516,6 +1774,7 @@ const rootRouteChildren: RootRouteChildren = {
   TechnicalServicesRoute: TechnicalServicesRoute,
   TelechargementsRoute: TelechargementsRoute,
   ValeursEnActionRoute: ValeursEnActionRoute,
+  VerifierEmailRoute: VerifierEmailRoute,
   BlogSlugRoute: BlogSlugRoute,
 }
 export const routeTree = rootRouteImport

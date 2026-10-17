@@ -6,10 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { FileText, CheckCircle2, Send } from "lucide-react";
+import { useMemberPrefill } from "@/lib/account-context";
 import { errorMessage, fieldErrorsOf } from "@/lib/api";
 import { submitQuote } from "@/lib/submissions";
 
@@ -53,6 +54,12 @@ function Devis() {
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+
+  // Compte client connecté : coordonnées pré-remplies (sans écraser une saisie).
+  const prefill = useMemberPrefill();
+  useEffect(() => {
+    if (prefill.key !== "anonyme") setData((d) => ({ ...d, name: d.name || prefill.name, email: d.email || prefill.email, phone: d.phone || prefill.phone, company: d.company || prefill.company }));
+  }, [prefill]);
 
   const set = <K extends keyof FormData>(k: K, v: FormData[K]) => {
     setData(d => ({ ...d, [k]: v }));

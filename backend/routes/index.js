@@ -14,6 +14,7 @@ const userCtrl = require("../controllers/user.controller");
 const settingCtrl = require("../controllers/setting.controller");
 const statsCtrl = require("../controllers/stats.controller");
 const notificationCtrl = require("../controllers/notification.controller");
+const { crudController } = require("../controllers/crud.factory");
 
 const router = express.Router();
 
@@ -21,6 +22,8 @@ router.get("/health", (_req, res) => res.json({ status: "ok", uptime: process.up
 router.use("/auth", authRoutes);
 // Site public : lecture des contenus publiés et dépôt des formulaires.
 router.use("/public", publicRoutes);
+// Espace client du site public : comptes candidats / entreprises.
+router.use("/account", require("./account.routes"));
 router.get("/stats/dashboard", canView, statsCtrl.dashboard);
 router.get("/stats/activity", canView, statsCtrl.activity);
 
@@ -66,6 +69,30 @@ users.get("/:id", adminOnly, userCtrl.getOne);
 users.patch("/:id", adminOnly, validate(schemas.userUpdate), userCtrl.update);
 users.delete("/:id", adminOnly, userCtrl.remove);
 router.use("/users", users);
+
+// --- Comptes clients du site public ----------------------------------------
+// Consultation et désactivation ; la création passe par l'inscription du client.
+const memberCrud = crudController({
+  model: require("../models/Member"),
+  searchFields: ["fullName", "email", "companyName", "phone", "city"],
+  filterFields: ["accountType", "active", "emailVerified"],
+  sortFields: ["createdAt", "fullName", "lastLoginAt"],
+});
+const members = express.Router();
+members.get("/", canView, memberCrud.list);
+members.get("/:id", canView, memberCrud.getOne);
+members.patch("/:id", canEdit, validate(schemas.memberAdminUpdate), memberCrud.update);
+// Les demandes restent pour leur traitement, simplement détachées du compte.
+members.delete("/:id", adminOnly, async (req, res, next) => {
+  try {
+    const { KINDS } = require("../controllers/account.controller");
+    await Promise.all(Object.values(KINDS).map(({ model }) => model.updateMany({ member: req.params.id }, { $set: { member: null } })));
+    next();
+  } catch (err) {
+    next(err);
+  }
+}, memberCrud.remove);
+router.use("/members", members);
 
 // --- Paramètres du site ----------------------------------------------------
 const settings = express.Router();

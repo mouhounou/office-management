@@ -40,6 +40,8 @@ module.exports = {
   // Derrière un proxy (Render, Railway, Nginx…), nombre de sauts à croire pour
   // l'IP du visiteur : indispensable au bon fonctionnement des limites de débit.
   trustProxy: Number(process.env.TRUST_PROXY) || 0,
+  // Site public : base des liens envoyés par email (vérification, mot de passe).
+  publicSiteUrl: (process.env.PUBLIC_SITE_URL || "http://localhost:8080").replace(/\/$/, ""),
   corsOrigins: (process.env.CORS_ORIGIN || "http://localhost:3000,http://localhost:5173")
     .split(",")
     .map((o) => o.trim())

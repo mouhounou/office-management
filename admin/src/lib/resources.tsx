@@ -9,6 +9,7 @@ import {
   Receipt,
   UserCheck,
   Users,
+  UserRound,
   type LucideIcon,
 } from "lucide-react";
 
@@ -89,6 +90,8 @@ export type ResourceDef = {
   fields?: FieldDef[];
   deleteLevel: "edit" | "admin";
   csvExport?: string;
+  /** Pas de création depuis l'admin (ex. comptes clients, créés par inscription). */
+  noCreate?: boolean;
 };
 
 const opt = optionsOf;
@@ -437,5 +440,38 @@ export const RESOURCES: ResourceDef[] = [
     csvExport: "/subscribers/export/csv",
   },
 ];
+
+RESOURCES.push({
+  key: "members",
+  title: "Comptes clients",
+  singular: "compte client",
+  description: "Candidats et entreprises inscrits sur l'espace client du site.",
+  icon: UserRound,
+  mode: "content",
+  noCreate: true,
+  searchPlaceholder: "Nom, email, entreprise, ville…",
+  primary: (item) => `${item.fullName} — ${item.email}`,
+  columns: [
+    { key: "fullName", label: "Client", render: (i) => <div><div className="font-medium">{i.fullName}</div><div className="text-xs text-muted-foreground">{i.email}</div></div> },
+    { key: "accountType", label: "Type", render: (i) => (i.accountType === "entreprise" ? <Badge tone="progress">Entreprise{i.companyName ? ` · ${i.companyName}` : ""}</Badge> : <Badge tone="info">Candidat</Badge>) },
+    { key: "emailVerified", label: "Email", render: (i) => (i.emailVerified ? <Badge tone="success">Vérifié</Badge> : <Badge>Non vérifié</Badge>) },
+    { key: "active", label: "État", render: (i) => (i.active ? <Badge tone="success">Actif</Badge> : <Badge tone="danger">Désactivé</Badge>) },
+    { key: "lastLoginAt", label: "Dernière connexion", render: (i) => (i.lastLoginAt ? timeAgo(i.lastLoginAt) : "—"), className: "whitespace-nowrap" },
+  ],
+  filters: [
+    { name: "accountType", label: "Type", options: [{ value: "candidat", label: "Candidats" }, { value: "entreprise", label: "Entreprises" }] },
+    { name: "active", label: "État", options: [{ value: "true", label: "Actifs" }, { value: "false", label: "Désactivés" }] },
+    { name: "emailVerified", label: "Email", options: [{ value: "true", label: "Vérifié" }, { value: "false", label: "Non vérifié" }] },
+  ],
+  fields: [
+    { name: "fullName", label: "Nom complet", type: "text", required: true, full: true },
+    { name: "accountType", label: "Type de compte", type: "select", options: [{ value: "candidat", label: "Candidat" }, { value: "entreprise", label: "Entreprise" }], required: true },
+    { name: "companyName", label: "Entreprise", type: "text" },
+    { name: "phone", label: "Téléphone", type: "text" },
+    { name: "city", label: "Ville", type: "text" },
+    { name: "active", label: "Compte actif (désactivé : le client ne peut plus se connecter)", type: "boolean", defaultValue: true },
+  ],
+  deleteLevel: "admin",
+});
 
 export const RESOURCE_BY_KEY = Object.fromEntries(RESOURCES.map((r) => [r.key, r]));

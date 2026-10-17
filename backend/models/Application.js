@@ -4,6 +4,8 @@ const { APPLICATION_STATUSES } = require("./constants");
 
 const applicationSchema = new mongoose.Schema(
   {
+    // Compte du site public à l'origine du dépôt (null pour un visiteur anonyme).
+    member: { type: mongoose.Schema.Types.ObjectId, ref: "Member", default: null, index: true },
     offer: { type: mongoose.Schema.Types.ObjectId, ref: "Offer", default: null, index: true },
     fullName: { type: String, required: true, trim: true, maxlength: 120 },
     email: { type: String, required: true, trim: true, lowercase: true, maxlength: 255 },

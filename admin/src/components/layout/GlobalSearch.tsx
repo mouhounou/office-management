@@ -9,7 +9,7 @@ import { RESOURCE_BY_KEY } from "@/lib/resources";
 import { cn } from "@/lib/utils";
 
 /** Ressources balayées par la recherche globale, dans l'ordre d'affichage. */
-const SCOPES = ["business-requests", "quotes", "pre-registrations", "applications", "messages", "companies", "offers"];
+const SCOPES = ["business-requests", "quotes", "pre-registrations", "applications", "messages", "companies", "offers", "members"];
 
 type Hit = { key: string; id: string; title: string; group: string };
 
