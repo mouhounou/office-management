@@ -38,6 +38,11 @@ const businessRequestCreate = z.object({
   deadline: optionalDate,
   assignedTo: z.string().nullish(),
   adminNotes: optionalText(4000),
+  // Champs propres au type de demande (postes recherchés, effectif…).
+  details: z
+    .record(z.string().trim().max(60), z.string().trim().max(2000))
+    .refine((v) => Object.keys(v).length <= 30, "Trop de champs complémentaires")
+    .optional(),
 });
 
 const requestEventCreate = z.object({
@@ -217,7 +222,9 @@ module.exports = {
   preRegistrationCreate,
   preRegistrationUpdate: preRegistrationCreate.partial(),
   offerCreate,
-  offerUpdate: offerCreate.partial(),
+  // Sans ce retrait du `.default("stage")`, chaque PATCH qui omet le type de
+  // contrat le remettrait à « stage ».
+  offerUpdate: offerCreate.extend({ contractType: enumOf(C.CONTRACT_TYPES, "Type de contrat invalide") }).partial(),
   applicationCreate,
   applicationUpdate: applicationCreate.partial(),
   formationCreate,

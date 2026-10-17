@@ -72,7 +72,7 @@ const uploadRequestDocument = asyncHandler(async (req, res) => {
 });
 
 const removeRequestDocument = asyncHandler(async (req, res) => {
-  const doc = await RequestDocument.findByIdAndDelete(req.params.docId);
+  const doc = await RequestDocument.findOneAndDelete({ _id: req.params.docId, request: req.params.id });
   if (!doc) throw ApiError.notFound();
   await destroyFile(doc.storageKey, doc.resourceType);
   res.status(204).end();
