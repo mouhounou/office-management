@@ -4,7 +4,7 @@ const { trimmed, email, phone, optionalText, dateString, optionalDate, bool } = 
 const C = require("../models/constants");
 
 const enumOf = (values, message) => z.enum(values, { message });
-const optionalEmail = email.optional().or(z.literal("")).transform((v) => v || undefined);
+const optionalEmail = email.nullish().or(z.literal("")).transform((v) => (v === "" ? null : v));
 
 // --- Entreprises ------------------------------------------------------------
 const companyCreate = z.object({

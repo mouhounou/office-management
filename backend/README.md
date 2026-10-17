@@ -16,7 +16,11 @@ MongoDB doit tourner localement (`mongodb://127.0.0.1:27017/office_management` p
 ## Authentification
 
 Le JWT est renvoyé dans le corps de la réponse **et** posé en cookie httpOnly `om_token`.
-L'admin Next stocke le token dans son propre cookie et l'envoie en `Authorization: Bearer`.
+L'admin (`admin/`, Vite + React) garde le token et l'envoie en `Authorization: Bearer` ; le cookie sert de repli.
+
+Les requêtes d'écriture (POST, PATCH, PUT, DELETE) venant d'une origine absente de
+`CORS_ORIGIN` sont refusées (403) : protection CSRF, le cookie étant en `SameSite=None`
+en production. `/auth/login` est limité à 10 échecs par quart d'heure et par IP.
 
 | Méthode | Route | Accès | Rôle |
 | --- | --- | --- | --- |
@@ -80,14 +84,22 @@ répond `{ item }`.
 | Médiathèque | `/api/media` | folder, mimeType | éditeur |
 | Entreprises | `/api/companies` | sector, city | éditeur |
 | Newsletter | `/api/subscribers` (+ `/export/csv`) | active, source | éditeur |
-| Notifications | `/api/notifications` | type, user | éditeur |
+| Notifications | `/api/notifications` (+ `/unread-count`, `/read-all`, `/:id/read`) | unread | éditeur |
 | Utilisateurs | `/api/users` (+ `/assignable`) | role, active | admin |
 | Paramètres | `/api/settings`, `PUT /api/settings/:key` | — | admin |
-| Statistiques | `/api/stats/dashboard` | — | lecture |
+| Statistiques | `/api/stats/dashboard`, `/api/stats/activity` | weeks | lecture |
 
 La suppression est réservée aux admins, sauf pour la newsletter et les
 notifications (éditeurs). Un changement de statut ou d'assignation sur une
 demande business est automatiquement journalisé dans ses événements.
+
+Les notifications sont vues depuis le compte connecté : celles diffusées à toute
+l'équipe et celles qui lui sont adressées, chacune avec un booléen `read`
+(lu / non lu par compte). Chaque dépôt du site public en crée une, avec un lien
+vers la fiche à traiter dans l'admin.
+
+Dans un `PATCH`, un champ texte facultatif envoyé vide (`""`) est effacé ; un
+champ absent reste inchangé.
 
 ## Site public
 
@@ -115,8 +127,11 @@ traitement (`status`, `adminNotes`, assignation) : un visiteur ne peut pas
 créer une demande déjà « terminée » ni écrire dans les notes internes.
 Les dépôts sont limités à 20 par quart d'heure et par adresse IP.
 
-Pensez à déclarer l'origine du site dans `CORS_ORIGIN` (`.env`) : une origine
-inconnue ne reçoit simplement pas d'en-tête CORS et le navigateur bloque.
+Pensez à déclarer l'origine du site et celle de l'admin dans `CORS_ORIGIN` (`.env`) :
+une origine inconnue ne reçoit pas d'en-tête CORS et ses écritures sont refusées.
+
+En production derrière un proxy (Render, Railway, Nginx…), réglez `TRUST_PROXY=1` :
+sans cela, tous les visiteurs partagent la même IP aux yeux des limites de débit.
 
 ## Fichiers
 

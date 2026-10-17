@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
-const { corsOrigins } = require("./config/env");
+const { corsOrigins, trustProxy } = require("./config/env");
 const routes = require("./routes");
 const { mountDocs } = require("./docs");
 const { notFound, errorHandler } = require("./middlewares/error");
@@ -11,6 +11,7 @@ const ApiError = require("./utils/ApiError");
 const app = express();
 
 app.disable("x-powered-by");
+if (trustProxy) app.set("trust proxy", trustProxy);
 app.use(
   cors({
     origin(origin, cb) {

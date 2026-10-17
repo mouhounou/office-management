@@ -8,6 +8,7 @@ const Post = require("../models/Post");
 const Subscriber = require("../models/Subscriber");
 const Media = require("../models/Media");
 const User = require("../models/User");
+const Message = require("../models/Message");
 const asyncHandler = require("../utils/asyncHandler");
 
 /** { new: 3, completed: 1 } à partir d'un $group Mongo. */
@@ -53,6 +54,9 @@ const dashboard = asyncHandler(async (_req, res) => {
     latestQuotes,
     latestPreRegistrations,
     latestApplications,
+    messagesTotal,
+    messagesNew,
+    latestMessages,
   ] = await Promise.all([
     BusinessRequest.countDocuments(),
     BusinessRequest.countDocuments({ status: "new" }),
@@ -81,6 +85,9 @@ const dashboard = asyncHandler(async (_req, res) => {
     QuoteRequest.find().sort({ createdAt: -1 }).limit(8).select("name company pole status createdAt"),
     PreRegistration.find().sort({ createdAt: -1 }).limit(8).select("fullName training status createdAt"),
     Application.find().sort({ createdAt: -1 }).limit(8).select("fullName email status createdAt"),
+    Message.countDocuments(),
+    Message.countDocuments({ status: "new" }),
+    Message.find().sort({ createdAt: -1 }).limit(8).select("name kind subject reason status createdAt"),
   ]);
 
   res.json({
@@ -95,6 +102,7 @@ const dashboard = asyncHandler(async (_req, res) => {
       subscribers: { total: subscribersTotal, last30Days: subscribersRecent },
       media: { total: mediaTotal },
       users: { total: usersTotal },
+      messages: { total: messagesTotal, pending: messagesNew },
     },
     byStatus: {
       businessRequests: toStatusMap(businessByStatus),
@@ -107,6 +115,7 @@ const dashboard = asyncHandler(async (_req, res) => {
       quotes: latestQuotes,
       preRegistrations: latestPreRegistrations,
       applications: latestApplications,
+      messages: latestMessages,
     },
   });
 });

@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Charte reprise du site public : navy profond + cyan. Le back-office est
+ * clair par défaut (lecture prolongée de tableaux) avec un mode sombre.
+ */
+@theme inline {
+  --font-sans: "Poppins", system-ui, sans-serif;
+  --font-display: "Montserrat", system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-destructive: var(--destructive);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-cyan: var(--cyan);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-muted: var(--sidebar-muted);
+  --color-sidebar-active: var(--sidebar-active);
+}
+
+:root {
+  --navy-deep: oklch(0.18 0.04 255);
+  --navy: oklch(0.24 0.05 255);
+  --cyan: oklch(0.68 0.13 220);
+
+  --background: oklch(0.975 0.004 250);
+  --foreground: oklch(0.22 0.04 255);
+  --card: oklch(1 0 0);
+  --muted: oklch(0.955 0.006 250);
+  --muted-foreground: oklch(0.5 0.02 255);
+  --border: oklch(0.91 0.008 250);
+  --input: oklch(0.88 0.01 250);
+  --primary: oklch(0.58 0.13 225);
+  --primary-foreground: oklch(0.99 0 0);
+  --accent: oklch(0.95 0.03 220);
+  --destructive: oklch(0.58 0.21 27);
+
+  --sidebar: oklch(0.18 0.04 255);
+  --sidebar-foreground: oklch(0.95 0.01 250);
+  --sidebar-muted: oklch(0.68 0.02 250);
+  --sidebar-active: oklch(0.26 0.05 250);
+
+  color-scheme: light;
+}
+
+.dark {
+  --background: oklch(0.15 0.035 255);
+  --foreground: oklch(0.95 0.01 250);
+  --card: oklch(0.2 0.04 255);
+  --muted: oklch(0.24 0.04 255);
+  --muted-foreground: oklch(0.72 0.02 250);
+  --border: oklch(0.3 0.04 255);
+  --input: oklch(0.34 0.04 255);
+  --primary: oklch(0.7 0.13 220);
+  --primary-foreground: oklch(0.15 0.04 255);
+  --accent: oklch(0.28 0.06 230);
+  --destructive: oklch(0.65 0.2 27);
+
+  --sidebar: oklch(0.12 0.03 255);
+  --sidebar-active: oklch(0.22 0.05 250);
+
+  color-scheme: dark;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+}
