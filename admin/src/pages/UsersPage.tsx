@@ -53,8 +53,8 @@ export function UsersPage() {
       />
       <Card>
         <div className="flex flex-wrap gap-3 border-b border-border p-4">
-          <SearchInput value={String(params.q ?? "")} onChange={onSearch} placeholder="Nom ou email…" className="min-w-56 flex-1" />
-          <Select value={String(params.role ?? "")} onChange={(e) => setParam("role", e.target.value)} className="w-auto min-w-40" aria-label="Rôle">
+          <SearchInput value={String(params.q ?? "")} onChange={onSearch} placeholder="Nom ou email…" className="w-full sm:w-auto sm:min-w-56 sm:flex-1" />
+          <Select value={String(params.role ?? "")} onChange={(e) => setParam("role", e.target.value)} className="w-full sm:w-auto sm:min-w-40" aria-label="Rôle">
             <option value="">Rôle : tous</option>
             {optionsOf(ROLES).map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </Select>
@@ -67,6 +67,23 @@ export function UsersPage() {
           <EmptyState icon={UserCog} title="Aucun compte" />
         ) : (
           <>
+            <ul className="divide-y divide-border sm:hidden">
+              {data.items.map((u) => (
+                <li key={u.id}>
+                  <button className="flex w-full items-center gap-3 px-4 py-3 text-left active:bg-muted" onClick={() => setEditing(u)}>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-medium">{u.fullName}</span>
+                      <span className="block truncate text-xs text-muted-foreground">{u.email}</span>
+                      <span className="mt-1.5 flex flex-wrap gap-1.5">
+                        <StatusBadge value={u.role} map={ROLES} />
+                        {u.active ? <Badge tone="success">Actif</Badge> : <Badge>Désactivé</Badge>}
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <div className="hidden sm:block">
             <Table>
               <thead>
                 <tr>
@@ -100,6 +117,7 @@ export function UsersPage() {
                 ))}
               </tbody>
             </Table>
+            </div>
             <Pagination page={data.page} pages={data.pages} total={data.total} onChange={(page) => setParam("page", String(page))} />
           </>
         )}

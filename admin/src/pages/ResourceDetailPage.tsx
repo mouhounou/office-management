@@ -167,7 +167,7 @@ function InboxView({ def, item }: { def: ResourceDef; item: AnyRecord }) {
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
       <Card>
         <CardHeader title="Détail" action={<StatusBadge value={item.status} map={statusMap} />} />
         <dl className="divide-y divide-border px-5 py-2">

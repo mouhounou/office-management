@@ -76,8 +76,8 @@ export function MediaPage() {
         className={cn(dragging && "ring-2 ring-primary")}
       >
         <div className="flex flex-wrap gap-3 border-b border-border p-4">
-          <SearchInput value={String(params.q ?? "")} onChange={onSearch} placeholder="Nom, texte alternatif…" className="min-w-56 flex-1" />
-          <Input value={String(params.folder ?? "")} onChange={(e) => setParam("folder", e.target.value)} placeholder="Dossier (ex. contenus)" className="w-48" />
+          <SearchInput value={String(params.q ?? "")} onChange={onSearch} placeholder="Nom, texte alternatif…" className="w-full sm:w-auto sm:min-w-56 sm:flex-1" />
+          <Input value={String(params.folder ?? "")} onChange={(e) => setParam("folder", e.target.value)} placeholder="Dossier (ex. contenus)" className="w-full sm:w-48" />
         </div>
 
         {isLoading ? (

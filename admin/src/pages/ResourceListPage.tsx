@@ -79,9 +79,9 @@ function ResourceList({ def }: { def: ResourceDef }) {
 
       <Card>
         <div className="flex flex-wrap items-center gap-3 border-b border-border p-4">
-          <SearchInput value={String(params.q ?? "")} onChange={onSearch} placeholder={def.searchPlaceholder} className="min-w-56 flex-1" />
+          <SearchInput value={String(params.q ?? "")} onChange={onSearch} placeholder={def.searchPlaceholder} className="w-full sm:w-auto sm:min-w-56 sm:flex-1" />
           {def.filters?.map((filter) => (
-            <Select key={filter.name} value={String(params[filter.name] ?? "")} onChange={(e) => update(filter.name, e.target.value)} className="w-auto min-w-40" aria-label={filter.label}>
+            <Select key={filter.name} value={String(params[filter.name] ?? "")} onChange={(e) => update(filter.name, e.target.value)} className="min-w-[45%] flex-1 sm:w-auto sm:min-w-40 sm:flex-none" aria-label={filter.label}>
               <option value="">{filter.label} : tous</option>
               {filter.options.map((o) => (
                 <option key={o.value} value={o.value}>
@@ -105,6 +105,28 @@ function ResourceList({ def }: { def: ResourceDef }) {
           />
         ) : (
           <div className={isFetching ? "opacity-70 transition" : "transition"}>
+            {/* Mobile : une fiche par élément, toutes les colonnes visibles sans défilement horizontal. */}
+            <ul className="divide-y divide-border sm:hidden">
+              {data.items.map((item) => {
+                const [first, ...rest] = def.columns;
+                return (
+                  <li key={item.id}>
+                    <Link to={`/${def.key}/${item.id}`} className="block space-y-2 px-4 py-3 transition active:bg-muted">
+                      <div className="text-sm">{first.render ? first.render(item) : (item[first.key] ?? "—")}</div>
+                      <dl className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs">
+                        {rest.map((column) => (
+                          <div key={column.key} className="flex items-center gap-1.5">
+                            <dt className="text-muted-foreground">{column.label} :</dt>
+                            <dd>{column.render ? column.render(item) : (item[column.key] ?? "—")}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+            <div className="hidden sm:block">
             <Table>
               <thead>
                 <tr>
@@ -135,6 +157,7 @@ function ResourceList({ def }: { def: ResourceDef }) {
                 ))}
               </tbody>
             </Table>
+            </div>
             <Pagination page={data.page} pages={data.pages} total={data.total} onChange={(page) => update("page", String(page))} />
           </div>
         )}
