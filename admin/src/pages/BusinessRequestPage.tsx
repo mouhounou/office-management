@@ -65,10 +65,10 @@ export function BusinessRequestPage() {
               <DetailRow label="Entreprise">{item.companyName}</DetailRow>
               <DetailRow label="Contact">{item.contactName}</DetailRow>
               <DetailRow label="Email">
-                <a href={`mailto:${item.contactEmail}`} className="text-primary hover:underline">{item.contactEmail}</a>
+                <a href={`mailto:${item.contactEmail}`} className="text-brand-strong hover:underline">{item.contactEmail}</a>
               </DetailRow>
               <DetailRow label="Téléphone">
-                <a href={`tel:${item.contactPhone}`} className="text-primary hover:underline">{item.contactPhone}</a>
+                <a href={`tel:${item.contactPhone}`} className="text-brand-strong hover:underline">{item.contactPhone}</a>
               </DetailRow>
               <DetailRow label="Budget">{item.budget || "—"}</DetailRow>
               <DetailRow label="Échéance">{formatDate(item.deadline)}</DetailRow>
@@ -248,7 +248,7 @@ function TimelineCard({ requestId }: { requestId: string }) {
               return (
                 <li key={event.id} className="relative">
                   <span className="absolute top-0.5 -left-[33px] flex h-6 w-6 items-center justify-center rounded-full border border-border bg-card">
-                    <Icon className="h-3 w-3 text-primary" />
+                    <Icon className="h-3 w-3 text-brand-strong" />
                   </span>
                   <div className="text-sm">
                     <span className="font-medium">{event.actorName ?? "Système"}</span>
@@ -355,7 +355,7 @@ function DocumentsCard({ requestId }: { requestId: string }) {
             <li key={doc.id} className="flex items-center gap-3 px-5 py-3">
               <FileText className="h-5 w-5 shrink-0 text-muted-foreground" />
               <a href={doc.url} target="_blank" rel="noreferrer" className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-medium hover:text-primary">{doc.name}</span>
+                <span className="block truncate text-sm font-medium hover:text-brand-strong">{doc.name}</span>
                 <span className="block text-xs text-muted-foreground">
                   {DOCUMENT_TYPES[doc.type] ?? doc.type} · {formatBytes(doc.sizeBytes)} · {formatDate(doc.createdAt)}
                 </span>

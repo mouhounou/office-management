@@ -69,7 +69,7 @@ export function LoginPage() {
             <img src="/logo.png" alt="" className="h-12 w-12 rounded-xl" />
           </div>
           <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-xl bg-accent">
-            <Lock className="h-5 w-5 text-primary" />
+            <Lock className="h-5 w-5 text-brand-strong" />
           </div>
           <h2 className="text-2xl font-bold">{firstAccount ? "Créer le compte administrateur" : "Connexion"}</h2>
           <p className="mt-1 mb-8 text-sm text-muted-foreground">

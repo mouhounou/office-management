@@ -73,7 +73,7 @@ export function MediaPage() {
         onDragOver={(e) => { if (can("edit")) { e.preventDefault(); setDragging(true); } }}
         onDragLeave={() => setDragging(false)}
         onDrop={(e) => { e.preventDefault(); setDragging(false); if (can("edit")) pick(e.dataTransfer.files); }}
-        className={cn(dragging && "ring-2 ring-primary")}
+        className={cn(dragging && "ring-2 ring-brand")}
       >
         <div className="flex flex-wrap gap-3 border-b border-border p-4">
           <SearchInput value={String(params.q ?? "")} onChange={onSearch} placeholder="Nom, texte alternatif…" className="w-full sm:w-auto sm:min-w-56 sm:flex-1" />
@@ -91,7 +91,7 @@ export function MediaPage() {
             <ul className="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6">
               {data.items.map((media) => (
                 <li key={media.id}>
-                  <button onClick={() => setSelected(media)} className="group block w-full overflow-hidden rounded-lg border border-border text-left transition hover:border-primary">
+                  <button onClick={() => setSelected(media)} className="group block w-full overflow-hidden rounded-lg border border-border text-left transition hover:border-brand">
                     <div className="flex aspect-square items-center justify-center bg-muted">
                       {media.mimeType?.startsWith("image/") ? (
                         <img src={media.url} alt={media.alt ?? ""} loading="lazy" className="h-full w-full object-cover transition group-hover:scale-105" />

@@ -6,11 +6,12 @@ import { Button, Spinner } from "@/components/ui/primitives";
 import { useNotificationActions, useNotifications, type Notification } from "@/lib/notifications";
 import { cn, timeAgo } from "@/lib/utils";
 
+// Couleurs de la charte ; le rouge seulement pour une erreur.
 const DOT: Record<Notification["type"], string> = {
-  info: "bg-sky-500",
-  success: "bg-emerald-500",
-  warning: "bg-amber-500",
-  error: "bg-red-500",
+  info: "bg-brand",
+  success: "bg-navy dark:bg-silver",
+  warning: "bg-transparent ring-2 ring-inset ring-brand",
+  error: "bg-destructive",
 };
 
 export function NotificationMenu() {
@@ -28,10 +29,10 @@ export function NotificationMenu() {
 
   return (
     <div className="relative">
-      <Button variant="ghost" size="icon" onClick={() => setOpen((v) => !v)} aria-label={`Notifications${unread ? ` (${unread} non lues)` : ""}`} className="relative">
-        <Bell className="h-5 w-5" />
+      <Button variant="outline" size="icon" onClick={() => setOpen((v) => !v)} aria-label={`Notifications${unread ? ` (${unread} non lues)` : ""}`} className="relative border-border">
+        <Bell className="h-[18px] w-[18px]" />
         {unread > 0 && (
-          <span className="absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold text-white">
+          <span className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-cyan px-1 text-[10px] font-bold text-navy-deep ring-2 ring-surface">
             {unread > 9 ? "9+" : unread}
           </span>
         )}
@@ -40,11 +41,11 @@ export function NotificationMenu() {
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 z-20 mt-2 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-xl border border-border bg-card shadow-lg">
+          <div className="absolute right-0 z-20 mt-2 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-border bg-card shadow-xl">
             <div className="flex items-center justify-between border-b border-border px-4 py-3">
               <span className="text-sm font-semibold">Notifications</span>
               {unread > 0 && (
-                <button className="inline-flex items-center gap-1 text-xs text-primary hover:underline" onClick={() => markAllRead.mutate()}>
+                <button className="inline-flex items-center gap-1 text-xs text-brand-strong hover:underline" onClick={() => markAllRead.mutate()}>
                   <CheckCheck className="h-3.5 w-3.5" /> Tout marquer comme lu
                 </button>
               )}
@@ -73,7 +74,7 @@ export function NotificationMenu() {
                 ))
               )}
             </div>
-            <Link to="/notifications" onClick={() => setOpen(false)} className="block border-t border-border px-4 py-2.5 text-center text-sm text-primary hover:bg-muted">
+            <Link to="/notifications" onClick={() => setOpen(false)} className="block border-t border-border px-4 py-2.5 text-center text-sm text-brand-strong hover:bg-muted">
               Voir toutes les notifications
             </Link>
           </div>

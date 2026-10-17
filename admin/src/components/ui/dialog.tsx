@@ -37,7 +37,7 @@ export function Dialog({
       onClose={onClose}
       onClick={(event) => event.target === ref.current && onClose()}
       className={cn(
-        "m-auto w-[calc(100%-2rem)] rounded-xl border border-border bg-card p-0 text-foreground shadow-2xl backdrop:bg-black/50 backdrop:backdrop-blur-sm",
+        "m-auto w-[calc(100%-2rem)] rounded-3xl border border-border bg-card p-0 text-foreground shadow-2xl backdrop:bg-navy-deep/50 backdrop:backdrop-blur-sm",
         size === "sm" && "max-w-md",
         size === "md" && "max-w-lg",
         size === "lg" && "max-w-2xl",

@@ -94,10 +94,10 @@ export type ResourceDef = {
 const opt = optionsOf;
 const published = (item: AnyRecord) =>
   item.published ? <Badge tone="success">Publié</Badge> : <Badge>Brouillon</Badge>;
-const mailto = (email?: string) => (email ? <a className="text-primary hover:underline" href={`mailto:${email}`}>{email}</a> : "—");
+const mailto = (email?: string) => (email ? <a className="text-brand-strong hover:underline" href={`mailto:${email}`}>{email}</a> : "—");
 const link = (url?: string | null) =>
   url ? (
-    <a className="text-primary hover:underline break-all" href={url} target="_blank" rel="noreferrer">
+    <a className="text-brand-strong hover:underline break-all" href={url} target="_blank" rel="noreferrer">
       {url}
     </a>
   ) : (

@@ -87,7 +87,7 @@ export function Table({ children }: { children: React.ReactNode }) {
 
 export function Th({ children, className }: { children?: React.ReactNode; className?: string }) {
   return (
-    <th className={cn("border-b border-border bg-muted/50 px-4 py-2.5 text-xs font-semibold tracking-wide text-muted-foreground uppercase", className)}>
+    <th className={cn("border-b border-border px-4 py-3 text-xs font-medium text-muted-foreground", className)}>
       {children}
     </th>
   );

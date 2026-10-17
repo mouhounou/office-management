@@ -10,7 +10,8 @@ function stored() {
   } catch {
     /* stockage indisponible */
   }
-  return window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
+  // Sans préférence enregistrée, le back-office s'ouvre en mode sombre.
+  return true;
 }
 
 let dark = stored();

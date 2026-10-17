@@ -560,8 +560,8 @@ function otherPaths() {
       get: {
         tags: ["Système"],
         summary: "Statistiques du tableau de bord",
-        description: "Compteurs par ressource, répartitions par statut et cinq derniers éléments de chaque flux.",
-        responses: { 200: { description: "Agrégats", ...json({ type: "object", properties: { counts: item, byStatus: item, latest: item } }) }, 401: RESPONSES[401] },
+        description: "Compteurs par ressource, répartitions par statut, derniers éléments de chaque flux, tendances sur 30 jours (`current` / `previous`), prochain rendez-vous et charge de l'équipe (demandes ouvertes par personne assignée).",
+        responses: { 200: { description: "Agrégats", ...json({ type: "object", properties: { counts: item, byStatus: item, latest: item, trends: item, nextAppointment: item, team: { type: "array", items: item } } }) }, 401: RESPONSES[401] },
       },
     },
     "/media": {

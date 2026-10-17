@@ -9,18 +9,19 @@ import type { Tone } from "@/lib/constants";
 type ButtonVariant = "primary" | "secondary" | "ghost" | "danger" | "outline";
 type ButtonSize = "sm" | "md" | "icon";
 
+// Boutons en pilule : plein navy pour l'action principale, contour pour le reste.
 const VARIANTS: Record<ButtonVariant, string> = {
-  primary: "bg-primary text-primary-foreground hover:opacity-90 shadow-sm",
+  primary: "bg-primary text-primary-foreground hover:opacity-90 shadow-sm shadow-navy-deep/20",
   secondary: "bg-muted text-foreground hover:bg-border",
-  outline: "border border-border bg-card hover:bg-muted",
+  outline: "border border-foreground/15 bg-card hover:bg-muted",
   ghost: "hover:bg-muted text-foreground",
   danger: "bg-destructive text-white hover:opacity-90",
 };
 
 const SIZES: Record<ButtonSize, string> = {
-  sm: "h-8 px-3 text-xs gap-1.5",
-  md: "h-10 px-4 text-sm gap-2",
-  icon: "h-9 w-9 justify-center",
+  sm: "h-8 px-3.5 text-xs gap-1.5",
+  md: "h-10 px-5 text-sm gap-2",
+  icon: "h-10 w-10 justify-center",
 };
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -38,7 +39,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       ref={ref}
       disabled={disabled || loading}
       className={cn(
-        "inline-flex items-center rounded-lg font-medium transition outline-none focus-visible:ring-2 focus-visible:ring-primary/50 disabled:pointer-events-none disabled:opacity-50 cursor-pointer whitespace-nowrap",
+        "inline-flex items-center rounded-full font-medium transition outline-none focus-visible:ring-2 focus-visible:ring-brand/50 disabled:pointer-events-none disabled:opacity-50 cursor-pointer whitespace-nowrap",
         VARIANTS[variant],
         SIZES[size],
         className,
@@ -54,7 +55,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
 // --- Champs -----------------------------------------------------------------
 
 const fieldBase =
-  "w-full rounded-lg border border-input bg-card px-3 text-sm outline-none transition placeholder:text-muted-foreground/70 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-60 aria-[invalid=true]:border-destructive";
+  "w-full rounded-xl border border-input bg-card px-3.5 text-sm outline-none transition placeholder:text-muted-foreground/70 focus:border-brand focus:ring-2 focus:ring-brand/20 disabled:opacity-60 aria-[invalid=true]:border-destructive";
 
 export const Input = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   function Input({ className, ...props }, ref) {
@@ -137,7 +138,7 @@ export function Switch({
         onClick={() => onChange(!checked)}
         className={cn(
           "relative h-6 w-11 shrink-0 rounded-full transition",
-          checked ? "bg-primary" : "bg-input",
+          checked ? "bg-brand" : "bg-input",
         )}
       >
         <span
@@ -155,7 +156,7 @@ export function Switch({
 // --- Conteneurs -------------------------------------------------------------
 
 export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("rounded-xl border border-border bg-card shadow-sm", className)} {...props} />;
+  return <div className={cn("rounded-2xl border border-border bg-card", className)} {...props} />;
 }
 
 export function CardHeader({
@@ -170,7 +171,7 @@ export function CardHeader({
   className?: string;
 }) {
   return (
-    <div className={cn("flex items-start justify-between gap-4 border-b border-border px-5 py-4", className)}>
+    <div className={cn("flex items-start justify-between gap-4 px-5 pt-5 pb-3", className)}>
       <div className="min-w-0">
         <h2 className="text-base font-semibold">{title}</h2>
         {description && <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>}
@@ -195,7 +196,7 @@ export function PageHeader({
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div className="min-w-0">
         {back}
-        <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
+        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{title}</h1>
         {description && <p className="mt-1 text-sm text-muted-foreground">{description}</p>}
       </div>
       {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
@@ -205,13 +206,15 @@ export function PageHeader({
 
 // --- Badges & états ---------------------------------------------------------
 
+// Statuts déclinés dans la charte : cyan = nouveau, contour = à l'étude,
+// navy clair = en cours, navy plein = terminé. Le rouge ne signale que l'alerte.
 const TONES: Record<Tone, string> = {
   neutral: "bg-muted text-muted-foreground ring-border",
-  info: "bg-sky-500/10 text-sky-700 ring-sky-500/25 dark:text-sky-300",
-  progress: "bg-indigo-500/10 text-indigo-700 ring-indigo-500/25 dark:text-indigo-300",
-  success: "bg-emerald-500/10 text-emerald-700 ring-emerald-500/25 dark:text-emerald-300",
-  warning: "bg-amber-500/10 text-amber-700 ring-amber-500/30 dark:text-amber-300",
-  danger: "bg-red-500/10 text-red-700 ring-red-500/25 dark:text-red-300",
+  info: "bg-brand-soft text-brand-strong ring-brand/30",
+  warning: "bg-transparent text-foreground ring-brand",
+  progress: "bg-navy/10 text-navy ring-navy/20 dark:bg-silver/15 dark:text-silver dark:ring-silver/30",
+  success: "bg-navy-deep text-white ring-navy-deep dark:bg-cyan dark:text-navy-deep dark:ring-cyan",
+  danger: "bg-destructive/10 text-destructive ring-destructive/30",
 };
 
 export function Badge({

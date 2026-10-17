@@ -22,9 +22,52 @@ const groupByStatus = (model) =>
 /** Agrégats du tableau de bord : compteurs, répartitions et derniers arrivages.
  *  Huit éléments par flux : la liste du tableau de bord est bornée en hauteur et
  *  défile, autant y mettre de la matière. */
+/** Dépôts des 30 derniers jours et des 30 précédents, pour afficher une tendance. */
+async function trend(model) {
+  const now = Date.now();
+  const day = 24 * 60 * 60 * 1000;
+  const [current, previous] = await Promise.all([
+    model.countDocuments({ createdAt: { $gte: new Date(now - 30 * day) } }),
+    model.countDocuments({ createdAt: { $gte: new Date(now - 60 * day), $lt: new Date(now - 30 * day) } }),
+  ]);
+  return { current, previous };
+}
+
+/** Demandes business encore ouvertes, par personne assignée. */
+async function teamWorkload() {
+  const open = await BusinessRequest.find({
+    status: { $in: ["new", "in_review", "in_progress"] },
+    assignedTo: { $ne: null },
+  })
+    .sort({ updatedAt: -1 })
+    .select("title status assignedTo")
+    .populate("assignedTo", "fullName email role")
+    .lean();
+
+  const byUser = new Map();
+  for (const request of open) {
+    if (!request.assignedTo) continue;
+    const key = String(request.assignedTo._id);
+    if (!byUser.has(key)) {
+      byUser.set(key, {
+        id: key,
+        fullName: request.assignedTo.fullName,
+        email: request.assignedTo.email,
+        open: 0,
+        // La plus récemment mise à jour : ce sur quoi la personne travaille.
+        current: { id: String(request._id), title: request.title, status: request.status },
+      });
+    }
+    byUser.get(key).open += 1;
+  }
+  return [...byUser.values()].sort((a, b) => b.open - a.open).slice(0, 6);
+}
+
 const dashboard = asyncHandler(async (_req, res) => {
   const since = new Date();
   since.setDate(since.getDate() - 30);
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
 
   const [
     businessTotal,
@@ -57,6 +100,13 @@ const dashboard = asyncHandler(async (_req, res) => {
     messagesTotal,
     messagesNew,
     latestMessages,
+    businessTrend,
+    quotesTrend,
+    preTrend,
+    applicationsTrend,
+    messagesTrend,
+    nextAppointment,
+    team,
   ] = await Promise.all([
     BusinessRequest.countDocuments(),
     BusinessRequest.countDocuments({ status: "new" }),
@@ -88,6 +138,19 @@ const dashboard = asyncHandler(async (_req, res) => {
     Message.countDocuments(),
     Message.countDocuments({ status: "new" }),
     Message.find().sort({ createdAt: -1 }).limit(8).select("name kind subject reason status createdAt"),
+    trend(BusinessRequest),
+    trend(QuoteRequest),
+    trend(PreRegistration),
+    trend(Application),
+    trend(Message),
+    Message.findOne({
+      kind: "rendez-vous",
+      preferredDate: { $gte: startOfToday },
+      status: { $nin: ["completed", "cancelled"] },
+    })
+      .sort({ preferredDate: 1 })
+      .select("name email phone reason preferredDate timeSlot status"),
+    teamWorkload(),
   ]);
 
   res.json({
@@ -117,6 +180,15 @@ const dashboard = asyncHandler(async (_req, res) => {
       applications: latestApplications,
       messages: latestMessages,
     },
+    trends: {
+      businessRequests: businessTrend,
+      quotes: quotesTrend,
+      preRegistrations: preTrend,
+      applications: applicationsTrend,
+      messages: messagesTrend,
+    },
+    nextAppointment,
+    team,
   });
 });
 
