@@ -10,6 +10,7 @@ import { Phone, Mail, MapPin, Clock, MessageCircle, Send, CheckCircle2, Headset 
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { errorMessage } from "@/lib/api";
+import { useMemberPrefill } from "@/lib/account-context";
 import { submitContactMessage } from "@/lib/submissions";
 
 export const Route = createFileRoute("/contact")({
@@ -32,6 +33,7 @@ const infos = [
 ];
 
 function Contact() {
+  const prefill = useMemberPrefill();
   const [done, setDone] = useState(false);
   const [sending, setSending] = useState(false);
 
@@ -117,13 +119,13 @@ function Contact() {
                 <Button onClick={() => setDone(false)} variant="outline" className="border-primary/40 hover:bg-primary/10">Envoyer un autre message</Button>
               </div>
             ) : (
-              <form onSubmit={onSubmit} className="space-y-5">
+              <form key={prefill.key} onSubmit={onSubmit} className="space-y-5">
                 <h2 className="font-display text-2xl font-bold">Écrivez-nous</h2>
                 <div className="grid sm:grid-cols-2 gap-4">
-                  <div><Label className="mb-2 block">Nom</Label><Input name="name" required placeholder="Jean Dupont" /></div>
-                  <div><Label className="mb-2 block">Téléphone</Label><Input name="phone" required placeholder="06 ..." /></div>
+                  <div><Label className="mb-2 block">Nom</Label><Input name="name" required defaultValue={prefill.name} placeholder="Jean Dupont" /></div>
+                  <div><Label className="mb-2 block">Téléphone</Label><Input name="phone" required defaultValue={prefill.phone} placeholder="06 ..." /></div>
                 </div>
-                <div><Label className="mb-2 block">Email</Label><Input name="email" type="email" required placeholder="email@exemple.com" /></div>
+                <div><Label className="mb-2 block">Email</Label><Input name="email" type="email" required defaultValue={prefill.email} placeholder="email@exemple.com" /></div>
                 <div><Label className="mb-2 block">Sujet</Label><Input name="subject" required placeholder="Demande de devis, inscription, ..." /></div>
                 <div><Label className="mb-2 block">Message</Label><Textarea name="message" required rows={5} placeholder="Décrivez votre besoin..." /></div>
                 <Button type="submit" disabled={sending} className="w-full gradient-cyan text-primary-foreground glow-cyan font-semibold hover:opacity-90">

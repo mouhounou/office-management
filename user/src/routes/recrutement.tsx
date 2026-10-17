@@ -10,6 +10,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { errorMessage } from "@/lib/api";
+import { useMemberPrefill } from "@/lib/account-context";
 import { submitApplication, submitBusinessRequest } from "@/lib/submissions";
 import { Briefcase, Users, UserCheck, Search, Send, ArrowRight, Clock, ShieldCheck, Network, Target } from "lucide-react";
 import entretien from "@/assets/entretien-recrutement.jpg";
@@ -47,6 +48,7 @@ const ASIDE = {
 };
 
 function Recrutement() {
+  const prefill = useMemberPrefill();
   const [tab, setTab] = useState<"candidat" | "entreprise">("candidat");
   const [sending, setSending] = useState(false);
 
@@ -178,16 +180,16 @@ ${details}`,
 
           {/* Form */}
           <Card className="gradient-card border-border p-8 md:p-10">
-            <form onSubmit={onSubmit} className="space-y-5">
+            <form key={prefill.key} onSubmit={onSubmit} className="space-y-5">
               <h2 className="font-display text-2xl font-bold mb-2">{tab === "candidat" ? "Déposer ma candidature" : "Décrire mon besoin de recrutement"}</h2>
               <div className="grid sm:grid-cols-2 gap-4">
-                <div><Label className="mb-2 block">Nom complet</Label><Input name="name" required placeholder="Jean Dupont" /></div>
+                <div><Label className="mb-2 block">Nom complet</Label><Input name="name" required defaultValue={prefill.name} placeholder="Jean Dupont" /></div>
                 <div><Label className="mb-2 block">{tab === "candidat" ? "Téléphone" : "Entreprise"}</Label><Input name="phoneOrCompany" required placeholder={tab === "candidat" ? "06 ..." : "Société SARL"} /></div>
               </div>
               {tab === "entreprise" ? (
-                <div><Label className="mb-2 block">Téléphone</Label><Input name="phone" required placeholder="06 ..." /></div>
+                <div><Label className="mb-2 block">Téléphone</Label><Input name="phone" required defaultValue={prefill.phone} placeholder="06 ..." /></div>
               ) : null}
-              <div><Label className="mb-2 block">Email</Label><Input name="email" type="email" required placeholder="email@exemple.com" /></div>
+              <div><Label className="mb-2 block">Email</Label><Input name="email" type="email" required defaultValue={prefill.email} placeholder="email@exemple.com" /></div>
               <div><Label className="mb-2 block">{tab === "candidat" ? "Poste recherché" : "Poste à pourvoir"}</Label><Input name="position" required placeholder="Ex : Comptable" /></div>
               <div><Label className="mb-2 block">{tab === "candidat" ? "Présentation / parcours" : "Description du besoin"}</Label><Textarea name="details" required rows={4} minLength={20} placeholder="Décrivez votre profil ou votre besoin (20 caractères minimum)..." /></div>
               <Button type="submit" disabled={sending} className="w-full gradient-cyan text-primary-foreground glow-cyan font-semibold hover:opacity-90">

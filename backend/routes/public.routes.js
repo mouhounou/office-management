@@ -4,6 +4,7 @@ const { rateLimit } = require("express-rate-limit");
 const ctrl = require("../controllers/public.controller");
 const validate = require("../middlewares/validate");
 const publicSchemas = require("../validators/public");
+const { optionalMember } = require("../middlewares/memberAuth");
 
 /**
  * Routes ouvertes, consommées par le site public (user/).
@@ -33,6 +34,8 @@ router.get("/offers/:id", ctrl.getOffer);
 router.get("/settings", ctrl.getSettings);
 
 // --- Dépôts ----------------------------------------------------------------
+// Un visiteur connecté à son espace client voit ses dépôts rattachés à son compte.
+router.use(["/quotes", "/pre-registrations", "/business-requests", "/applications", "/messages", "/appointments"], optionalMember);
 router.post("/quotes", submitLimiter, validate(publicSchemas.quotePublic), ctrl.submitQuote);
 router.post(
   "/pre-registrations",

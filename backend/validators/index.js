@@ -206,6 +206,17 @@ const userUpdate = z.object({
   password: z.string().min(8, "8 caractères minimum").max(200).optional().or(z.literal("")),
 });
 
+// --- Comptes clients (vus depuis l'admin) -----------------------------------
+// Pas de mot de passe ni d'email ici : ils restent entre les mains du client.
+const memberAdminUpdate = z.object({
+  fullName: trimmed(120).min(2, "Nom trop court").optional(),
+  accountType: enumOf(["candidat", "entreprise"], "Type de compte invalide").optional(),
+  phone: optionalText(40),
+  companyName: optionalText(180),
+  city: optionalText(120),
+  active: bool.optional(),
+});
+
 // --- Paramètres -------------------------------------------------------------
 const settingUpsert = z.object({
   value: z.record(z.string(), z.any()),
@@ -240,4 +251,5 @@ module.exports = {
   userCreate,
   userUpdate,
   settingUpsert,
+  memberAdminUpdate,
 };

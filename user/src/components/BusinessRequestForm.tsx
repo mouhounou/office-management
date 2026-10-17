@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Loader2, CheckCircle2, Building2 } from "lucide-react";
 import { type RequestType, TYPE_LABELS } from "@/lib/business";
 import { errorMessage } from "@/lib/api";
+import { useMemberPrefill } from "@/lib/account-context";
 import { submitBusinessRequest } from "@/lib/submissions";
 
 const requestSchema = z.object({
@@ -25,6 +26,7 @@ const requestSchema = z.object({
 });
 
 export function BusinessRequestForm({ type }: { type: RequestType }) {
+  const prefill = useMemberPrefill();
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [extra, setExtra] = useState<Record<string, string>>({});
@@ -80,15 +82,15 @@ export function BusinessRequestForm({ type }: { type: RequestType }) {
   }
 
   return (
-    <form onSubmit={onSubmit} className="max-w-2xl mx-auto space-y-6">
+    <form key={prefill.key} onSubmit={onSubmit} className="max-w-2xl mx-auto space-y-6">
       {/* Coordonnées */}
       <div>
         <h3 className="font-display text-lg font-bold mb-4 flex items-center gap-2"><Building2 className="h-4 w-4 text-primary" /> Vos coordonnées</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2"><Label htmlFor="contact_name">Nom complet *</Label><Input id="contact_name" name="contact_name" required maxLength={120} placeholder="Jean Dupont" /></div>
-          <div className="space-y-2"><Label htmlFor="company">Entreprise *</Label><Input id="company" name="company" required maxLength={180} placeholder="Société SARL" /></div>
-          <div className="space-y-2"><Label htmlFor="contact_email">Email *</Label><Input id="contact_email" name="contact_email" type="email" required maxLength={180} placeholder="email@entreprise.com" /></div>
-          <div className="space-y-2"><Label htmlFor="contact_phone">Téléphone *</Label><Input id="contact_phone" name="contact_phone" required maxLength={40} placeholder="+242 ..." /></div>
+          <div className="space-y-2"><Label htmlFor="contact_name">Nom complet *</Label><Input id="contact_name" name="contact_name" required maxLength={120} defaultValue={prefill.name} placeholder="Jean Dupont" /></div>
+          <div className="space-y-2"><Label htmlFor="company">Entreprise *</Label><Input id="company" name="company" required maxLength={180} defaultValue={prefill.company} placeholder="Société SARL" /></div>
+          <div className="space-y-2"><Label htmlFor="contact_email">Email *</Label><Input id="contact_email" name="contact_email" type="email" required maxLength={180} defaultValue={prefill.email} placeholder="email@entreprise.com" /></div>
+          <div className="space-y-2"><Label htmlFor="contact_phone">Téléphone *</Label><Input id="contact_phone" name="contact_phone" required maxLength={40} defaultValue={prefill.phone} placeholder="+242 ..." /></div>
         </div>
       </div>
 

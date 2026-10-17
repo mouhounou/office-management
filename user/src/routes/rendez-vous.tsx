@@ -12,6 +12,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { errorMessage } from "@/lib/api";
+import { useMemberPrefill } from "@/lib/account-context";
 import { submitAppointment } from "@/lib/submissions";
 import { Briefcase, Compass, GraduationCap, Search, CalendarClock } from "lucide-react";
 
@@ -35,6 +36,7 @@ const motifs = [
 ];
 
 function RendezVous() {
+  const prefill = useMemberPrefill();
   const [motif, setMotif] = useState("Conseils RH");
   const [sending, setSending] = useState(false);
 
@@ -86,15 +88,15 @@ function RendezVous() {
         </div>
 
         <Card className="gradient-card border-border p-8 max-w-2xl mx-auto">
-          <form onSubmit={onSubmit} className="space-y-4">
+          <form key={prefill.key} onSubmit={onSubmit} className="space-y-4">
             <h2 className="font-display text-2xl font-bold mb-2 flex items-center gap-2">
               <CalendarClock className="h-6 w-6 text-primary" /> Réserver un rendez-vous
             </h2>
             <div className="grid sm:grid-cols-2 gap-4">
-              <div><Label>Nom complet</Label><Input name="name" required placeholder="Jean Dupont" /></div>
-              <div><Label>Téléphone</Label><Input name="phone" required placeholder="06 ..." /></div>
+              <div><Label>Nom complet</Label><Input name="name" required defaultValue={prefill.name} placeholder="Jean Dupont" /></div>
+              <div><Label>Téléphone</Label><Input name="phone" required defaultValue={prefill.phone} placeholder="06 ..." /></div>
             </div>
-            <div><Label>Email</Label><Input name="email" type="email" required placeholder="email@exemple.com" /></div>
+            <div><Label>Email</Label><Input name="email" type="email" required defaultValue={prefill.email} placeholder="email@exemple.com" /></div>
             <div>
               <Label>Motif</Label>
               <Select value={motif} onValueChange={setMotif}>

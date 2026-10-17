@@ -1,10 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Menu, ArrowRight } from "lucide-react";
+import { Menu, ArrowRight, UserRound } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useAccount } from "@/lib/account-context";
 import {
   Sheet,
   SheetContent,
@@ -19,6 +20,7 @@ type NavGroup = { label: string; items: NavItem[] };
 export function Header() {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
+  const { member } = useAccount();
 
   const groups: NavGroup[] = [
     {
@@ -83,6 +85,13 @@ export function Header() {
         {/* Actions */}
         <div className="flex items-center gap-2">
           <LanguageSwitcher />
+          {/* Espace client : « Mon espace » une fois connecté, sinon « Connexion ». */}
+          <Button asChild variant="outline" size="sm" className="gap-2 border-primary/30">
+            <Link to={member ? "/espace" : "/connexion"} aria-label={member ? t("nav.myAccount") : t("nav.login")}>
+              <UserRound className="h-4 w-4" />
+              <span className="hidden md:inline">{member ? t("nav.myAccount") : t("nav.login")}</span>
+            </Link>
+          </Button>
           <Button asChild variant="default" size="sm" className="hidden sm:inline-flex gradient-cyan text-primary-foreground font-semibold hover:opacity-90">
             <Link to="/devis">{t("nav.requestQuote")}</Link>
           </Button>

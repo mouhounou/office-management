@@ -54,7 +54,7 @@ function ResourceList({ def }: { def: ResourceDef }) {
     }
   };
 
-  const canCreate = def.mode === "content" && can("edit");
+  const canCreate = def.mode === "content" && !def.noCreate && can("edit");
 
   return (
     <>

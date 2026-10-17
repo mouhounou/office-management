@@ -38,6 +38,29 @@ renseignée en administration (repli par catégorie, voir
 **Validation** : les formulaires vérifient la saisie côté navigateur, puis l'API
 revalide et renvoie ses erreurs par champ, réaffichées telles quelles.
 
+## Espace client
+
+Les visiteurs peuvent créer un compte (candidat ou entreprise) et suivre leurs
+demandes. Même design que le back-office, sans l'en-tête ni le pied du site.
+
+| Page | Chemin |
+| --- | --- |
+| Connexion · inscription | `/connexion`, `/inscription` |
+| Compte perdu | `/mot-de-passe-oublie`, `/reinitialiser-mot-de-passe?token=…` |
+| Confirmation de l'email | `/verifier-email?token=…` |
+| Tableau de bord | `/espace` |
+| Mes demandes (liste, détail et suivi) | `/espace/demandes`, `/espace/demandes/:type/:id` |
+| Nouvelle demande · profil · sécurité | `/espace/nouvelle-demande`, `/espace/profil`, `/espace/securite` |
+
+- Session : [src/lib/account-context.tsx](src/lib/account-context.tsx) ; appels :
+  [src/lib/account.ts](src/lib/account.ts). Le jeton est gardé dans le
+  navigateur et lu après l'hydratation (le rendu serveur ne connaît pas le
+  visiteur).
+- Un visiteur connecté voit ses coordonnées pré-remplies dans les formulaires
+  (devis, pré-inscription, contact, rendez-vous, recrutement, Business Center)
+  et ses dépôts sont rattachés à son compte.
+- L'en-tête du site affiche « Mon espace » ou « Connexion ».
+
 ## Points d'attention
 
 - Le rendu serveur impose que le premier rendu soit identique des deux côtés :

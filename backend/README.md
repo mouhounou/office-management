@@ -133,6 +133,43 @@ une origine inconnue ne reçoit pas d'en-tête CORS et ses écritures sont refus
 En production derrière un proxy (Render, Railway, Nginx…), réglez `TRUST_PROXY=1` :
 sans cela, tous les visiteurs partagent la même IP aux yeux des limites de débit.
 
+## Espace client
+
+Les visiteurs du site peuvent ouvrir un compte (candidat ou entreprise) sous
+`/api/account`. Ces comptes (`models/Member.js`) sont **distincts** de ceux du
+back-office : leurs jetons portent l'audience `member` et sont refusés par
+toutes les routes de l'admin ; à l'inverse, un jeton de l'équipe n'ouvre pas
+l'espace client. Cookie : `om_member`.
+
+| Méthode | Route | Rôle |
+| --- | --- | --- |
+| POST | `/api/account/register` | crée le compte, ouvre la session, envoie l'email de vérification |
+| POST | `/api/account/login` · `/logout` | session |
+| POST | `/api/account/verify-email` | confirme l'adresse (lien valable 48 h) |
+| POST | `/api/account/forgot-password` | lien de réinitialisation (1 h), réponse identique que l'adresse existe ou non |
+| POST | `/api/account/reset-password` | nouveau mot de passe, invalide les autres sessions |
+| GET · PATCH · DELETE | `/api/account/me` | profil ; suppression confirmée par le mot de passe |
+| POST | `/api/account/change-password` · `/resend-verification` | sécurité |
+| GET | `/api/account/overview` · `/requests` · `/requests/:kind/:id` | suivi des demandes |
+
+Une demande déposée sur le site par un visiteur connecté est rattachée à son
+compte (champ `member`). À la vérification de l'email, les demandes envoyées
+auparavant avec la même adresse le sont aussi — jamais avant : sinon il
+suffirait de s'inscrire avec l'adresse d'un autre pour lire ses demandes. Le
+client ne voit ni les notes internes, ni les commentaires de l'équipe, ni
+l'assignation.
+
+Les jetons de vérification et de réinitialisation sont à usage unique et seule
+leur empreinte SHA-256 est stockée. Inscription et connexion : 20 tentatives
+par quart d'heure ; emails de récupération : 5. En développement sans SMTP,
+les liens sont écrits dans la console de l'API (`[mail] lien de …`).
+
+`PUBLIC_SITE_URL` (`.env`) donne la base des liens envoyés par email.
+
+Depuis l'admin, `/api/members` liste les comptes clients et permet de les
+désactiver (la session en cours est coupée) ou de les supprimer ; les demandes
+restent enregistrées, simplement détachées du compte.
+
 ## Fichiers
 
 Les téléversements passent par multer (en mémoire) puis Cloudinary

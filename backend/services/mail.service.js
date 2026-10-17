@@ -1,4 +1,5 @@
-const { mail } = require("../config/env");
+const { mail, isProduction } = require("../config/env");
+const { isConfigured: mailConfigured } = require("./mailer");
 const Setting = require("../models/Setting");
 const { DEFAULTS } = require("../controllers/setting.controller");
 const { sendMailInBackground } = require("./mailer");
@@ -235,4 +236,68 @@ function notifyStatusChange(request, status, statusLabel) {
   });
 }
 
-module.exports = { notifySubmission, welcomeSubscriber, notifyStatusChange, adminRecipient, button };
+/**
+ * En développement sans SMTP, le lien est écrit dans la console : on peut
+ * tester l'inscription et la réinitialisation sans serveur de messagerie.
+ */
+function logLinkIfNoMail(label, link) {
+  if (!mailConfigured && !isProduction) console.log(`[mail] ${label} : ${link}`);
+}
+
+/** Lien de vérification de l'adresse, envoyé à l'inscription et sur demande. */
+function sendEmailVerification(member, link) {
+  logLinkIfNoMail("lien de vérification", link);
+  sendMailInBackground({
+    to: member.email,
+    subject: "Confirmez votre adresse email — Office Management",
+    html: layout({
+      title: `Bienvenue ${member.fullName}`,
+      intro:
+        "Votre espace client est créé. Confirmez votre adresse pour retrouver toutes vos demandes, y compris celles envoyées avant la création du compte.",
+      contentHtml: `${button("Confirmer mon adresse", link)}
+        <p style="margin:20px 0 0;font-size:12px;color:#6b7280;">Ce lien est valable 48 heures. Si vous n'êtes pas à l'origine de cette inscription, ignorez cet email.</p>
+        <p style="margin:24px 0 0;font-size:14px;line-height:1.6;">${SIGNATURE}</p>`,
+    }),
+  });
+}
+
+/** Lien de réinitialisation du mot de passe (compte perdu). */
+function sendPasswordReset(member, link) {
+  logLinkIfNoMail("lien de réinitialisation", link);
+  sendMailInBackground({
+    to: member.email,
+    subject: "Réinitialisation de votre mot de passe — Office Management",
+    html: layout({
+      title: "Réinitialiser votre mot de passe",
+      intro: "Une réinitialisation du mot de passe de votre espace client a été demandée.",
+      contentHtml: `${button("Choisir un nouveau mot de passe", link)}
+        <p style="margin:20px 0 0;font-size:12px;color:#6b7280;">Ce lien est valable 1 heure et ne sert qu'une fois. Si vous n'avez rien demandé, ignorez cet email : votre mot de passe reste inchangé.</p>
+        <p style="margin:24px 0 0;font-size:14px;line-height:1.6;">${SIGNATURE}</p>`,
+    }),
+  });
+}
+
+/** Alerte de sécurité après un changement de mot de passe. */
+function sendPasswordChanged(member) {
+  sendMailInBackground({
+    to: member.email,
+    subject: "Votre mot de passe a été modifié — Office Management",
+    html: layout({
+      title: "Mot de passe modifié",
+      intro:
+        "Le mot de passe de votre espace client vient d'être modifié et vos autres sessions ont été déconnectées. Si vous n'êtes pas à l'origine de ce changement, contactez-nous immédiatement.",
+      contentHtml: `<p style="margin:0;font-size:14px;line-height:1.6;">${SIGNATURE}</p>`,
+    }),
+  });
+}
+
+module.exports = {
+  notifySubmission,
+  welcomeSubscriber,
+  notifyStatusChange,
+  adminRecipient,
+  button,
+  sendEmailVerification,
+  sendPasswordReset,
+  sendPasswordChanged,
+};

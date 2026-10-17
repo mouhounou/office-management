@@ -12,6 +12,8 @@ const TIME_SLOTS = ["matin", "apres-midi"];
  */
 const messageSchema = new mongoose.Schema(
   {
+    // Compte du site public à l'origine du dépôt (null pour un visiteur anonyme).
+    member: { type: mongoose.Schema.Types.ObjectId, ref: "Member", default: null, index: true },
     kind: { type: String, enum: MESSAGE_KINDS, required: true, index: true },
     name: { type: String, required: true, trim: true, maxlength: 120 },
     email: { type: String, required: true, trim: true, lowercase: true, maxlength: 255 },

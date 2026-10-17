@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
-const { verifyToken } = require("../utils/token");
+const { verifyToken, MEMBER_AUDIENCE } = require("../utils/token");
 
 function extractToken(req) {
   const header = req.headers.authorization;
@@ -21,6 +21,8 @@ const protect = asyncHandler(async (req, _res, next) => {
   } catch {
     throw ApiError.unauthorized("Session expirée ou invalide");
   }
+  // Un compte client du site public n'ouvre jamais le back-office.
+  if (payload.aud === MEMBER_AUDIENCE) throw ApiError.unauthorized();
 
   const user = await User.findById(payload.sub);
   if (!user) throw ApiError.unauthorized("Compte introuvable");

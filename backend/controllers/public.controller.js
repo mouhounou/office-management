@@ -100,25 +100,28 @@ const getSettings = asyncHandler(async (_req, res) => {
 
 const created = (res, item) => res.status(201).json({ item });
 
+/** Corps du dépôt, rattaché au compte client connecté s'il y en a un. */
+const withMember = (req, extra = {}) => ({ ...req.body, ...extra, member: req.member?._id ?? null });
+
 /** Emails (visiteur + équipe) et notification dans le back-office. */
 async function afterSubmit(kind, doc) {
   await Promise.all([notifySubmission(kind, doc), notifyTeam(kind, doc)]);
 }
 
 const submitQuote = asyncHandler(async (req, res) => {
-  const doc = await QuoteRequest.create(req.body);
+  const doc = await QuoteRequest.create(withMember(req));
   await afterSubmit("quote", doc);
   created(res, doc);
 });
 
 const submitPreRegistration = asyncHandler(async (req, res) => {
-  const doc = await PreRegistration.create(req.body);
+  const doc = await PreRegistration.create(withMember(req));
   await afterSubmit("preRegistration", doc);
   created(res, doc);
 });
 
 const submitBusinessRequest = asyncHandler(async (req, res) => {
-  const doc = await BusinessRequest.create(req.body);
+  const doc = await BusinessRequest.create(withMember(req));
   // Même journal que côté back-office : la demande commence son cycle de vie.
   await RequestEvent.create({
     request: doc._id,
@@ -131,7 +134,7 @@ const submitBusinessRequest = asyncHandler(async (req, res) => {
 });
 
 const submitApplication = asyncHandler(async (req, res) => {
-  const doc = await Application.create(req.body);
+  const doc = await Application.create(withMember(req));
   await afterSubmit("application", doc);
   created(res, doc);
 });
@@ -160,13 +163,13 @@ const subscribe = asyncHandler(async (req, res) => {
 });
 
 const submitContact = asyncHandler(async (req, res) => {
-  const doc = await Message.create({ ...req.body, kind: "contact" });
+  const doc = await Message.create(withMember(req, { kind: "contact" }));
   await afterSubmit("contact", doc);
   created(res, doc);
 });
 
 const submitAppointment = asyncHandler(async (req, res) => {
-  const doc = await Message.create({ ...req.body, kind: "rendez-vous" });
+  const doc = await Message.create(withMember(req, { kind: "rendez-vous" }));
   await afterSubmit("appointment", doc);
   created(res, doc);
 });

@@ -21,6 +21,7 @@ import {
   UserCheck,
   UserCog,
   Users,
+  UserRound,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -63,6 +64,7 @@ const NAV: { title: string; items: NavItem[] }[] = [
       { to: "/media", label: "Médiathèque", icon: ImageIcon },
       { to: "/companies", label: "Entreprises", icon: Building2 },
       { to: "/subscribers", label: "Newsletter", icon: Users },
+      { to: "/members", label: "Comptes clients", icon: UserRound },
     ],
   },
   {

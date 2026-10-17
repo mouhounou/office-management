@@ -5,6 +5,7 @@ const schemas = require("../validators");
 const C = require("../models/constants");
 const { port } = require("../config/env");
 const { buildPublicPaths } = require("./public-paths");
+const { buildAccountPaths } = require("./account-paths");
 
 /**
  * Document OpenAPI 3.1 construit à partir des mêmes sources que l'API :
@@ -249,6 +250,18 @@ function buildComponents() {
         in: "cookie",
         name: "om_token",
         description: "Cookie httpOnly posé par /auth/login, alternative à l'en-tête Bearer.",
+      },
+      memberBearer: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        description: "Jeton d'un compte client, renvoyé par POST /account/login. Valable uniquement sous /account.",
+      },
+      memberCookie: {
+        type: "apiKey",
+        in: "cookie",
+        name: "om_member",
+        description: "Cookie httpOnly posé par /account/login.",
       },
     },
     schemas: {
@@ -770,6 +783,8 @@ function buildOpenApiDocument() {
       { name: "Utilisateurs", description: "Comptes du back-office (admin)." },
       { name: "Paramètres", description: "Réglages du site public (admin)." },
       { name: "Système", description: "Santé de l'API et statistiques." },
+      { name: "Espace client", description: "Comptes du site public : inscription, récupération, profil et suivi des demandes." },
+      { name: "Comptes clients", description: "Comptes du site public vus depuis l'admin." },
       {
         name: "Site public",
         description:
@@ -781,6 +796,7 @@ function buildOpenApiDocument() {
     components: buildComponents(),
     paths: {
       ...buildPublicPaths(jsonSchema),
+      ...buildAccountPaths(jsonSchema),
       ...otherPaths(),
       ...authPaths(),
       ...businessRequestPaths(),

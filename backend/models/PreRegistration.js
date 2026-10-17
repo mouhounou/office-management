@@ -5,6 +5,8 @@ const { TRAININGS, FINANCING_TYPES, ID_DOCUMENT_TYPES, SIMPLE_STATUSES } = requi
 // Formulaire /pre-inscription du site public (dossier de candidature formation).
 const preRegistrationSchema = new mongoose.Schema(
   {
+    // Compte du site public à l'origine du dépôt (null pour un visiteur anonyme).
+    member: { type: mongoose.Schema.Types.ObjectId, ref: "Member", default: null, index: true },
     fullName: { type: String, required: true, trim: true, maxlength: 120 },
     email: { type: String, required: true, trim: true, lowercase: true, maxlength: 255 },
     phone: { type: String, required: true, trim: true, maxlength: 40 },
