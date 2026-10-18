@@ -4,6 +4,7 @@ const validate = require("../middlewares/validate");
 const { canView, canEdit, adminOnly } = require("../middlewares/guards");
 const schemas = require("../validators");
 const { uploadImage, uploadDocument } = require("../config/upload");
+const { databaseState } = require("../config/db");
 
 const authRoutes = require("./auth.routes");
 const publicRoutes = require("./public.routes");
@@ -18,7 +19,14 @@ const { crudController } = require("../controllers/crud.factory");
 
 const router = express.Router();
 
-router.get("/health", (_req, res) => res.json({ status: "ok", uptime: process.uptime() }));
+router.get("/health", (_req, res) => {
+  const database = databaseState();
+  res.status(database === "connecté" ? 200 : 503).json({
+    status: database === "connecté" ? "ok" : "degraded",
+    database,
+    uptime: process.uptime(),
+  });
+});
 router.use("/auth", authRoutes);
 // Site public : lecture des contenus publiés et dépôt des formulaires.
 router.use("/public", publicRoutes);

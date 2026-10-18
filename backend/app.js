@@ -37,8 +37,10 @@ app.use((req, _res, next) => {
   next(ApiError.forbidden("Origine non autorisée"));
 });
 
-// Documentation interactive : /api/docs (et /api/docs.json).
+// Documentation interactive : /api/docs (et /api/docs.json), accessible
+// aussi depuis la racine du serveur.
 mountDocs(app);
+app.get(["/", "/docs"], (_req, res) => res.redirect("/api/docs"));
 
 app.use("/api", routes);
 

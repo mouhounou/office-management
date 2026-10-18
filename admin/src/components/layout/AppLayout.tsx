@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   ArrowUpRight,
   Bell,
+  BookOpen,
   Briefcase,
   Building2,
   GraduationCap,
@@ -29,7 +30,7 @@ import {
 import { GlobalSearch } from "@/components/layout/GlobalSearch";
 import { NotificationMenu } from "@/components/layout/NotificationMenu";
 import { Button } from "@/components/ui/primitives";
-import { api } from "@/lib/api";
+import { api, API_URL } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { ROLES } from "@/lib/constants";
 import { useTheme } from "@/lib/theme";
@@ -253,6 +254,12 @@ function UserMenu({ name, email, role, onLogout }: { name: string; email: string
             <button role="menuitem" className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm hover:bg-muted" onClick={() => { setOpen(false); navigate("/notifications"); }}>
               <Bell className="h-4 w-4" /> Notifications
             </button>
+            {/* Swagger UI de l'API, utile pour les intégrations et le support. */}
+            {role === "admin" && (
+              <a role="menuitem" href={`${API_URL}/docs`} target="_blank" rel="noreferrer" className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm hover:bg-muted" onClick={() => setOpen(false)}>
+                <BookOpen className="h-4 w-4" /> Documentation API <ArrowUpRight className="ml-auto h-3.5 w-3.5 text-muted-foreground" />
+              </a>
+            )}
             <div className="my-1 border-t border-border" />
             <button role="menuitem" className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-left text-sm text-destructive hover:bg-muted" onClick={() => onLogout()}>
               <LogOut className="h-4 w-4" /> Se déconnecter

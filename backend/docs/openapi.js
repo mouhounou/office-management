@@ -523,9 +523,12 @@ function otherPaths() {
     "/health": {
       get: {
         tags: ["Système"],
-        summary: "Vérifier que l'API répond",
+        summary: "Vérifier que l'API et MongoDB répondent",
         security: [],
-        responses: { 200: { description: "En ligne", ...json({ type: "object", properties: { status: { type: "string" }, uptime: { type: "number" } } }) } },
+        responses: {
+          200: { description: "API en ligne, base connectée", ...json({ type: "object", properties: { status: { type: "string", enum: ["ok", "degraded"] }, database: { type: "string", description: "État de la connexion MongoDB" }, uptime: { type: "number" } } }) },
+          503: { description: "API en ligne mais base MongoDB injoignable", ...json({ type: "object", properties: { status: { type: "string", enum: ["ok", "degraded"] }, database: { type: "string", description: "État de la connexion MongoDB" }, uptime: { type: "number" } } }) },
+        },
       },
     },
     "/stats/activity": {

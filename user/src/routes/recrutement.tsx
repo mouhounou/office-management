@@ -12,6 +12,7 @@ import { Loader2 } from "lucide-react";
 import { errorMessage } from "@/lib/api";
 import { useMemberPrefill } from "@/lib/account-context";
 import { submitApplication, submitBusinessRequest } from "@/lib/submissions";
+import { fetchOffers, type Offer } from "@/lib/content";
 import { Briefcase, Send, ArrowRight, Clock, ShieldCheck, Network, Target } from "lucide-react";
 import { BarometreSection } from "@/components/sections/recrutement/BarometreSection";
 import { CarrieresSection } from "@/components/sections/recrutement/CarrieresSection";
@@ -38,6 +39,8 @@ export const Route = createFileRoute("/recrutement")({
       },
     ],
   }),
+  // Offres publiées depuis le back-office ; la page reste utilisable sans l'API.
+  loader: async () => ({ offers: await fetchOffers().catch(() => [] as Offer[]) }),
   component: Recrutement,
 });
 
@@ -80,11 +83,13 @@ function Recrutement() {
   const prefill = useMemberPrefill();
   const [tab, setTab] = useState<"candidat" | "entreprise">("candidat");
   const [sending, setSending] = useState(false);
-  /** Poste prérempli quand on clique « Postuler » sur une offre de la page. */
-  const [position, setPosition] = useState("");
-  const applyAsCandidate = (job?: string) => {
+  const { offers } = Route.useLoaderData();
+  /** Offre choisie via « Postuler » : poste prérempli et candidature rattachée. */
+  const [offer, setOffer] = useState<Offer | null>(null);
+  const position = offer?.title ?? "";
+  const applyAsCandidate = (selected?: Offer) => {
     setTab("candidat");
-    if (job) setPosition(job);
+    setOffer(selected ?? null);
   };
 
   /**
@@ -106,6 +111,7 @@ function Recrutement() {
     try {
       if (tab === "candidat") {
         await submitApplication({
+          offer: offer?.id ?? null,
           fullName: name,
           email,
           phone: phoneOrCompany,
@@ -126,6 +132,7 @@ ${details}`,
       }
       toast.success("Votre demande a bien été envoyée ! Nous vous recontactons sous 48h.");
       form.reset();
+      setOffer(null);
     } catch (error) {
       toast.error(errorMessage(error));
     } finally {
@@ -318,7 +325,7 @@ ${details}`,
 
       <ParcoursSection />
       <JeunesTalentsSection onApply={() => applyAsCandidate()} />
-      <CarrieresSection onApply={applyAsCandidate} />
+      <CarrieresSection offers={offers} onApply={applyAsCandidate} />
       <PartenairesSection />
       <BarometreSection />
     </>
