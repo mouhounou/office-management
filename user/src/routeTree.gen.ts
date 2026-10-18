@@ -10,84 +10,28 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VerifierEmailRouteImport } from './routes/verifier-email'
-import { Route as ValeursEnActionRouteImport } from './routes/valeurs-en-action'
-import { Route as TelechargementsRouteImport } from './routes/telechargements'
-import { Route as TechnicalServicesRouteImport } from './routes/technical-services'
-import { Route as StagesInsertionRouteImport } from './routes/stages-insertion'
 import { Route as ServicesRouteImport } from './routes/services'
-import { Route as SecteursRouteImport } from './routes/secteurs'
-import { Route as SalleDePresseRouteImport } from './routes/salle-de-presse'
-import { Route as RendezVousRouteImport } from './routes/rendez-vous'
 import { Route as ReinitialiserMotDePasseRouteImport } from './routes/reinitialiser-mot-de-passe'
-import { Route as ReferencesRouteImport } from './routes/references'
 import { Route as RecrutementRouteImport } from './routes/recrutement'
-import { Route as RecruitmentAgencyRouteImport } from './routes/recruitment-agency'
 import { Route as RealisationsRouteImport } from './routes/realisations'
-import { Route as RdvPdgRouteImport } from './routes/rdv-pdg'
-import { Route as RapportImpactRouteImport } from './routes/rapport-impact'
-import { Route as RapportAnnuelRouteImport } from './routes/rapport-annuel'
-import { Route as ProcessusQualiteRouteImport } from './routes/processus-qualite'
-import { Route as ProcessusRouteImport } from './routes/processus'
 import { Route as PreInscriptionRouteImport } from './routes/pre-inscription'
-import { Route as PolesRouteImport } from './routes/poles'
-import { Route as PartenairesRecruteursRouteImport } from './routes/partenaires-recruteurs'
-import { Route as ParcoursCarriereRouteImport } from './routes/parcours-carriere'
-import { Route as PacksPmeRouteImport } from './routes/packs-pme'
-import { Route as OmDigitalRouteImport } from './routes/om-digital'
-import { Route as OmConsultingRouteImport } from './routes/om-consulting'
-import { Route as OmCertifiedRouteImport } from './routes/om-certified'
-import { Route as OffresSpecialesRouteImport } from './routes/offres-speciales'
 import { Route as OffresRouteImport } from './routes/offres'
-import { Route as Objectifs2030RouteImport } from './routes/objectifs-2030'
-import { Route as NotreHistoireRouteImport } from './routes/notre-histoire'
-import { Route as NosPolitiquesRouteImport } from './routes/nos-politiques'
-import { Route as NosExpertsRouteImport } from './routes/nos-experts'
 import { Route as MotDePasseOublieRouteImport } from './routes/mot-de-passe-oublie'
-import { Route as MediathequeRouteImport } from './routes/mediatheque'
-import { Route as LaureatsRouteImport } from './routes/laureats'
-import { Route as JeunesTalentsRouteImport } from './routes/jeunes-talents'
-import { Route as InstituteRouteImport } from './routes/institute'
 import { Route as InscriptionRouteImport } from './routes/inscription'
-import { Route as InnovationDigitaleRouteImport } from './routes/innovation-digitale'
-import { Route as GouvernanceRouteImport } from './routes/gouvernance'
-import { Route as GalerieRouteImport } from './routes/galerie'
-import { Route as FranchiseRouteImport } from './routes/franchise'
-import { Route as FoundationRouteImport } from './routes/foundation'
 import { Route as FormationsRouteImport } from './routes/formations'
-import { Route as FormateursRouteImport } from './routes/formateurs'
-import { Route as FaqInteractiveRouteImport } from './routes/faq-interactive'
 import { Route as FaqRouteImport } from './routes/faq'
-import { Route as EvenementsRouteImport } from './routes/evenements'
 import { Route as EspaceRouteImport } from './routes/espace'
-import { Route as EngagementsFormationRouteImport } from './routes/engagements-formation'
-import { Route as EngagementsEntreprisesRouteImport } from './routes/engagements-entreprises'
-import { Route as EngagementsClientsRouteImport } from './routes/engagements-clients'
-import { Route as EcosystemeRouteImport } from './routes/ecosysteme'
 import { Route as DevisRouteImport } from './routes/devis'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as ConnexionRouteImport } from './routes/connexion'
-import { Route as CertificationsRouteImport } from './routes/certifications'
-import { Route as CertificationQualiteRouteImport } from './routes/certification-qualite'
-import { Route as CentreExcellenceRouteImport } from './routes/centre-excellence'
-import { Route as CentreCompetencesRouteImport } from './routes/centre-competences'
-import { Route as CarrieresTalentsRouteImport } from './routes/carrieres-talents'
-import { Route as CarrieresRouteImport } from './routes/carrieres'
-import { Route as CalculateurRoiRouteImport } from './routes/calculateur-roi'
-import { Route as BusinessSchoolRouteImport } from './routes/business-school'
 import { Route as BusinessCenterRouteImport } from './routes/business-center'
 import { Route as BlogRouteImport } from './routes/blog'
-import { Route as BarometreEmploiRouteImport } from './routes/barometre-emploi'
-import { Route as AppelsOffresRouteImport } from './routes/appels-offres'
-import { Route as AcademyTvRouteImport } from './routes/academy-tv'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EspaceIndexRouteImport } from './routes/espace.index'
 import { Route as EspaceSecuriteRouteImport } from './routes/espace.securite'
 import { Route as EspaceProfilRouteImport } from './routes/espace.profil'
 import { Route as EspaceNouvelleDemandeRouteImport } from './routes/espace.nouvelle-demande'
-import { Route as BusinessCenterRecrutementRouteImport } from './routes/business-center.recrutement'
-import { Route as BusinessCenterFormationRouteImport } from './routes/business-center.formation'
-import { Route as BusinessCenterAuditRhRouteImport } from './routes/business-center.audit-rh'
 import { Route as BlogSlugRouteImport } from './routes/blog_.$slug'
 import { Route as EspaceDemandesIndexRouteImport } from './routes/espace.demandes.index'
 import { Route as EspaceDemandesKindIdRouteImport } from './routes/espace.demandes.$kind.$id'
@@ -97,44 +41,9 @@ const VerifierEmailRoute = VerifierEmailRouteImport.update({
   path: '/verifier-email',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ValeursEnActionRoute = ValeursEnActionRouteImport.update({
-  id: '/valeurs-en-action',
-  path: '/valeurs-en-action',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TelechargementsRoute = TelechargementsRouteImport.update({
-  id: '/telechargements',
-  path: '/telechargements',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TechnicalServicesRoute = TechnicalServicesRouteImport.update({
-  id: '/technical-services',
-  path: '/technical-services',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const StagesInsertionRoute = StagesInsertionRouteImport.update({
-  id: '/stages-insertion',
-  path: '/stages-insertion',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SecteursRoute = SecteursRouteImport.update({
-  id: '/secteurs',
-  path: '/secteurs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SalleDePresseRoute = SalleDePresseRouteImport.update({
-  id: '/salle-de-presse',
-  path: '/salle-de-presse',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RendezVousRoute = RendezVousRouteImport.update({
-  id: '/rendez-vous',
-  path: '/rendez-vous',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReinitialiserMotDePasseRoute = ReinitialiserMotDePasseRouteImport.update({
@@ -142,19 +51,9 @@ const ReinitialiserMotDePasseRoute = ReinitialiserMotDePasseRouteImport.update({
   path: '/reinitialiser-mot-de-passe',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ReferencesRoute = ReferencesRouteImport.update({
-  id: '/references',
-  path: '/references',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const RecrutementRoute = RecrutementRouteImport.update({
   id: '/recrutement',
   path: '/recrutement',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RecruitmentAgencyRoute = RecruitmentAgencyRouteImport.update({
-  id: '/recruitment-agency',
-  path: '/recruitment-agency',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RealisationsRoute = RealisationsRouteImport.update({
@@ -162,74 +61,9 @@ const RealisationsRoute = RealisationsRouteImport.update({
   path: '/realisations',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RdvPdgRoute = RdvPdgRouteImport.update({
-  id: '/rdv-pdg',
-  path: '/rdv-pdg',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RapportImpactRoute = RapportImpactRouteImport.update({
-  id: '/rapport-impact',
-  path: '/rapport-impact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RapportAnnuelRoute = RapportAnnuelRouteImport.update({
-  id: '/rapport-annuel',
-  path: '/rapport-annuel',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProcessusQualiteRoute = ProcessusQualiteRouteImport.update({
-  id: '/processus-qualite',
-  path: '/processus-qualite',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProcessusRoute = ProcessusRouteImport.update({
-  id: '/processus',
-  path: '/processus',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PreInscriptionRoute = PreInscriptionRouteImport.update({
   id: '/pre-inscription',
   path: '/pre-inscription',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PolesRoute = PolesRouteImport.update({
-  id: '/poles',
-  path: '/poles',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PartenairesRecruteursRoute = PartenairesRecruteursRouteImport.update({
-  id: '/partenaires-recruteurs',
-  path: '/partenaires-recruteurs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ParcoursCarriereRoute = ParcoursCarriereRouteImport.update({
-  id: '/parcours-carriere',
-  path: '/parcours-carriere',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PacksPmeRoute = PacksPmeRouteImport.update({
-  id: '/packs-pme',
-  path: '/packs-pme',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OmDigitalRoute = OmDigitalRouteImport.update({
-  id: '/om-digital',
-  path: '/om-digital',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OmConsultingRoute = OmConsultingRouteImport.update({
-  id: '/om-consulting',
-  path: '/om-consulting',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OmCertifiedRoute = OmCertifiedRouteImport.update({
-  id: '/om-certified',
-  path: '/om-certified',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OffresSpecialesRoute = OffresSpecialesRouteImport.update({
-  id: '/offres-speciales',
-  path: '/offres-speciales',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OffresRoute = OffresRouteImport.update({
@@ -237,49 +71,9 @@ const OffresRoute = OffresRouteImport.update({
   path: '/offres',
   getParentRoute: () => rootRouteImport,
 } as any)
-const Objectifs2030Route = Objectifs2030RouteImport.update({
-  id: '/objectifs-2030',
-  path: '/objectifs-2030',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotreHistoireRoute = NotreHistoireRouteImport.update({
-  id: '/notre-histoire',
-  path: '/notre-histoire',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NosPolitiquesRoute = NosPolitiquesRouteImport.update({
-  id: '/nos-politiques',
-  path: '/nos-politiques',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NosExpertsRoute = NosExpertsRouteImport.update({
-  id: '/nos-experts',
-  path: '/nos-experts',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const MotDePasseOublieRoute = MotDePasseOublieRouteImport.update({
   id: '/mot-de-passe-oublie',
   path: '/mot-de-passe-oublie',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MediathequeRoute = MediathequeRouteImport.update({
-  id: '/mediatheque',
-  path: '/mediatheque',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LaureatsRoute = LaureatsRouteImport.update({
-  id: '/laureats',
-  path: '/laureats',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const JeunesTalentsRoute = JeunesTalentsRouteImport.update({
-  id: '/jeunes-talents',
-  path: '/jeunes-talents',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InstituteRoute = InstituteRouteImport.update({
-  id: '/institute',
-  path: '/institute',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InscriptionRoute = InscriptionRouteImport.update({
@@ -287,44 +81,9 @@ const InscriptionRoute = InscriptionRouteImport.update({
   path: '/inscription',
   getParentRoute: () => rootRouteImport,
 } as any)
-const InnovationDigitaleRoute = InnovationDigitaleRouteImport.update({
-  id: '/innovation-digitale',
-  path: '/innovation-digitale',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GouvernanceRoute = GouvernanceRouteImport.update({
-  id: '/gouvernance',
-  path: '/gouvernance',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GalerieRoute = GalerieRouteImport.update({
-  id: '/galerie',
-  path: '/galerie',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FranchiseRoute = FranchiseRouteImport.update({
-  id: '/franchise',
-  path: '/franchise',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FoundationRoute = FoundationRouteImport.update({
-  id: '/foundation',
-  path: '/foundation',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const FormationsRoute = FormationsRouteImport.update({
   id: '/formations',
   path: '/formations',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FormateursRoute = FormateursRouteImport.update({
-  id: '/formateurs',
-  path: '/formateurs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FaqInteractiveRoute = FaqInteractiveRouteImport.update({
-  id: '/faq-interactive',
-  path: '/faq-interactive',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -332,34 +91,9 @@ const FaqRoute = FaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EvenementsRoute = EvenementsRouteImport.update({
-  id: '/evenements',
-  path: '/evenements',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const EspaceRoute = EspaceRouteImport.update({
   id: '/espace',
   path: '/espace',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EngagementsFormationRoute = EngagementsFormationRouteImport.update({
-  id: '/engagements-formation',
-  path: '/engagements-formation',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EngagementsEntreprisesRoute = EngagementsEntreprisesRouteImport.update({
-  id: '/engagements-entreprises',
-  path: '/engagements-entreprises',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EngagementsClientsRoute = EngagementsClientsRouteImport.update({
-  id: '/engagements-clients',
-  path: '/engagements-clients',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EcosystemeRoute = EcosystemeRouteImport.update({
-  id: '/ecosysteme',
-  path: '/ecosysteme',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DevisRoute = DevisRouteImport.update({
@@ -377,46 +111,6 @@ const ConnexionRoute = ConnexionRouteImport.update({
   path: '/connexion',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CertificationsRoute = CertificationsRouteImport.update({
-  id: '/certifications',
-  path: '/certifications',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CertificationQualiteRoute = CertificationQualiteRouteImport.update({
-  id: '/certification-qualite',
-  path: '/certification-qualite',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CentreExcellenceRoute = CentreExcellenceRouteImport.update({
-  id: '/centre-excellence',
-  path: '/centre-excellence',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CentreCompetencesRoute = CentreCompetencesRouteImport.update({
-  id: '/centre-competences',
-  path: '/centre-competences',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CarrieresTalentsRoute = CarrieresTalentsRouteImport.update({
-  id: '/carrieres-talents',
-  path: '/carrieres-talents',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CarrieresRoute = CarrieresRouteImport.update({
-  id: '/carrieres',
-  path: '/carrieres',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CalculateurRoiRoute = CalculateurRoiRouteImport.update({
-  id: '/calculateur-roi',
-  path: '/calculateur-roi',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BusinessSchoolRoute = BusinessSchoolRouteImport.update({
-  id: '/business-school',
-  path: '/business-school',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const BusinessCenterRoute = BusinessCenterRouteImport.update({
   id: '/business-center',
   path: '/business-center',
@@ -425,21 +119,6 @@ const BusinessCenterRoute = BusinessCenterRouteImport.update({
 const BlogRoute = BlogRouteImport.update({
   id: '/blog',
   path: '/blog',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BarometreEmploiRoute = BarometreEmploiRouteImport.update({
-  id: '/barometre-emploi',
-  path: '/barometre-emploi',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AppelsOffresRoute = AppelsOffresRouteImport.update({
-  id: '/appels-offres',
-  path: '/appels-offres',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AcademyTvRoute = AcademyTvRouteImport.update({
-  id: '/academy-tv',
-  path: '/academy-tv',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AProposRoute = AProposRouteImport.update({
@@ -472,22 +151,6 @@ const EspaceNouvelleDemandeRoute = EspaceNouvelleDemandeRouteImport.update({
   path: '/nouvelle-demande',
   getParentRoute: () => EspaceRoute,
 } as any)
-const BusinessCenterRecrutementRoute =
-  BusinessCenterRecrutementRouteImport.update({
-    id: '/recrutement',
-    path: '/recrutement',
-    getParentRoute: () => BusinessCenterRoute,
-  } as any)
-const BusinessCenterFormationRoute = BusinessCenterFormationRouteImport.update({
-  id: '/formation',
-  path: '/formation',
-  getParentRoute: () => BusinessCenterRoute,
-} as any)
-const BusinessCenterAuditRhRoute = BusinessCenterAuditRhRouteImport.update({
-  id: '/audit-rh',
-  path: '/audit-rh',
-  getParentRoute: () => BusinessCenterRoute,
-} as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/blog_/$slug',
   path: '/blog/$slug',
@@ -507,80 +170,24 @@ const EspaceDemandesKindIdRoute = EspaceDemandesKindIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
-  '/academy-tv': typeof AcademyTvRoute
-  '/appels-offres': typeof AppelsOffresRoute
-  '/barometre-emploi': typeof BarometreEmploiRoute
   '/blog': typeof BlogRoute
-  '/business-center': typeof BusinessCenterRouteWithChildren
-  '/business-school': typeof BusinessSchoolRoute
-  '/calculateur-roi': typeof CalculateurRoiRoute
-  '/carrieres': typeof CarrieresRoute
-  '/carrieres-talents': typeof CarrieresTalentsRoute
-  '/centre-competences': typeof CentreCompetencesRoute
-  '/centre-excellence': typeof CentreExcellenceRoute
-  '/certification-qualite': typeof CertificationQualiteRoute
-  '/certifications': typeof CertificationsRoute
+  '/business-center': typeof BusinessCenterRoute
   '/connexion': typeof ConnexionRoute
   '/contact': typeof ContactRoute
   '/devis': typeof DevisRoute
-  '/ecosysteme': typeof EcosystemeRoute
-  '/engagements-clients': typeof EngagementsClientsRoute
-  '/engagements-entreprises': typeof EngagementsEntreprisesRoute
-  '/engagements-formation': typeof EngagementsFormationRoute
   '/espace': typeof EspaceRouteWithChildren
-  '/evenements': typeof EvenementsRoute
   '/faq': typeof FaqRoute
-  '/faq-interactive': typeof FaqInteractiveRoute
-  '/formateurs': typeof FormateursRoute
   '/formations': typeof FormationsRoute
-  '/foundation': typeof FoundationRoute
-  '/franchise': typeof FranchiseRoute
-  '/galerie': typeof GalerieRoute
-  '/gouvernance': typeof GouvernanceRoute
-  '/innovation-digitale': typeof InnovationDigitaleRoute
   '/inscription': typeof InscriptionRoute
-  '/institute': typeof InstituteRoute
-  '/jeunes-talents': typeof JeunesTalentsRoute
-  '/laureats': typeof LaureatsRoute
-  '/mediatheque': typeof MediathequeRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
-  '/nos-experts': typeof NosExpertsRoute
-  '/nos-politiques': typeof NosPolitiquesRoute
-  '/notre-histoire': typeof NotreHistoireRoute
-  '/objectifs-2030': typeof Objectifs2030Route
   '/offres': typeof OffresRoute
-  '/offres-speciales': typeof OffresSpecialesRoute
-  '/om-certified': typeof OmCertifiedRoute
-  '/om-consulting': typeof OmConsultingRoute
-  '/om-digital': typeof OmDigitalRoute
-  '/packs-pme': typeof PacksPmeRoute
-  '/parcours-carriere': typeof ParcoursCarriereRoute
-  '/partenaires-recruteurs': typeof PartenairesRecruteursRoute
-  '/poles': typeof PolesRoute
   '/pre-inscription': typeof PreInscriptionRoute
-  '/processus': typeof ProcessusRoute
-  '/processus-qualite': typeof ProcessusQualiteRoute
-  '/rapport-annuel': typeof RapportAnnuelRoute
-  '/rapport-impact': typeof RapportImpactRoute
-  '/rdv-pdg': typeof RdvPdgRoute
   '/realisations': typeof RealisationsRoute
-  '/recruitment-agency': typeof RecruitmentAgencyRoute
   '/recrutement': typeof RecrutementRoute
-  '/references': typeof ReferencesRoute
   '/reinitialiser-mot-de-passe': typeof ReinitialiserMotDePasseRoute
-  '/rendez-vous': typeof RendezVousRoute
-  '/salle-de-presse': typeof SalleDePresseRoute
-  '/secteurs': typeof SecteursRoute
   '/services': typeof ServicesRoute
-  '/stages-insertion': typeof StagesInsertionRoute
-  '/technical-services': typeof TechnicalServicesRoute
-  '/telechargements': typeof TelechargementsRoute
-  '/valeurs-en-action': typeof ValeursEnActionRoute
   '/verifier-email': typeof VerifierEmailRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/business-center/audit-rh': typeof BusinessCenterAuditRhRoute
-  '/business-center/formation': typeof BusinessCenterFormationRoute
-  '/business-center/recrutement': typeof BusinessCenterRecrutementRoute
   '/espace/nouvelle-demande': typeof EspaceNouvelleDemandeRoute
   '/espace/profil': typeof EspaceProfilRoute
   '/espace/securite': typeof EspaceSecuriteRoute
@@ -591,79 +198,23 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
-  '/academy-tv': typeof AcademyTvRoute
-  '/appels-offres': typeof AppelsOffresRoute
-  '/barometre-emploi': typeof BarometreEmploiRoute
   '/blog': typeof BlogRoute
-  '/business-center': typeof BusinessCenterRouteWithChildren
-  '/business-school': typeof BusinessSchoolRoute
-  '/calculateur-roi': typeof CalculateurRoiRoute
-  '/carrieres': typeof CarrieresRoute
-  '/carrieres-talents': typeof CarrieresTalentsRoute
-  '/centre-competences': typeof CentreCompetencesRoute
-  '/centre-excellence': typeof CentreExcellenceRoute
-  '/certification-qualite': typeof CertificationQualiteRoute
-  '/certifications': typeof CertificationsRoute
+  '/business-center': typeof BusinessCenterRoute
   '/connexion': typeof ConnexionRoute
   '/contact': typeof ContactRoute
   '/devis': typeof DevisRoute
-  '/ecosysteme': typeof EcosystemeRoute
-  '/engagements-clients': typeof EngagementsClientsRoute
-  '/engagements-entreprises': typeof EngagementsEntreprisesRoute
-  '/engagements-formation': typeof EngagementsFormationRoute
-  '/evenements': typeof EvenementsRoute
   '/faq': typeof FaqRoute
-  '/faq-interactive': typeof FaqInteractiveRoute
-  '/formateurs': typeof FormateursRoute
   '/formations': typeof FormationsRoute
-  '/foundation': typeof FoundationRoute
-  '/franchise': typeof FranchiseRoute
-  '/galerie': typeof GalerieRoute
-  '/gouvernance': typeof GouvernanceRoute
-  '/innovation-digitale': typeof InnovationDigitaleRoute
   '/inscription': typeof InscriptionRoute
-  '/institute': typeof InstituteRoute
-  '/jeunes-talents': typeof JeunesTalentsRoute
-  '/laureats': typeof LaureatsRoute
-  '/mediatheque': typeof MediathequeRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
-  '/nos-experts': typeof NosExpertsRoute
-  '/nos-politiques': typeof NosPolitiquesRoute
-  '/notre-histoire': typeof NotreHistoireRoute
-  '/objectifs-2030': typeof Objectifs2030Route
   '/offres': typeof OffresRoute
-  '/offres-speciales': typeof OffresSpecialesRoute
-  '/om-certified': typeof OmCertifiedRoute
-  '/om-consulting': typeof OmConsultingRoute
-  '/om-digital': typeof OmDigitalRoute
-  '/packs-pme': typeof PacksPmeRoute
-  '/parcours-carriere': typeof ParcoursCarriereRoute
-  '/partenaires-recruteurs': typeof PartenairesRecruteursRoute
-  '/poles': typeof PolesRoute
   '/pre-inscription': typeof PreInscriptionRoute
-  '/processus': typeof ProcessusRoute
-  '/processus-qualite': typeof ProcessusQualiteRoute
-  '/rapport-annuel': typeof RapportAnnuelRoute
-  '/rapport-impact': typeof RapportImpactRoute
-  '/rdv-pdg': typeof RdvPdgRoute
   '/realisations': typeof RealisationsRoute
-  '/recruitment-agency': typeof RecruitmentAgencyRoute
   '/recrutement': typeof RecrutementRoute
-  '/references': typeof ReferencesRoute
   '/reinitialiser-mot-de-passe': typeof ReinitialiserMotDePasseRoute
-  '/rendez-vous': typeof RendezVousRoute
-  '/salle-de-presse': typeof SalleDePresseRoute
-  '/secteurs': typeof SecteursRoute
   '/services': typeof ServicesRoute
-  '/stages-insertion': typeof StagesInsertionRoute
-  '/technical-services': typeof TechnicalServicesRoute
-  '/telechargements': typeof TelechargementsRoute
-  '/valeurs-en-action': typeof ValeursEnActionRoute
   '/verifier-email': typeof VerifierEmailRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/business-center/audit-rh': typeof BusinessCenterAuditRhRoute
-  '/business-center/formation': typeof BusinessCenterFormationRoute
-  '/business-center/recrutement': typeof BusinessCenterRecrutementRoute
   '/espace/nouvelle-demande': typeof EspaceNouvelleDemandeRoute
   '/espace/profil': typeof EspaceProfilRoute
   '/espace/securite': typeof EspaceSecuriteRoute
@@ -675,80 +226,24 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/a-propos': typeof AProposRoute
-  '/academy-tv': typeof AcademyTvRoute
-  '/appels-offres': typeof AppelsOffresRoute
-  '/barometre-emploi': typeof BarometreEmploiRoute
   '/blog': typeof BlogRoute
-  '/business-center': typeof BusinessCenterRouteWithChildren
-  '/business-school': typeof BusinessSchoolRoute
-  '/calculateur-roi': typeof CalculateurRoiRoute
-  '/carrieres': typeof CarrieresRoute
-  '/carrieres-talents': typeof CarrieresTalentsRoute
-  '/centre-competences': typeof CentreCompetencesRoute
-  '/centre-excellence': typeof CentreExcellenceRoute
-  '/certification-qualite': typeof CertificationQualiteRoute
-  '/certifications': typeof CertificationsRoute
+  '/business-center': typeof BusinessCenterRoute
   '/connexion': typeof ConnexionRoute
   '/contact': typeof ContactRoute
   '/devis': typeof DevisRoute
-  '/ecosysteme': typeof EcosystemeRoute
-  '/engagements-clients': typeof EngagementsClientsRoute
-  '/engagements-entreprises': typeof EngagementsEntreprisesRoute
-  '/engagements-formation': typeof EngagementsFormationRoute
   '/espace': typeof EspaceRouteWithChildren
-  '/evenements': typeof EvenementsRoute
   '/faq': typeof FaqRoute
-  '/faq-interactive': typeof FaqInteractiveRoute
-  '/formateurs': typeof FormateursRoute
   '/formations': typeof FormationsRoute
-  '/foundation': typeof FoundationRoute
-  '/franchise': typeof FranchiseRoute
-  '/galerie': typeof GalerieRoute
-  '/gouvernance': typeof GouvernanceRoute
-  '/innovation-digitale': typeof InnovationDigitaleRoute
   '/inscription': typeof InscriptionRoute
-  '/institute': typeof InstituteRoute
-  '/jeunes-talents': typeof JeunesTalentsRoute
-  '/laureats': typeof LaureatsRoute
-  '/mediatheque': typeof MediathequeRoute
   '/mot-de-passe-oublie': typeof MotDePasseOublieRoute
-  '/nos-experts': typeof NosExpertsRoute
-  '/nos-politiques': typeof NosPolitiquesRoute
-  '/notre-histoire': typeof NotreHistoireRoute
-  '/objectifs-2030': typeof Objectifs2030Route
   '/offres': typeof OffresRoute
-  '/offres-speciales': typeof OffresSpecialesRoute
-  '/om-certified': typeof OmCertifiedRoute
-  '/om-consulting': typeof OmConsultingRoute
-  '/om-digital': typeof OmDigitalRoute
-  '/packs-pme': typeof PacksPmeRoute
-  '/parcours-carriere': typeof ParcoursCarriereRoute
-  '/partenaires-recruteurs': typeof PartenairesRecruteursRoute
-  '/poles': typeof PolesRoute
   '/pre-inscription': typeof PreInscriptionRoute
-  '/processus': typeof ProcessusRoute
-  '/processus-qualite': typeof ProcessusQualiteRoute
-  '/rapport-annuel': typeof RapportAnnuelRoute
-  '/rapport-impact': typeof RapportImpactRoute
-  '/rdv-pdg': typeof RdvPdgRoute
   '/realisations': typeof RealisationsRoute
-  '/recruitment-agency': typeof RecruitmentAgencyRoute
   '/recrutement': typeof RecrutementRoute
-  '/references': typeof ReferencesRoute
   '/reinitialiser-mot-de-passe': typeof ReinitialiserMotDePasseRoute
-  '/rendez-vous': typeof RendezVousRoute
-  '/salle-de-presse': typeof SalleDePresseRoute
-  '/secteurs': typeof SecteursRoute
   '/services': typeof ServicesRoute
-  '/stages-insertion': typeof StagesInsertionRoute
-  '/technical-services': typeof TechnicalServicesRoute
-  '/telechargements': typeof TelechargementsRoute
-  '/valeurs-en-action': typeof ValeursEnActionRoute
   '/verifier-email': typeof VerifierEmailRoute
   '/blog_/$slug': typeof BlogSlugRoute
-  '/business-center/audit-rh': typeof BusinessCenterAuditRhRoute
-  '/business-center/formation': typeof BusinessCenterFormationRoute
-  '/business-center/recrutement': typeof BusinessCenterRecrutementRoute
   '/espace/nouvelle-demande': typeof EspaceNouvelleDemandeRoute
   '/espace/profil': typeof EspaceProfilRoute
   '/espace/securite': typeof EspaceSecuriteRoute
@@ -761,80 +256,24 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/a-propos'
-    | '/academy-tv'
-    | '/appels-offres'
-    | '/barometre-emploi'
     | '/blog'
     | '/business-center'
-    | '/business-school'
-    | '/calculateur-roi'
-    | '/carrieres'
-    | '/carrieres-talents'
-    | '/centre-competences'
-    | '/centre-excellence'
-    | '/certification-qualite'
-    | '/certifications'
     | '/connexion'
     | '/contact'
     | '/devis'
-    | '/ecosysteme'
-    | '/engagements-clients'
-    | '/engagements-entreprises'
-    | '/engagements-formation'
     | '/espace'
-    | '/evenements'
     | '/faq'
-    | '/faq-interactive'
-    | '/formateurs'
     | '/formations'
-    | '/foundation'
-    | '/franchise'
-    | '/galerie'
-    | '/gouvernance'
-    | '/innovation-digitale'
     | '/inscription'
-    | '/institute'
-    | '/jeunes-talents'
-    | '/laureats'
-    | '/mediatheque'
     | '/mot-de-passe-oublie'
-    | '/nos-experts'
-    | '/nos-politiques'
-    | '/notre-histoire'
-    | '/objectifs-2030'
     | '/offres'
-    | '/offres-speciales'
-    | '/om-certified'
-    | '/om-consulting'
-    | '/om-digital'
-    | '/packs-pme'
-    | '/parcours-carriere'
-    | '/partenaires-recruteurs'
-    | '/poles'
     | '/pre-inscription'
-    | '/processus'
-    | '/processus-qualite'
-    | '/rapport-annuel'
-    | '/rapport-impact'
-    | '/rdv-pdg'
     | '/realisations'
-    | '/recruitment-agency'
     | '/recrutement'
-    | '/references'
     | '/reinitialiser-mot-de-passe'
-    | '/rendez-vous'
-    | '/salle-de-presse'
-    | '/secteurs'
     | '/services'
-    | '/stages-insertion'
-    | '/technical-services'
-    | '/telechargements'
-    | '/valeurs-en-action'
     | '/verifier-email'
     | '/blog/$slug'
-    | '/business-center/audit-rh'
-    | '/business-center/formation'
-    | '/business-center/recrutement'
     | '/espace/nouvelle-demande'
     | '/espace/profil'
     | '/espace/securite'
@@ -845,79 +284,23 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/a-propos'
-    | '/academy-tv'
-    | '/appels-offres'
-    | '/barometre-emploi'
     | '/blog'
     | '/business-center'
-    | '/business-school'
-    | '/calculateur-roi'
-    | '/carrieres'
-    | '/carrieres-talents'
-    | '/centre-competences'
-    | '/centre-excellence'
-    | '/certification-qualite'
-    | '/certifications'
     | '/connexion'
     | '/contact'
     | '/devis'
-    | '/ecosysteme'
-    | '/engagements-clients'
-    | '/engagements-entreprises'
-    | '/engagements-formation'
-    | '/evenements'
     | '/faq'
-    | '/faq-interactive'
-    | '/formateurs'
     | '/formations'
-    | '/foundation'
-    | '/franchise'
-    | '/galerie'
-    | '/gouvernance'
-    | '/innovation-digitale'
     | '/inscription'
-    | '/institute'
-    | '/jeunes-talents'
-    | '/laureats'
-    | '/mediatheque'
     | '/mot-de-passe-oublie'
-    | '/nos-experts'
-    | '/nos-politiques'
-    | '/notre-histoire'
-    | '/objectifs-2030'
     | '/offres'
-    | '/offres-speciales'
-    | '/om-certified'
-    | '/om-consulting'
-    | '/om-digital'
-    | '/packs-pme'
-    | '/parcours-carriere'
-    | '/partenaires-recruteurs'
-    | '/poles'
     | '/pre-inscription'
-    | '/processus'
-    | '/processus-qualite'
-    | '/rapport-annuel'
-    | '/rapport-impact'
-    | '/rdv-pdg'
     | '/realisations'
-    | '/recruitment-agency'
     | '/recrutement'
-    | '/references'
     | '/reinitialiser-mot-de-passe'
-    | '/rendez-vous'
-    | '/salle-de-presse'
-    | '/secteurs'
     | '/services'
-    | '/stages-insertion'
-    | '/technical-services'
-    | '/telechargements'
-    | '/valeurs-en-action'
     | '/verifier-email'
     | '/blog/$slug'
-    | '/business-center/audit-rh'
-    | '/business-center/formation'
-    | '/business-center/recrutement'
     | '/espace/nouvelle-demande'
     | '/espace/profil'
     | '/espace/securite'
@@ -928,80 +311,24 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/a-propos'
-    | '/academy-tv'
-    | '/appels-offres'
-    | '/barometre-emploi'
     | '/blog'
     | '/business-center'
-    | '/business-school'
-    | '/calculateur-roi'
-    | '/carrieres'
-    | '/carrieres-talents'
-    | '/centre-competences'
-    | '/centre-excellence'
-    | '/certification-qualite'
-    | '/certifications'
     | '/connexion'
     | '/contact'
     | '/devis'
-    | '/ecosysteme'
-    | '/engagements-clients'
-    | '/engagements-entreprises'
-    | '/engagements-formation'
     | '/espace'
-    | '/evenements'
     | '/faq'
-    | '/faq-interactive'
-    | '/formateurs'
     | '/formations'
-    | '/foundation'
-    | '/franchise'
-    | '/galerie'
-    | '/gouvernance'
-    | '/innovation-digitale'
     | '/inscription'
-    | '/institute'
-    | '/jeunes-talents'
-    | '/laureats'
-    | '/mediatheque'
     | '/mot-de-passe-oublie'
-    | '/nos-experts'
-    | '/nos-politiques'
-    | '/notre-histoire'
-    | '/objectifs-2030'
     | '/offres'
-    | '/offres-speciales'
-    | '/om-certified'
-    | '/om-consulting'
-    | '/om-digital'
-    | '/packs-pme'
-    | '/parcours-carriere'
-    | '/partenaires-recruteurs'
-    | '/poles'
     | '/pre-inscription'
-    | '/processus'
-    | '/processus-qualite'
-    | '/rapport-annuel'
-    | '/rapport-impact'
-    | '/rdv-pdg'
     | '/realisations'
-    | '/recruitment-agency'
     | '/recrutement'
-    | '/references'
     | '/reinitialiser-mot-de-passe'
-    | '/rendez-vous'
-    | '/salle-de-presse'
-    | '/secteurs'
     | '/services'
-    | '/stages-insertion'
-    | '/technical-services'
-    | '/telechargements'
-    | '/valeurs-en-action'
     | '/verifier-email'
     | '/blog_/$slug'
-    | '/business-center/audit-rh'
-    | '/business-center/formation'
-    | '/business-center/recrutement'
     | '/espace/nouvelle-demande'
     | '/espace/profil'
     | '/espace/securite'
@@ -1013,75 +340,22 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AProposRoute: typeof AProposRoute
-  AcademyTvRoute: typeof AcademyTvRoute
-  AppelsOffresRoute: typeof AppelsOffresRoute
-  BarometreEmploiRoute: typeof BarometreEmploiRoute
   BlogRoute: typeof BlogRoute
-  BusinessCenterRoute: typeof BusinessCenterRouteWithChildren
-  BusinessSchoolRoute: typeof BusinessSchoolRoute
-  CalculateurRoiRoute: typeof CalculateurRoiRoute
-  CarrieresRoute: typeof CarrieresRoute
-  CarrieresTalentsRoute: typeof CarrieresTalentsRoute
-  CentreCompetencesRoute: typeof CentreCompetencesRoute
-  CentreExcellenceRoute: typeof CentreExcellenceRoute
-  CertificationQualiteRoute: typeof CertificationQualiteRoute
-  CertificationsRoute: typeof CertificationsRoute
+  BusinessCenterRoute: typeof BusinessCenterRoute
   ConnexionRoute: typeof ConnexionRoute
   ContactRoute: typeof ContactRoute
   DevisRoute: typeof DevisRoute
-  EcosystemeRoute: typeof EcosystemeRoute
-  EngagementsClientsRoute: typeof EngagementsClientsRoute
-  EngagementsEntreprisesRoute: typeof EngagementsEntreprisesRoute
-  EngagementsFormationRoute: typeof EngagementsFormationRoute
   EspaceRoute: typeof EspaceRouteWithChildren
-  EvenementsRoute: typeof EvenementsRoute
   FaqRoute: typeof FaqRoute
-  FaqInteractiveRoute: typeof FaqInteractiveRoute
-  FormateursRoute: typeof FormateursRoute
   FormationsRoute: typeof FormationsRoute
-  FoundationRoute: typeof FoundationRoute
-  FranchiseRoute: typeof FranchiseRoute
-  GalerieRoute: typeof GalerieRoute
-  GouvernanceRoute: typeof GouvernanceRoute
-  InnovationDigitaleRoute: typeof InnovationDigitaleRoute
   InscriptionRoute: typeof InscriptionRoute
-  InstituteRoute: typeof InstituteRoute
-  JeunesTalentsRoute: typeof JeunesTalentsRoute
-  LaureatsRoute: typeof LaureatsRoute
-  MediathequeRoute: typeof MediathequeRoute
   MotDePasseOublieRoute: typeof MotDePasseOublieRoute
-  NosExpertsRoute: typeof NosExpertsRoute
-  NosPolitiquesRoute: typeof NosPolitiquesRoute
-  NotreHistoireRoute: typeof NotreHistoireRoute
-  Objectifs2030Route: typeof Objectifs2030Route
   OffresRoute: typeof OffresRoute
-  OffresSpecialesRoute: typeof OffresSpecialesRoute
-  OmCertifiedRoute: typeof OmCertifiedRoute
-  OmConsultingRoute: typeof OmConsultingRoute
-  OmDigitalRoute: typeof OmDigitalRoute
-  PacksPmeRoute: typeof PacksPmeRoute
-  ParcoursCarriereRoute: typeof ParcoursCarriereRoute
-  PartenairesRecruteursRoute: typeof PartenairesRecruteursRoute
-  PolesRoute: typeof PolesRoute
   PreInscriptionRoute: typeof PreInscriptionRoute
-  ProcessusRoute: typeof ProcessusRoute
-  ProcessusQualiteRoute: typeof ProcessusQualiteRoute
-  RapportAnnuelRoute: typeof RapportAnnuelRoute
-  RapportImpactRoute: typeof RapportImpactRoute
-  RdvPdgRoute: typeof RdvPdgRoute
   RealisationsRoute: typeof RealisationsRoute
-  RecruitmentAgencyRoute: typeof RecruitmentAgencyRoute
   RecrutementRoute: typeof RecrutementRoute
-  ReferencesRoute: typeof ReferencesRoute
   ReinitialiserMotDePasseRoute: typeof ReinitialiserMotDePasseRoute
-  RendezVousRoute: typeof RendezVousRoute
-  SalleDePresseRoute: typeof SalleDePresseRoute
-  SecteursRoute: typeof SecteursRoute
   ServicesRoute: typeof ServicesRoute
-  StagesInsertionRoute: typeof StagesInsertionRoute
-  TechnicalServicesRoute: typeof TechnicalServicesRoute
-  TelechargementsRoute: typeof TelechargementsRoute
-  ValeursEnActionRoute: typeof ValeursEnActionRoute
   VerifierEmailRoute: typeof VerifierEmailRoute
   BlogSlugRoute: typeof BlogSlugRoute
 }
@@ -1095,60 +369,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerifierEmailRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/valeurs-en-action': {
-      id: '/valeurs-en-action'
-      path: '/valeurs-en-action'
-      fullPath: '/valeurs-en-action'
-      preLoaderRoute: typeof ValeursEnActionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/telechargements': {
-      id: '/telechargements'
-      path: '/telechargements'
-      fullPath: '/telechargements'
-      preLoaderRoute: typeof TelechargementsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/technical-services': {
-      id: '/technical-services'
-      path: '/technical-services'
-      fullPath: '/technical-services'
-      preLoaderRoute: typeof TechnicalServicesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/stages-insertion': {
-      id: '/stages-insertion'
-      path: '/stages-insertion'
-      fullPath: '/stages-insertion'
-      preLoaderRoute: typeof StagesInsertionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/services': {
       id: '/services'
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/secteurs': {
-      id: '/secteurs'
-      path: '/secteurs'
-      fullPath: '/secteurs'
-      preLoaderRoute: typeof SecteursRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/salle-de-presse': {
-      id: '/salle-de-presse'
-      path: '/salle-de-presse'
-      fullPath: '/salle-de-presse'
-      preLoaderRoute: typeof SalleDePresseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/rendez-vous': {
-      id: '/rendez-vous'
-      path: '/rendez-vous'
-      fullPath: '/rendez-vous'
-      preLoaderRoute: typeof RendezVousRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reinitialiser-mot-de-passe': {
@@ -1158,25 +383,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ReinitialiserMotDePasseRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/references': {
-      id: '/references'
-      path: '/references'
-      fullPath: '/references'
-      preLoaderRoute: typeof ReferencesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/recrutement': {
       id: '/recrutement'
       path: '/recrutement'
       fullPath: '/recrutement'
       preLoaderRoute: typeof RecrutementRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/recruitment-agency': {
-      id: '/recruitment-agency'
-      path: '/recruitment-agency'
-      fullPath: '/recruitment-agency'
-      preLoaderRoute: typeof RecruitmentAgencyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/realisations': {
@@ -1186,102 +397,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RealisationsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/rdv-pdg': {
-      id: '/rdv-pdg'
-      path: '/rdv-pdg'
-      fullPath: '/rdv-pdg'
-      preLoaderRoute: typeof RdvPdgRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/rapport-impact': {
-      id: '/rapport-impact'
-      path: '/rapport-impact'
-      fullPath: '/rapport-impact'
-      preLoaderRoute: typeof RapportImpactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/rapport-annuel': {
-      id: '/rapport-annuel'
-      path: '/rapport-annuel'
-      fullPath: '/rapport-annuel'
-      preLoaderRoute: typeof RapportAnnuelRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/processus-qualite': {
-      id: '/processus-qualite'
-      path: '/processus-qualite'
-      fullPath: '/processus-qualite'
-      preLoaderRoute: typeof ProcessusQualiteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/processus': {
-      id: '/processus'
-      path: '/processus'
-      fullPath: '/processus'
-      preLoaderRoute: typeof ProcessusRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/pre-inscription': {
       id: '/pre-inscription'
       path: '/pre-inscription'
       fullPath: '/pre-inscription'
       preLoaderRoute: typeof PreInscriptionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/poles': {
-      id: '/poles'
-      path: '/poles'
-      fullPath: '/poles'
-      preLoaderRoute: typeof PolesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/partenaires-recruteurs': {
-      id: '/partenaires-recruteurs'
-      path: '/partenaires-recruteurs'
-      fullPath: '/partenaires-recruteurs'
-      preLoaderRoute: typeof PartenairesRecruteursRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/parcours-carriere': {
-      id: '/parcours-carriere'
-      path: '/parcours-carriere'
-      fullPath: '/parcours-carriere'
-      preLoaderRoute: typeof ParcoursCarriereRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/packs-pme': {
-      id: '/packs-pme'
-      path: '/packs-pme'
-      fullPath: '/packs-pme'
-      preLoaderRoute: typeof PacksPmeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/om-digital': {
-      id: '/om-digital'
-      path: '/om-digital'
-      fullPath: '/om-digital'
-      preLoaderRoute: typeof OmDigitalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/om-consulting': {
-      id: '/om-consulting'
-      path: '/om-consulting'
-      fullPath: '/om-consulting'
-      preLoaderRoute: typeof OmConsultingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/om-certified': {
-      id: '/om-certified'
-      path: '/om-certified'
-      fullPath: '/om-certified'
-      preLoaderRoute: typeof OmCertifiedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/offres-speciales': {
-      id: '/offres-speciales'
-      path: '/offres-speciales'
-      fullPath: '/offres-speciales'
-      preLoaderRoute: typeof OffresSpecialesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/offres': {
@@ -1291,67 +411,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OffresRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/objectifs-2030': {
-      id: '/objectifs-2030'
-      path: '/objectifs-2030'
-      fullPath: '/objectifs-2030'
-      preLoaderRoute: typeof Objectifs2030RouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notre-histoire': {
-      id: '/notre-histoire'
-      path: '/notre-histoire'
-      fullPath: '/notre-histoire'
-      preLoaderRoute: typeof NotreHistoireRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/nos-politiques': {
-      id: '/nos-politiques'
-      path: '/nos-politiques'
-      fullPath: '/nos-politiques'
-      preLoaderRoute: typeof NosPolitiquesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/nos-experts': {
-      id: '/nos-experts'
-      path: '/nos-experts'
-      fullPath: '/nos-experts'
-      preLoaderRoute: typeof NosExpertsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/mot-de-passe-oublie': {
       id: '/mot-de-passe-oublie'
       path: '/mot-de-passe-oublie'
       fullPath: '/mot-de-passe-oublie'
       preLoaderRoute: typeof MotDePasseOublieRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mediatheque': {
-      id: '/mediatheque'
-      path: '/mediatheque'
-      fullPath: '/mediatheque'
-      preLoaderRoute: typeof MediathequeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/laureats': {
-      id: '/laureats'
-      path: '/laureats'
-      fullPath: '/laureats'
-      preLoaderRoute: typeof LaureatsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/jeunes-talents': {
-      id: '/jeunes-talents'
-      path: '/jeunes-talents'
-      fullPath: '/jeunes-talents'
-      preLoaderRoute: typeof JeunesTalentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/institute': {
-      id: '/institute'
-      path: '/institute'
-      fullPath: '/institute'
-      preLoaderRoute: typeof InstituteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/inscription': {
@@ -1361,60 +425,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InscriptionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/innovation-digitale': {
-      id: '/innovation-digitale'
-      path: '/innovation-digitale'
-      fullPath: '/innovation-digitale'
-      preLoaderRoute: typeof InnovationDigitaleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/gouvernance': {
-      id: '/gouvernance'
-      path: '/gouvernance'
-      fullPath: '/gouvernance'
-      preLoaderRoute: typeof GouvernanceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/galerie': {
-      id: '/galerie'
-      path: '/galerie'
-      fullPath: '/galerie'
-      preLoaderRoute: typeof GalerieRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/franchise': {
-      id: '/franchise'
-      path: '/franchise'
-      fullPath: '/franchise'
-      preLoaderRoute: typeof FranchiseRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/foundation': {
-      id: '/foundation'
-      path: '/foundation'
-      fullPath: '/foundation'
-      preLoaderRoute: typeof FoundationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/formations': {
       id: '/formations'
       path: '/formations'
       fullPath: '/formations'
       preLoaderRoute: typeof FormationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/formateurs': {
-      id: '/formateurs'
-      path: '/formateurs'
-      fullPath: '/formateurs'
-      preLoaderRoute: typeof FormateursRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/faq-interactive': {
-      id: '/faq-interactive'
-      path: '/faq-interactive'
-      fullPath: '/faq-interactive'
-      preLoaderRoute: typeof FaqInteractiveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -1424,46 +439,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/evenements': {
-      id: '/evenements'
-      path: '/evenements'
-      fullPath: '/evenements'
-      preLoaderRoute: typeof EvenementsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/espace': {
       id: '/espace'
       path: '/espace'
       fullPath: '/espace'
       preLoaderRoute: typeof EspaceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/engagements-formation': {
-      id: '/engagements-formation'
-      path: '/engagements-formation'
-      fullPath: '/engagements-formation'
-      preLoaderRoute: typeof EngagementsFormationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/engagements-entreprises': {
-      id: '/engagements-entreprises'
-      path: '/engagements-entreprises'
-      fullPath: '/engagements-entreprises'
-      preLoaderRoute: typeof EngagementsEntreprisesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/engagements-clients': {
-      id: '/engagements-clients'
-      path: '/engagements-clients'
-      fullPath: '/engagements-clients'
-      preLoaderRoute: typeof EngagementsClientsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ecosysteme': {
-      id: '/ecosysteme'
-      path: '/ecosysteme'
-      fullPath: '/ecosysteme'
-      preLoaderRoute: typeof EcosystemeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/devis': {
@@ -1487,62 +467,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConnexionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/certifications': {
-      id: '/certifications'
-      path: '/certifications'
-      fullPath: '/certifications'
-      preLoaderRoute: typeof CertificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/certification-qualite': {
-      id: '/certification-qualite'
-      path: '/certification-qualite'
-      fullPath: '/certification-qualite'
-      preLoaderRoute: typeof CertificationQualiteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/centre-excellence': {
-      id: '/centre-excellence'
-      path: '/centre-excellence'
-      fullPath: '/centre-excellence'
-      preLoaderRoute: typeof CentreExcellenceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/centre-competences': {
-      id: '/centre-competences'
-      path: '/centre-competences'
-      fullPath: '/centre-competences'
-      preLoaderRoute: typeof CentreCompetencesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/carrieres-talents': {
-      id: '/carrieres-talents'
-      path: '/carrieres-talents'
-      fullPath: '/carrieres-talents'
-      preLoaderRoute: typeof CarrieresTalentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/carrieres': {
-      id: '/carrieres'
-      path: '/carrieres'
-      fullPath: '/carrieres'
-      preLoaderRoute: typeof CarrieresRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/calculateur-roi': {
-      id: '/calculateur-roi'
-      path: '/calculateur-roi'
-      fullPath: '/calculateur-roi'
-      preLoaderRoute: typeof CalculateurRoiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/business-school': {
-      id: '/business-school'
-      path: '/business-school'
-      fullPath: '/business-school'
-      preLoaderRoute: typeof BusinessSchoolRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/business-center': {
       id: '/business-center'
       path: '/business-center'
@@ -1555,27 +479,6 @@ declare module '@tanstack/react-router' {
       path: '/blog'
       fullPath: '/blog'
       preLoaderRoute: typeof BlogRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/barometre-emploi': {
-      id: '/barometre-emploi'
-      path: '/barometre-emploi'
-      fullPath: '/barometre-emploi'
-      preLoaderRoute: typeof BarometreEmploiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/appels-offres': {
-      id: '/appels-offres'
-      path: '/appels-offres'
-      fullPath: '/appels-offres'
-      preLoaderRoute: typeof AppelsOffresRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/academy-tv': {
-      id: '/academy-tv'
-      path: '/academy-tv'
-      fullPath: '/academy-tv'
-      preLoaderRoute: typeof AcademyTvRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/a-propos': {
@@ -1620,27 +523,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EspaceNouvelleDemandeRouteImport
       parentRoute: typeof EspaceRoute
     }
-    '/business-center/recrutement': {
-      id: '/business-center/recrutement'
-      path: '/recrutement'
-      fullPath: '/business-center/recrutement'
-      preLoaderRoute: typeof BusinessCenterRecrutementRouteImport
-      parentRoute: typeof BusinessCenterRoute
-    }
-    '/business-center/formation': {
-      id: '/business-center/formation'
-      path: '/formation'
-      fullPath: '/business-center/formation'
-      preLoaderRoute: typeof BusinessCenterFormationRouteImport
-      parentRoute: typeof BusinessCenterRoute
-    }
-    '/business-center/audit-rh': {
-      id: '/business-center/audit-rh'
-      path: '/audit-rh'
-      fullPath: '/business-center/audit-rh'
-      preLoaderRoute: typeof BusinessCenterAuditRhRouteImport
-      parentRoute: typeof BusinessCenterRoute
-    }
     '/blog_/$slug': {
       id: '/blog_/$slug'
       path: '/blog/$slug'
@@ -1664,22 +546,6 @@ declare module '@tanstack/react-router' {
     }
   }
 }
-
-interface BusinessCenterRouteChildren {
-  BusinessCenterAuditRhRoute: typeof BusinessCenterAuditRhRoute
-  BusinessCenterFormationRoute: typeof BusinessCenterFormationRoute
-  BusinessCenterRecrutementRoute: typeof BusinessCenterRecrutementRoute
-}
-
-const BusinessCenterRouteChildren: BusinessCenterRouteChildren = {
-  BusinessCenterAuditRhRoute: BusinessCenterAuditRhRoute,
-  BusinessCenterFormationRoute: BusinessCenterFormationRoute,
-  BusinessCenterRecrutementRoute: BusinessCenterRecrutementRoute,
-}
-
-const BusinessCenterRouteWithChildren = BusinessCenterRoute._addFileChildren(
-  BusinessCenterRouteChildren,
-)
 
 interface EspaceRouteChildren {
   EspaceNouvelleDemandeRoute: typeof EspaceNouvelleDemandeRoute
@@ -1705,75 +571,22 @@ const EspaceRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AProposRoute: AProposRoute,
-  AcademyTvRoute: AcademyTvRoute,
-  AppelsOffresRoute: AppelsOffresRoute,
-  BarometreEmploiRoute: BarometreEmploiRoute,
   BlogRoute: BlogRoute,
-  BusinessCenterRoute: BusinessCenterRouteWithChildren,
-  BusinessSchoolRoute: BusinessSchoolRoute,
-  CalculateurRoiRoute: CalculateurRoiRoute,
-  CarrieresRoute: CarrieresRoute,
-  CarrieresTalentsRoute: CarrieresTalentsRoute,
-  CentreCompetencesRoute: CentreCompetencesRoute,
-  CentreExcellenceRoute: CentreExcellenceRoute,
-  CertificationQualiteRoute: CertificationQualiteRoute,
-  CertificationsRoute: CertificationsRoute,
+  BusinessCenterRoute: BusinessCenterRoute,
   ConnexionRoute: ConnexionRoute,
   ContactRoute: ContactRoute,
   DevisRoute: DevisRoute,
-  EcosystemeRoute: EcosystemeRoute,
-  EngagementsClientsRoute: EngagementsClientsRoute,
-  EngagementsEntreprisesRoute: EngagementsEntreprisesRoute,
-  EngagementsFormationRoute: EngagementsFormationRoute,
   EspaceRoute: EspaceRouteWithChildren,
-  EvenementsRoute: EvenementsRoute,
   FaqRoute: FaqRoute,
-  FaqInteractiveRoute: FaqInteractiveRoute,
-  FormateursRoute: FormateursRoute,
   FormationsRoute: FormationsRoute,
-  FoundationRoute: FoundationRoute,
-  FranchiseRoute: FranchiseRoute,
-  GalerieRoute: GalerieRoute,
-  GouvernanceRoute: GouvernanceRoute,
-  InnovationDigitaleRoute: InnovationDigitaleRoute,
   InscriptionRoute: InscriptionRoute,
-  InstituteRoute: InstituteRoute,
-  JeunesTalentsRoute: JeunesTalentsRoute,
-  LaureatsRoute: LaureatsRoute,
-  MediathequeRoute: MediathequeRoute,
   MotDePasseOublieRoute: MotDePasseOublieRoute,
-  NosExpertsRoute: NosExpertsRoute,
-  NosPolitiquesRoute: NosPolitiquesRoute,
-  NotreHistoireRoute: NotreHistoireRoute,
-  Objectifs2030Route: Objectifs2030Route,
   OffresRoute: OffresRoute,
-  OffresSpecialesRoute: OffresSpecialesRoute,
-  OmCertifiedRoute: OmCertifiedRoute,
-  OmConsultingRoute: OmConsultingRoute,
-  OmDigitalRoute: OmDigitalRoute,
-  PacksPmeRoute: PacksPmeRoute,
-  ParcoursCarriereRoute: ParcoursCarriereRoute,
-  PartenairesRecruteursRoute: PartenairesRecruteursRoute,
-  PolesRoute: PolesRoute,
   PreInscriptionRoute: PreInscriptionRoute,
-  ProcessusRoute: ProcessusRoute,
-  ProcessusQualiteRoute: ProcessusQualiteRoute,
-  RapportAnnuelRoute: RapportAnnuelRoute,
-  RapportImpactRoute: RapportImpactRoute,
-  RdvPdgRoute: RdvPdgRoute,
   RealisationsRoute: RealisationsRoute,
-  RecruitmentAgencyRoute: RecruitmentAgencyRoute,
   RecrutementRoute: RecrutementRoute,
-  ReferencesRoute: ReferencesRoute,
   ReinitialiserMotDePasseRoute: ReinitialiserMotDePasseRoute,
-  RendezVousRoute: RendezVousRoute,
-  SalleDePresseRoute: SalleDePresseRoute,
-  SecteursRoute: SecteursRoute,
   ServicesRoute: ServicesRoute,
-  StagesInsertionRoute: StagesInsertionRoute,
-  TechnicalServicesRoute: TechnicalServicesRoute,
-  TelechargementsRoute: TelechargementsRoute,
-  ValeursEnActionRoute: ValeursEnActionRoute,
   VerifierEmailRoute: VerifierEmailRoute,
   BlogSlugRoute: BlogSlugRoute,
 }

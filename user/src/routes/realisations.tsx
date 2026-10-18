@@ -1,53 +1,133 @@
 import { createFileRoute } from "@tanstack/react-router";
+import {
+  Award,
+  Briefcase,
+  Building2,
+  Calendar,
+  Factory,
+  GraduationCap,
+  HeartHandshake,
+  Landmark,
+  TrendingUp,
+  UserCheck,
+} from "lucide-react";
+
 import { Section, SectionTitle } from "@/components/Section";
-import { Card } from "@/components/ui/card";
-import { Award, Briefcase, UserCheck, Calendar, TrendingUp } from "lucide-react";
+import { FeatureCards } from "@/components/sections/FeatureCards";
+import { Galerie } from "@/components/sections/realisations/Galerie";
 
 export const Route = createFileRoute("/realisations")({
   head: () => ({
     meta: [
-      { title: "Réalisations — Office Management" },
-      { name: "description", content: "Découvrez nos réalisations : formations certifiantes, accompagnement d'entreprises, recrutements réussis et séminaires." },
+      { title: "Réalisations, références & galerie — Office Management" },
+      {
+        name: "description",
+        content:
+          "Nos réalisations (formations certifiantes, accompagnement d'entreprises, recrutements, séminaires), nos références par secteur et la galerie photos d'Office Management.",
+      },
       { property: "og:title", content: "Réalisations — Office Management" },
-      { property: "og:description", content: "Des résultats concrets pour nos clients et partenaires." },
+      {
+        property: "og:description",
+        content: "Des résultats concrets, des clients variés et nos équipes en images.",
+      },
     ],
   }),
   component: Realisations,
 });
 
 const items = [
-  { i: Award, t: "Formations professionnelles certifiantes", d: "Des dizaines de promotions formées avec succès." },
-  { i: Briefcase, t: "Accompagnement des entreprises", d: "Audit RH, externalisation paie, conseil organisationnel." },
-  { i: UserCheck, t: "Recrutements réussis", d: "Placement de talents qualifiés dans divers secteurs." },
-  { i: Calendar, t: "Séminaires et ateliers", d: "Organisation d'événements professionnels à fort impact." },
-  { i: TrendingUp, t: "Développement des compétences", d: "Renforcement durable des capacités professionnelles." },
+  {
+    icon: Award,
+    title: "Formations professionnelles certifiantes",
+    text: "Des dizaines de promotions formées avec succès.",
+  },
+  {
+    icon: Briefcase,
+    title: "Accompagnement des entreprises",
+    text: "Audit RH, externalisation paie, conseil organisationnel.",
+  },
+  {
+    icon: UserCheck,
+    title: "Recrutements réussis",
+    text: "Placement de talents qualifiés dans divers secteurs.",
+  },
+  {
+    icon: Calendar,
+    title: "Séminaires et ateliers",
+    text: "Organisation d'événements professionnels à fort impact.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Développement des compétences",
+    text: "Renforcement durable des capacités professionnelles.",
+  },
+];
+
+const references = [
+  {
+    icon: Building2,
+    title: "Entreprises",
+    text: "Grands comptes et groupes accompagnés sur leurs enjeux RH.",
+  },
+  {
+    icon: Landmark,
+    title: "Institutions",
+    text: "Collaborations avec organismes publics et institutionnels.",
+  },
+  { icon: HeartHandshake, title: "ONG", text: "Soutien aux organisations à mission sociale." },
+  { icon: Factory, title: "PME", text: "Accompagnement de proximité des PME congolaises." },
+  {
+    icon: GraduationCap,
+    title: "Écoles",
+    text: "Partenariats académiques et insertion des jeunes.",
+  },
+];
+
+const anchors = [
+  { href: "#references", label: "Références" },
+  { href: "#galerie", label: "Galerie" },
 ];
 
 function Realisations() {
   return (
     <>
-      <section className="py-24 gradient-hero">
-        <div className="container mx-auto px-4 text-center max-w-3xl">
-          <div className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-3">Nos réussites</div>
-          <h1 className="font-display text-4xl md:text-6xl font-extrabold mb-4">Réalisations</h1>
-          <p className="text-muted-foreground text-lg">
-            Depuis notre création, nous avons accompagné plusieurs entreprises et formé de nombreux professionnels dans différents secteurs d'activité.
+      <section className="gradient-hero py-24">
+        <div className="container mx-auto max-w-3xl px-4 text-center">
+          <span className="eyebrow mb-3">Nos réussites</span>
+          <h1 className="mb-4 font-display text-4xl font-extrabold md:text-6xl">Réalisations</h1>
+          <p className="mb-8 text-lg text-muted-foreground">
+            Depuis notre création, nous avons accompagné plusieurs entreprises et formé de nombreux
+            professionnels dans différents secteurs d'activité.
           </p>
+          <div className="flex flex-wrap justify-center gap-2">
+            {anchors.map((a) => (
+              <a
+                key={a.href}
+                href={a.href}
+                className="glass rounded-full px-4 py-1.5 text-sm transition hover:text-primary"
+              >
+                {a.label}
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 
       <Section>
         <SectionTitle eyebrow="Nos réalisations" title="Des résultats concrets" />
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {items.map((it) => (
-            <Card key={it.t} className="gradient-card border-border p-6 hover-lift">
-              <it.i className="h-10 w-10 text-primary mb-4" />
-              <h3 className="font-display text-lg font-bold mb-2">{it.t}</h3>
-              <p className="text-sm text-muted-foreground">{it.d}</p>
-            </Card>
-          ))}
-        </div>
+        <FeatureCards items={items} />
       </Section>
+
+      <Section id="references" className="scroll-mt-24 pt-0!">
+        <SectionTitle
+          eyebrow="Ils nous font confiance"
+          title="Nos références"
+          subtitle="Des collaborations ponctuelles ou durables avec des acteurs variés du tissu économique et social."
+        />
+        <FeatureCards items={references} />
+      </Section>
+
+      <Galerie />
     </>
   );
 }

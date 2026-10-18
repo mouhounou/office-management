@@ -10,7 +10,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { useAccount } from "@/lib/account-context";
 import { cn } from "@/lib/utils";
 
-type NavItem = { to: string; label: string };
+type NavItem = { to: string; hash?: string; label: string };
 type NavGroup = { label: string; to?: string; items: NavItem[] };
 
 /**
@@ -35,15 +35,16 @@ export function Header() {
 
   useEffect(() => setOpen(false), [pathname]);
 
+  // Les anciennes pages secondaires sont désormais des sections (ancres).
   const groups: NavGroup[] = [
     {
       label: t("nav.about"),
       to: "/a-propos",
       items: [
         { to: "/a-propos", label: t("nav.about") },
-        { to: "/poles", label: t("nav.poles") },
+        { to: "/a-propos", hash: "engagements", label: t("nav.commitments", "Nos engagements") },
+        { to: "/a-propos", hash: "qualite", label: t("nav.certifications") },
         { to: "/realisations", label: t("nav.achievements") },
-        { to: "/certifications", label: t("nav.certifications") },
       ],
     },
     {
@@ -51,10 +52,9 @@ export function Header() {
       to: "/services",
       items: [
         { to: "/services", label: t("nav.services") },
-        { to: "/secteurs", label: t("nav.sectors") },
+        { to: "/services", hash: "secteurs", label: t("nav.sectors") },
         { to: "/business-center", label: t("nav.businessCenter") },
-        { to: "/packs-pme", label: t("nav.smepacks") },
-        { to: "/processus", label: t("nav.methodology") },
+        { to: "/offres", label: t("nav.offers", "Offres & tarifs") },
       ],
     },
     {
@@ -74,7 +74,7 @@ export function Header() {
       label: t("nav.resources", "Ressources"),
       items: [
         { to: "/blog", label: t("nav.news") },
-        { to: "/telechargements", label: t("nav.downloads") },
+        { to: "/blog", hash: "telechargements", label: t("nav.downloads") },
         { to: "/faq", label: t("nav.faq") },
       ],
     },
@@ -169,8 +169,10 @@ export function Header() {
                   <div className="rounded-2xl border border-border bg-popover p-2 shadow-card">
                     {group.items.map((item) => (
                       <Link
-                        key={item.to}
+                        key={item.to + (item.hash ?? "")}
                         to={item.to}
+                        hash={item.hash}
+                        activeOptions={{ includeHash: true }}
                         className="block rounded-xl px-3 py-2 text-sm text-foreground/80 transition-colors hover:bg-accent hover:text-primary"
                         activeProps={{ className: "bg-accent text-primary font-medium" }}
                       >
@@ -260,8 +262,10 @@ export function Header() {
                     </div>
                     {group.items.map((item) => (
                       <Link
-                        key={item.to}
+                        key={item.to + (item.hash ?? "")}
                         to={item.to}
+                        hash={item.hash}
+                        activeOptions={{ includeHash: true }}
                         className="block rounded-lg px-3 py-2 text-sm font-medium text-foreground/80 hover:bg-accent hover:text-primary"
                         activeProps={{ className: "bg-accent text-primary" }}
                       >

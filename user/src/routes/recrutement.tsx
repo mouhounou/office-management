@@ -12,37 +12,66 @@ import { Loader2 } from "lucide-react";
 import { errorMessage } from "@/lib/api";
 import { useMemberPrefill } from "@/lib/account-context";
 import { submitApplication, submitBusinessRequest } from "@/lib/submissions";
-import { Briefcase, Users, UserCheck, Search, Send, ArrowRight, Clock, ShieldCheck, Network, Target } from "lucide-react";
+import { Briefcase, Send, ArrowRight, Clock, ShieldCheck, Network, Target } from "lucide-react";
+import { BarometreSection } from "@/components/sections/recrutement/BarometreSection";
+import { CarrieresSection } from "@/components/sections/recrutement/CarrieresSection";
+import { ExpertisesSection } from "@/components/sections/recrutement/ExpertisesSection";
+import { JeunesTalentsSection } from "@/components/sections/recrutement/JeunesTalentsSection";
+import { ParcoursSection } from "@/components/sections/recrutement/ParcoursSection";
+import { PartenairesSection } from "@/components/sections/recrutement/PartenairesSection";
 import entretien from "@/assets/entretien-recrutement.jpg";
 
 export const Route = createFileRoute("/recrutement")({
   head: () => ({
     meta: [
       { title: "Recrutement & Mise à disposition — Office Management" },
-      { name: "description", content: "Espace candidat et entreprise : recrutement, sélection, placement et onboarding de talents qualifiés." },
+      {
+        name: "description",
+        content:
+          "Agence de recrutement Office Management : recrutement local et international, chasse de têtes, intérim, assessment center, programme Jeunes Talents, stages, postes ouverts, partenaires recruteurs et baromètre de l'emploi.",
+      },
       { property: "og:title", content: "Recrutement — Office Management" },
-      { property: "og:description", content: "Trouvez les meilleurs talents ou postulez à nos offres." },
+      {
+        property: "og:description",
+        content:
+          "Trouvez les meilleurs talents, postulez à nos offres et suivez les tendances de l'emploi.",
+      },
     ],
   }),
   component: Recrutement,
 });
 
-const SERVICES = [
-  { i: Search, t: "Recrutement & sélection", d: "Sourcing ciblé et présélection rigoureuse." },
-  { i: Briefcase, t: "Placement temp. & permanent", d: "Missions courtes ou postes durables." },
-  { i: UserCheck, t: "Évaluation des compétences", d: "Tests techniques et entretiens structurés." },
-  { i: Users, t: "Intégration & Onboarding", d: "Accompagnement jusqu'à la prise de poste." },
+const SECTION_LINKS = [
+  { hash: "expertises", label: "Expertises" },
+  { hash: "candidature", label: "Candidature" },
+  { hash: "parcours", label: "Parcours" },
+  { hash: "jeunes-talents", label: "Jeunes talents" },
+  { hash: "carrieres", label: "Carrières" },
+  { hash: "partenaires", label: "Partenaires" },
+  { hash: "barometre", label: "Baromètre" },
 ];
 
 const ASIDE = {
   candidat: [
-    { icon: Target, t: "Des offres qui vous correspondent", d: "Nous ciblons les postes adaptés à votre profil." },
-    { icon: Network, t: "120+ entreprises partenaires", d: "Un réseau actif pour accélérer votre placement." },
+    {
+      icon: Target,
+      t: "Des offres qui vous correspondent",
+      d: "Nous ciblons les postes adaptés à votre profil.",
+    },
+    {
+      icon: Network,
+      t: "120+ entreprises partenaires",
+      d: "Un réseau actif pour accélérer votre placement.",
+    },
     { icon: Clock, t: "Réponse sous 48h", d: "Un suivi réactif à chaque étape." },
   ],
   entreprise: [
     { icon: Target, t: "Les bons profils, plus vite", d: "Un vivier qualifié et présélectionné." },
-    { icon: ShieldCheck, t: "Sélection rigoureuse", d: "Tests, références et évaluation des compétences." },
+    {
+      icon: ShieldCheck,
+      t: "Sélection rigoureuse",
+      d: "Tests, références et évaluation des compétences.",
+    },
     { icon: Clock, t: "Mission lancée sous 48h", d: "Réactivité et disponibilité de nos équipes." },
   ],
 };
@@ -51,6 +80,12 @@ function Recrutement() {
   const prefill = useMemberPrefill();
   const [tab, setTab] = useState<"candidat" | "entreprise">("candidat");
   const [sending, setSending] = useState(false);
+  /** Poste prérempli quand on clique « Postuler » sur une offre de la page. */
+  const [position, setPosition] = useState("");
+  const applyAsCandidate = (job?: string) => {
+    setTab("candidat");
+    if (job) setPosition(job);
+  };
 
   /**
    * Deux destinations selon l'onglet : un candidat dépose une candidature
@@ -101,11 +136,20 @@ ${details}`,
     <>
       {/* HERO */}
       <section className="relative overflow-hidden py-24 md:py-28">
-        <img src={entretien} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-25" width={1280} height={800} />
+        <img
+          src={entretien}
+          alt=""
+          className="absolute inset-0 -z-10 h-full w-full object-cover opacity-25"
+          width={1280}
+          height={800}
+        />
         <div className="absolute inset-0 -z-10 gradient-hero opacity-95" />
         <div className="absolute inset-0 -z-10 bg-grid" />
         <div className="pointer-events-none absolute -top-24 -left-20 h-96 w-96 rounded-full bg-primary/20 blur-3xl animate-float" />
-        <div className="pointer-events-none absolute bottom-0 -right-20 h-96 w-96 rounded-full bg-cyan-glow/15 blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
+        <div
+          className="pointer-events-none absolute bottom-0 -right-20 h-96 w-96 rounded-full bg-cyan-glow/15 blur-3xl animate-float"
+          style={{ animationDelay: "1.5s" }}
+        />
 
         <div className="relative container mx-auto px-4 text-center max-w-3xl animate-fade-in-up">
           <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6 text-xs font-medium uppercase tracking-widest text-primary">
@@ -115,28 +159,26 @@ ${details}`,
             Le bon talent. <span className="text-gradient-cyan">Le bon poste.</span>
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Que vous soyez candidat ou employeur, nous facilitons la rencontre de l'opportunité et du talent.
+            Que vous soyez candidat ou employeur, nous facilitons la rencontre de l'opportunité et
+            du talent.
           </p>
+          <nav
+            aria-label="Sections de la page"
+            className="mt-8 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm font-medium text-muted-foreground"
+          >
+            {SECTION_LINKS.map((l) => (
+              <Link key={l.hash} to="/recrutement" hash={l.hash} className="hover:text-primary">
+                {l.label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </section>
 
-      {/* SERVICES */}
-      <Section className="pt-14!">
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {SERVICES.map((s) => (
-            <Card key={s.t} className="group gradient-card border-border p-6 hover-lift">
-              <div className="h-12 w-12 rounded-xl gradient-cyan flex items-center justify-center mb-4 group-hover:glow-cyan transition">
-                <s.i className="h-6 w-6 text-primary-foreground" />
-              </div>
-              <div className="font-display font-bold mb-1">{s.t}</div>
-              <p className="text-sm text-muted-foreground leading-relaxed">{s.d}</p>
-            </Card>
-          ))}
-        </div>
-      </Section>
+      <ExpertisesSection />
 
       {/* FORMULAIRE */}
-      <Section className="pt-0!">
+      <Section id="candidature" className="scroll-mt-24 pt-0!">
         {/* Toggle segmenté */}
         <div className="flex justify-center mb-10">
           <div className="inline-flex items-center gap-1 rounded-full glass p-1">
@@ -146,7 +188,9 @@ ${details}`,
                 type="button"
                 onClick={() => setTab(k)}
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors ${
-                  tab === k ? "gradient-cyan text-primary-foreground" : "text-muted-foreground hover:text-foreground"
+                  tab === k
+                    ? "gradient-cyan text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {k === "candidat" ? "Espace candidat" : "Espace entreprise"}
@@ -160,7 +204,9 @@ ${details}`,
           <aside className="lg:sticky lg:top-24">
             <Card className="gradient-card border-border p-6">
               <h2 className="font-display text-lg font-bold mb-4">
-                {tab === "candidat" ? "Pourquoi postuler avec nous" : "Pourquoi nous confier vos recrutements"}
+                {tab === "candidat"
+                  ? "Pourquoi postuler avec nous"
+                  : "Pourquoi nous confier vos recrutements"}
               </h2>
               <ul className="space-y-4">
                 {ASIDE[tab].map((b) => (
@@ -181,28 +227,100 @@ ${details}`,
           {/* Form */}
           <Card className="gradient-card border-border p-8 md:p-10">
             <form key={prefill.key} onSubmit={onSubmit} className="space-y-5">
-              <h2 className="font-display text-2xl font-bold mb-2">{tab === "candidat" ? "Déposer ma candidature" : "Décrire mon besoin de recrutement"}</h2>
+              <h2 className="font-display text-2xl font-bold mb-2">
+                {tab === "candidat"
+                  ? "Déposer ma candidature"
+                  : "Décrire mon besoin de recrutement"}
+              </h2>
               <div className="grid sm:grid-cols-2 gap-4">
-                <div><Label className="mb-2 block">Nom complet</Label><Input name="name" required defaultValue={prefill.name} placeholder="Jean Dupont" /></div>
-                <div><Label className="mb-2 block">{tab === "candidat" ? "Téléphone" : "Entreprise"}</Label><Input name="phoneOrCompany" required placeholder={tab === "candidat" ? "06 ..." : "Société SARL"} /></div>
+                <div>
+                  <Label className="mb-2 block">Nom complet</Label>
+                  <Input
+                    name="name"
+                    required
+                    defaultValue={prefill.name}
+                    placeholder="Jean Dupont"
+                  />
+                </div>
+                <div>
+                  <Label className="mb-2 block">
+                    {tab === "candidat" ? "Téléphone" : "Entreprise"}
+                  </Label>
+                  <Input
+                    name="phoneOrCompany"
+                    required
+                    placeholder={tab === "candidat" ? "06 ..." : "Société SARL"}
+                  />
+                </div>
               </div>
               {tab === "entreprise" ? (
-                <div><Label className="mb-2 block">Téléphone</Label><Input name="phone" required defaultValue={prefill.phone} placeholder="06 ..." /></div>
+                <div>
+                  <Label className="mb-2 block">Téléphone</Label>
+                  <Input name="phone" required defaultValue={prefill.phone} placeholder="06 ..." />
+                </div>
               ) : null}
-              <div><Label className="mb-2 block">Email</Label><Input name="email" type="email" required defaultValue={prefill.email} placeholder="email@exemple.com" /></div>
-              <div><Label className="mb-2 block">{tab === "candidat" ? "Poste recherché" : "Poste à pourvoir"}</Label><Input name="position" required placeholder="Ex : Comptable" /></div>
-              <div><Label className="mb-2 block">{tab === "candidat" ? "Présentation / parcours" : "Description du besoin"}</Label><Textarea name="details" required rows={4} minLength={20} placeholder="Décrivez votre profil ou votre besoin (20 caractères minimum)..." /></div>
-              <Button type="submit" disabled={sending} className="w-full gradient-cyan text-primary-foreground glow-cyan font-semibold hover:opacity-90">
-                {sending ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Send className="h-4 w-4 mr-2" />}
+              <div>
+                <Label className="mb-2 block">Email</Label>
+                <Input
+                  name="email"
+                  type="email"
+                  required
+                  defaultValue={prefill.email}
+                  placeholder="email@exemple.com"
+                />
+              </div>
+              <div>
+                <Label className="mb-2 block">
+                  {tab === "candidat" ? "Poste recherché" : "Poste à pourvoir"}
+                </Label>
+                <Input
+                  key={position}
+                  name="position"
+                  required
+                  defaultValue={position}
+                  placeholder="Ex : Comptable"
+                />
+              </div>
+              <div>
+                <Label className="mb-2 block">
+                  {tab === "candidat" ? "Présentation / parcours" : "Description du besoin"}
+                </Label>
+                <Textarea
+                  name="details"
+                  required
+                  rows={4}
+                  minLength={20}
+                  placeholder="Décrivez votre profil ou votre besoin (20 caractères minimum)..."
+                />
+              </div>
+              <Button
+                type="submit"
+                disabled={sending}
+                className="w-full gradient-cyan text-primary-foreground glow-cyan font-semibold hover:opacity-90"
+              >
+                {sending ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Send className="h-4 w-4 mr-2" />
+                )}
                 {sending ? "Envoi en cours…" : "Envoyer ma demande"}
               </Button>
               <p className="text-xs text-center text-muted-foreground">
-                Une question ? <Link to="/contact" className="text-primary font-medium">Contactez notre équipe <ArrowRight className="inline h-3 w-3" /></Link>
+                Une question ?{" "}
+                <Link to="/contact" className="text-primary font-medium">
+                  Contactez notre équipe <ArrowRight className="inline h-3 w-3" />
+                </Link>
               </p>
             </form>
           </Card>
         </div>
       </Section>
+
+      <ParcoursSection />
+      <JeunesTalentsSection onApply={() => applyAsCandidate()} />
+      <CarrieresSection onApply={applyAsCandidate} />
+      <PartenairesSection />
+      <BarometreSection />
     </>
   );
 }

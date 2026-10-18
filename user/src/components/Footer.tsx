@@ -5,15 +5,16 @@ import { Clock, Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 
-type FooterLink = { to: string; label: string };
+type FooterLink = { to: string; hash?: string; label: string };
 
 function LinkList({ links }: { links: FooterLink[] }) {
   return (
     <ul className="space-y-2.5 text-sm">
       {links.map((l) => (
-        <li key={l.to}>
+        <li key={l.to + (l.hash ?? "")}>
           <Link
             to={l.to}
+            hash={l.hash}
             className="group inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-primary"
           >
             <span className="h-px w-0 bg-primary transition-all duration-300 group-hover:w-3" />
@@ -53,7 +54,7 @@ export function Footer() {
     { to: "/a-propos", label: t("nav.about") },
     { to: "/realisations", label: t("nav.achievements") },
     { to: "/blog", label: t("nav.news") },
-    { to: "/references", label: "Nos références" },
+    { to: "/realisations", hash: "references", label: "Nos références" },
     { to: "/faq", label: t("nav.faq") },
     { to: "/contact", label: t("nav.contact") },
   ];
@@ -61,10 +62,10 @@ export function Footer() {
   const services: FooterLink[] = [
     { to: "/formations", label: "Formation professionnelle" },
     { to: "/recrutement", label: "Recrutement & personnel" },
-    { to: "/technical-services", label: "Prestations techniques" },
-    { to: "/om-consulting", label: "Conseil RH" },
+    { to: "/services", hash: "techniques", label: "Prestations techniques" },
+    { to: "/services", hash: "conseil", label: "Conseil RH" },
     { to: "/business-center", label: t("nav.businessCenter") },
-    { to: "/packs-pme", label: t("nav.smepacks") },
+    { to: "/offres", label: t("nav.offers", "Offres & tarifs") },
   ];
 
   const socials = [

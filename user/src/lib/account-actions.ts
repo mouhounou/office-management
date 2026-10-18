@@ -11,6 +11,7 @@ import {
 /** Démarches proposées depuis l'espace client ; `audience` filtre selon le type de compte. */
 export const QUICK_ACTIONS: {
   to: string;
+  hash?: string;
   label: string;
   description: string;
   icon: LucideIcon;
@@ -38,14 +39,16 @@ export const QUICK_ACTIONS: {
     audience: "candidat",
   },
   {
-    to: "/offres",
+    to: "/recrutement",
+    hash: "carrieres",
     label: "Offres d'emploi",
     description: "Postuler à une offre",
     icon: Briefcase,
     audience: "candidat",
   },
   {
-    to: "/rendez-vous",
+    to: "/contact",
+    hash: "rendez-vous",
     label: "Prendre rendez-vous",
     description: "Rencontrer un conseiller",
     icon: CalendarClock,

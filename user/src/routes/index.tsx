@@ -72,7 +72,14 @@ export const Route = createFileRoute("/")({
   component: Accueil,
 });
 
-const SERVICES: { icon: LucideIcon; title: string; desc: string; image: string; to: string }[] = [
+const SERVICES: {
+  icon: LucideIcon;
+  title: string;
+  desc: string;
+  image: string;
+  to: string;
+  hash?: string;
+}[] = [
   {
     icon: GraduationCap,
     title: "Formation professionnelle",
@@ -92,14 +99,16 @@ const SERVICES: { icon: LucideIcon; title: string; desc: string; image: string; 
     title: "Prestations techniques",
     desc: "Soudure, maintenance, électricité, climatisation, sécurité et nettoyage industriel.",
     image: technical,
-    to: "/technical-services",
+    to: "/services",
+    hash: "techniques",
   },
   {
     icon: Briefcase,
     title: "Conseil RH",
     desc: "Audit RH, externalisation de la paie, transformation digitale et organisation.",
     image: reunion,
-    to: "/om-consulting",
+    to: "/services",
+    hash: "conseil",
   },
   {
     icon: Sparkles,
@@ -243,6 +252,7 @@ function Accueil() {
             <Link
               key={service.title}
               to={service.to}
+              hash={service.hash}
               className="group overflow-hidden rounded-2xl border border-border bg-card shadow-card transition hover:-translate-y-1"
             >
               <div className="relative h-48 overflow-hidden">
@@ -426,7 +436,8 @@ function Accueil() {
           {SECTORS.map((sector, index) => (
             <Link
               key={sector.label}
-              to="/secteurs"
+              to="/services"
+              hash="secteurs"
               className="group flex flex-col items-center gap-3 text-center"
             >
               <span

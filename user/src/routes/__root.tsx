@@ -14,8 +14,18 @@ import {
 import appCss from "../styles.css?url";
 import { applyPreferredLanguage } from "@/i18n";
 import { fetchSettings, type SiteSettings } from "@/lib/content";
+import legacyRedirects from "@/lib/legacy-redirects.json";
 
 function NotFoundComponent() {
+  // Ancienne page regroupée dans une section : l'hébergeur redirige
+  // normalement (_redirects, .htaccess) ; à défaut, on redirige ici.
+  const { pathname } = useLocation();
+  const target = (legacyRedirects as Record<string, string>)[pathname.replace(/\/+$/, "")];
+  useEffect(() => {
+    if (target) window.location.replace(target);
+  }, [target]);
+  if (target) return null;
+
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0 -z-10 gradient-hero" />

@@ -20,4 +20,19 @@ if (!html.includes(marker)) {
 }
 writeFileSync(shell, html);
 writeFileSync("dist/404.html", html);
-console.log("postbuild : dist/ prêt (404.html = coquille de l'application)");
+
+// Anciennes pages regroupées dans des sections : redirections 301 vers leur
+// nouvelle adresse, placées avant la règle de repli vers la coquille.
+const legacy = JSON.parse(readFileSync("src/lib/legacy-redirects.json", "utf8"));
+const entries = Object.entries(legacy);
+
+const netlify = entries.map(([from, to]) => `${from}  ${to}  301`).join("\n");
+const redirects = readFileSync("dist/_redirects", "utf8");
+writeFileSync("dist/_redirects", redirects.replace("/*  /_shell.html  200", `${netlify}\n/*  /_shell.html  200`));
+
+const escape = (path) => path.slice(1).replace(/[.]/g, "\\.");
+const apache = entries.map(([from, to]) => `RewriteRule ^${escape(from)}/?$ ${to} [R=301,NE,L]`).join("\n");
+const htaccess = readFileSync("dist/.htaccess", "utf8");
+writeFileSync("dist/.htaccess", htaccess.replace("RewriteEngine On", `RewriteEngine On\n${apache}`));
+
+console.log(`postbuild : dist/ prêt (404.html = coquille de l'application, ${entries.length} redirections)`);

@@ -73,7 +73,7 @@ function EspaceAccueil() {
           <Link to="/espace/nouvelle-demande" className={pillLink()}>
             <Plus className="h-4 w-4" /> Nouvelle demande
           </Link>
-          <Link to="/rendez-vous" className={pillLink("outline")}>
+          <Link to="/contact" hash="rendez-vous" className={pillLink("outline")}>
             Prendre rendez-vous
           </Link>
         </div>
@@ -183,8 +183,9 @@ function EspaceAccueil() {
           <div className="grid gap-3 px-5 pb-5 sm:grid-cols-2">
             {actions.map((action) => (
               <Link
-                key={action.to}
+                key={action.label}
                 to={action.to}
+                hash={action.hash}
                 className="group flex items-center gap-3 rounded-xl border border-border p-3 transition hover:border-brand/60 hover:bg-muted"
               >
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand-strong">
