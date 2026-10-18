@@ -30,8 +30,9 @@ function NouvelleDemande() {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {actions.map((action, index) => (
           <Link
-            key={action.to}
+            key={action.label}
             to={action.to}
+            hash={action.hash}
             className={cn(
               "group relative flex min-h-40 flex-col overflow-hidden rounded-2xl border p-5 transition hover:-translate-y-0.5",
               index === 0

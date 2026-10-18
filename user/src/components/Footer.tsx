@@ -1,21 +1,23 @@
 import { Link, useLoaderData } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Phone, Mail, MapPin, Clock, Facebook, Instagram, ArrowUpRight } from "lucide-react";
+import { Clock, Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
+
 import logo from "@/assets/logo.png";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 
-type FooterLink = { to: string; label: string };
+type FooterLink = { to: string; hash?: string; label: string };
 
 function LinkList({ links }: { links: FooterLink[] }) {
   return (
     <ul className="space-y-2.5 text-sm">
       {links.map((l) => (
-        <li key={l.to}>
+        <li key={l.to + (l.hash ?? "")}>
           <Link
             to={l.to}
-            className="group inline-flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors"
+            hash={l.hash}
+            className="group inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-primary"
           >
-            <span className="h-px w-0 bg-primary transition-all duration-300 group-hover:w-4" />
+            <span className="h-px w-0 bg-primary transition-all duration-300 group-hover:w-3" />
             {l.label}
           </Link>
         </li>
@@ -38,6 +40,7 @@ const FALLBACK = {
   linkedin: "",
 };
 
+/** Pied de page navy, comme la maquette : marque, liens, services, contact. */
 export function Footer() {
   const { t } = useTranslation();
   // Coordonnées administrées depuis le back-office (écran Paramètres du site).
@@ -45,23 +48,24 @@ export function Footer() {
   const contact = { ...FALLBACK, ...(settings?.contact ?? {}) };
   const legal = { ...FALLBACK, ...(settings?.legal ?? {}) };
   const social = { ...FALLBACK, ...(settings?.social ?? {}) };
-  const telHref = `tel:${(contact.phone ?? "").replace(/[^+d]/g, "")}`;
+  const telHref = `tel:${(contact.phone ?? "").replace(/[^+\d]/g, "")}`;
 
-  const explore: FooterLink[] = [
-    { to: "/business-center", label: t("nav.businessCenter") },
-    { to: "/nos-experts", label: "Nos experts" },
-    { to: "/centre-competences", label: "Centre de compétences" },
-    { to: "/academy-tv", label: "Academy TV" },
-    { to: "/calculateur-roi", label: "Calculateur ROI" },
+  const quickLinks: FooterLink[] = [
+    { to: "/a-propos", label: t("nav.about") },
+    { to: "/realisations", label: t("nav.achievements") },
+    { to: "/blog", label: t("nav.news") },
+    { to: "/realisations", hash: "references", label: "Nos références" },
+    { to: "/faq", label: t("nav.faq") },
+    { to: "/contact", label: t("nav.contact") },
   ];
 
-  const institutional: FooterLink[] = [
-    { to: "/references", label: "Nos références" },
-    { to: "/partenaires-recruteurs", label: "Partenaires recruteurs" },
-    { to: "/laureats", label: "Mur des lauréats" },
-    { to: "/salle-de-presse", label: "Salle de presse" },
-    { to: "/rapport-annuel", label: "Rapport annuel" },
-    { to: "/objectifs-2030", label: "Objectifs 2030" },
+  const services: FooterLink[] = [
+    { to: "/formations", label: "Formation professionnelle" },
+    { to: "/recrutement", label: "Recrutement & personnel" },
+    { to: "/services", hash: "techniques", label: "Prestations techniques" },
+    { to: "/services", hash: "conseil", label: "Conseil RH" },
+    { to: "/business-center", label: t("nav.businessCenter") },
+    { to: "/offres", label: t("nav.offers", "Offres & tarifs") },
   ];
 
   const socials = [
@@ -69,30 +73,46 @@ export function Footer() {
     { href: social.instagram, label: "Instagram", icon: <Instagram className="h-4 w-4" /> },
     { href: social.tiktok, label: "TikTok", icon: <span className="text-xs font-bold">TT</span> },
     ...(social.linkedin
-      ? [{ href: social.linkedin, label: "LinkedIn", icon: <span className="text-xs font-bold">in</span> }]
+      ? [
+          {
+            href: social.linkedin,
+            label: "LinkedIn",
+            icon: <span className="text-xs font-bold">in</span>,
+          },
+        ]
       : []),
     // Un réseau vidé dans l'administration disparaît du pied de page.
   ].filter((s) => Boolean(s.href));
 
   return (
-    <footer className="relative mt-24 overflow-hidden border-t border-border bg-[oklch(0.11_0.035_255)]">
-      {/* Decorative glow */}
-      <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-64 w-[42rem] rounded-full bg-primary/10 blur-3xl" />
+    <footer className="theme-dark relative overflow-hidden bg-navy-deep">
+      <div className="pointer-events-none absolute -top-32 left-1/2 h-64 w-[42rem] -translate-x-1/2 rounded-full bg-cyan/10 blur-3xl" />
 
-      {/* Main grid */}
-      <div className="relative container mx-auto px-4 pt-16 pb-12 grid gap-10 md:grid-cols-2 lg:grid-cols-5">
-        {/* Brand */}
-        <div className="lg:col-span-2">
-          <div className="flex items-center gap-3 mb-4">
-            <img src={logo} alt="Office Management" className="h-12 w-12 rounded-md" width={48} height={48} loading="lazy" />
+      <div className="relative container mx-auto grid gap-10 px-4 pt-16 pb-12 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
+        <div>
+          <Link to="/" className="mb-4 flex items-center gap-3">
+            <img
+              src={logo}
+              alt="Office Management"
+              className="h-12 w-12 rounded-lg bg-white p-0.5"
+              width={48}
+              height={48}
+              loading="lazy"
+            />
             <div>
-              <div className="font-display font-bold text-gradient-cyan">OFFICE MANAGEMENT</div>
-              <div className="text-[10px] uppercase tracking-widest text-muted-foreground">HR Consulting</div>
+              <div className="font-display font-extrabold tracking-wide uppercase">
+                Office Management
+              </div>
+              <div className="text-[10px] tracking-widest text-muted-foreground uppercase">
+                Human Resources Consulting
+              </div>
             </div>
-          </div>
-          <p className="text-sm text-muted-foreground mb-5 max-w-sm leading-relaxed">{t("footer.tagline")}</p>
-
-          <div className="flex gap-2.5 mb-6">
+          </Link>
+          <p className="mb-2 text-sm font-semibold">Former. Recruter. Accompagner.</p>
+          <p className="mb-6 max-w-sm text-sm leading-relaxed text-muted-foreground">
+            {t("footer.tagline")}
+          </p>
+          <div className="flex gap-2.5">
             {socials.map((s) => (
               <a
                 key={s.label}
@@ -100,75 +120,71 @@ export function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={s.label}
-                className="h-10 w-10 rounded-full border border-border bg-card/40 flex items-center justify-center text-foreground/80 hover:text-primary hover:border-primary/40 hover:bg-primary/10 transition-colors"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/40 text-foreground/80 transition-colors hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
               >
                 {s.icon}
               </a>
             ))}
           </div>
-
-          <div className="rounded-xl border border-border bg-card/30 p-4 text-xs text-muted-foreground/80 space-y-1">
-            <div>RCCM : {legal.rccm}</div>
-            <div>NIU : {legal.niu}</div>
-            <div>Agrément : {legal.approval}</div>
-          </div>
         </div>
 
-        {/* Explore */}
         <div>
-          <h4 className="font-display font-bold mb-4 text-sm uppercase tracking-wider text-foreground">{t("footer.explore")}</h4>
-          <LinkList links={explore} />
+          <h4 className="mb-4 font-display text-sm font-bold tracking-wider uppercase">
+            Liens rapides
+          </h4>
+          <LinkList links={quickLinks} />
         </div>
 
-        {/* Institutional */}
         <div>
-          <h4 className="font-display font-bold mb-4 text-sm uppercase tracking-wider text-foreground">{t("footer.institutional")}</h4>
-          <LinkList links={institutional} />
+          <h4 className="mb-4 font-display text-sm font-bold tracking-wider uppercase">
+            {t("footer.services")}
+          </h4>
+          <LinkList links={services} />
         </div>
 
-        {/* Contact */}
         <div>
-          <h4 className="font-display font-bold mb-4 text-sm uppercase tracking-wider text-foreground">{t("footer.contact")}</h4>
-          <ul className="space-y-3 text-sm text-muted-foreground">
-            <li className="flex items-start gap-2.5">
-              <MapPin className="h-4 w-4 mt-0.5 text-primary shrink-0" /> {contact.address}
+          <h4 className="mb-4 font-display text-sm font-bold tracking-wider uppercase">
+            {t("footer.contact")}
+          </h4>
+          <ul className="space-y-3.5 text-sm text-muted-foreground">
+            <li className="flex items-start gap-3">
+              <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" /> {contact.address}
             </li>
             <li>
-              <a href={telHref} className="flex items-center gap-2.5 hover:text-primary transition-colors">
-                <Phone className="h-4 w-4 text-primary shrink-0" /> {contact.phone}
+              <a
+                href={telHref}
+                className="flex items-center gap-3 transition-colors hover:text-primary"
+              >
+                <Phone className="h-4 w-4 shrink-0 text-primary" /> {contact.phone}
               </a>
             </li>
             <li>
-              <a href={`mailto:${contact.email}`} className="flex items-center gap-2.5 hover:text-primary transition-colors">
-                <Mail className="h-4 w-4 text-primary shrink-0" /> {contact.email}
+              <a
+                href={`mailto:${contact.email}`}
+                className="flex items-center gap-3 break-all transition-colors hover:text-primary"
+              >
+                <Mail className="h-4 w-4 shrink-0 text-primary" /> {contact.email}
               </a>
             </li>
-            <li className="flex items-center gap-2.5">
-              <Clock className="h-4 w-4 text-primary shrink-0" /> {contact.hours}
+            <li className="flex items-center gap-3">
+              <Clock className="h-4 w-4 shrink-0 text-primary" /> {contact.hours}
             </li>
           </ul>
-
-          <Link
-            to="/contact"
-            className="mt-5 inline-flex items-center gap-1.5 rounded-full border border-primary/40 px-4 py-2 text-sm font-medium text-primary hover:bg-primary/10 transition-colors"
-          >
-            {t("footer.contact")} <ArrowUpRight className="h-4 w-4" />
-          </Link>
         </div>
       </div>
 
-      {/* Newsletter */}
       <div className="relative container mx-auto px-4 pb-12">
         <NewsletterSignup source="footer" />
       </div>
 
-      {/* Bottom bar */}
       <div className="relative border-t border-border">
-        <div className="container mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-          <span>© 2026 OFFICE MANAGEMENT — Human Resources Consulting. {t("footer.rights")}</span>
-          <span className="flex items-center gap-4">
-            <Link to="/faq" className="hover:text-primary transition-colors">{t("nav.faq")}</Link>
-            <Link to="/contact" className="hover:text-primary transition-colors">{t("footer.contact")}</Link>
+        <div className="container mx-auto flex flex-col items-center justify-between gap-3 px-4 py-6 text-center text-xs text-muted-foreground lg:flex-row lg:text-left">
+          <span suppressHydrationWarning>
+            © {new Date().getFullYear()} Office Management — Human Resources Consulting.{" "}
+            {t("footer.rights")}
+          </span>
+          <span>
+            RCCM {legal.rccm} · NIU {legal.niu} · Agrément {legal.approval}
           </span>
         </div>
       </div>

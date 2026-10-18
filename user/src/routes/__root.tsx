@@ -14,26 +14,38 @@ import {
 import appCss from "../styles.css?url";
 import { applyPreferredLanguage } from "@/i18n";
 import { fetchSettings, type SiteSettings } from "@/lib/content";
+import legacyRedirects from "@/lib/legacy-redirects.json";
 
 function NotFoundComponent() {
+  // Ancienne page regroupée dans une section : l'hébergeur redirige
+  // normalement (_redirects, .htaccess) ; à défaut, on redirige ici.
+  const { pathname } = useLocation();
+  const target = (legacyRedirects as Record<string, string>)[pathname.replace(/\/+$/, "")];
+  useEffect(() => {
+    if (target) window.location.replace(target);
+  }, [target]);
+  if (target) return null;
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
+    <section className="relative overflow-hidden">
+      <div className="absolute inset-0 -z-10 gradient-hero" />
+      <div className="container mx-auto flex min-h-[70vh] items-center justify-center px-4 py-24">
+        <div className="max-w-md text-center">
+          <span className="eyebrow">Erreur 404</span>
+          <h1 className="mt-4 font-display text-7xl font-extrabold text-gradient-cyan">404</h1>
+          <h2 className="mt-4 text-xl font-semibold text-foreground">Page introuvable</h2>
+          <p className="mt-2 text-sm text-muted-foreground">La page que vous cherchez n'existe pas ou a été déplacée.</p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link to="/" className="inline-flex h-11 items-center rounded-full gradient-cyan px-6 text-sm font-semibold text-primary-foreground transition hover:opacity-90">
+              Retour à l'accueil
+            </Link>
+            <Link to="/contact" className="inline-flex h-11 items-center rounded-full border border-border px-6 text-sm font-medium text-foreground transition hover:border-primary/50 hover:text-primary">
+              Nous contacter
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

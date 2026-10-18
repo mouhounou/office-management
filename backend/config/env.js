@@ -14,6 +14,9 @@ module.exports = {
   isProduction: process.env.NODE_ENV === "production",
   port: Number(process.env.PORT) || 5000,
   mongoUri: process.env.MONGODB_URI,
+  // Base à utiliser quand l'URI n'en précise pas (cas des URI Atlas copiées
+  // depuis l'interface, « ...mongodb.net/?retryWrites=true »).
+  mongoDbName: process.env.MONGODB_DB || "office_management",
   jwtSecret: process.env.JWT_SECRET,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d",
   // Plusieurs origines possibles, séparées par des virgules (admin, site user…).

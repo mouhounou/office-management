@@ -22,7 +22,11 @@ const baseUrl =
     ? args[args.indexOf("--url") + 1]
     : `http://localhost:${require("../config/env").port}/api`;
 
-const ADMIN = { email: "admin@office.cg", password: "admin1234" };
+// Compte administrateur utilisé pour appeler les routes protégées.
+const ADMIN = {
+  email: process.env.DOCS_CHECK_EMAIL || "admin@office.cg",
+  password: process.env.DOCS_CHECK_PASSWORD || "admin1234",
+};
 
 // Identifiants volontairement inexistants : la route répond 404 « ressource
 // introuvable », ce qui prouve qu'elle existe sans rien modifier.

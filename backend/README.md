@@ -1,7 +1,7 @@
 # API Office Management
 
-API Express 5 + MongoDB (Mongoose) qui alimente le back-office (`admin/`) et, à terme,
-le site public (`user/`).
+API Express 5 + MongoDB (Mongoose) qui alimente le back-office (`admin/`) et le site
+public (`user/`). Guide d'installation complet : [`../README.md`](../README.md).
 
 ## Démarrage
 
@@ -11,7 +11,8 @@ pnpm install
 pnpm dev               # nodemon, http://localhost:5000
 ```
 
-MongoDB doit tourner localement (`mongodb://127.0.0.1:27017/office_management` par défaut).
+MongoDB local (`mongodb://127.0.0.1:27017/office_management` par défaut) ou Atlas
+(`mongodb+srv://…`, base `MONGODB_DB`). `GET /api/health` indique l'état de la base.
 
 ## Authentification
 
@@ -55,7 +56,7 @@ Zod de validation, convertis en JSON Schema. Ajouter un champ à un schéma ou u
 ressource à la liste le fait apparaître dans la documentation sans autre geste.
 
 ```bash
-pnpm docs:check   # l'API doit tourner
+DOCS_CHECK_EMAIL=admin@office.cg DOCS_CHECK_PASSWORD=... pnpm docs:check   # l'API doit tourner
 ```
 
 Ce contrôle interroge l'API réelle : il vérifie que chacune des opérations
