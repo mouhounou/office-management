@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { fetchPosts, type Post } from "@/lib/content";
 import { formatFrenchDate, postImage } from "@/lib/content-images";
-import { Evenements } from "@/components/sections/blog/Evenements";
 import { Presse } from "@/components/sections/blog/Presse";
 import { Telechargements } from "@/components/sections/blog/Telechargements";
 
@@ -91,7 +90,6 @@ function Blog() {
           <div className="flex flex-wrap justify-center gap-2">
             {[
               { href: "#presse", label: "Salle de presse" },
-              { href: "#evenements", label: "Événements" },
               { href: "#telechargements", label: "Téléchargements" },
             ].map((a) => (
               <a
@@ -253,7 +251,6 @@ function Blog() {
       </Section>
 
       <Presse />
-      <Evenements />
       <Telechargements />
 
       {/* CTA */}

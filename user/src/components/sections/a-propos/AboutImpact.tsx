@@ -12,6 +12,7 @@ import {
   Users,
 } from "lucide-react";
 
+import { NavyBand } from "@/components/sections/NavyBand";
 import { Section, SectionTitle } from "@/components/Section";
 import { Chips, FeatureCards, StatRow } from "@/components/sections/FeatureCards";
 import { Button } from "@/components/ui/button";
@@ -88,7 +89,7 @@ const FRANCHISE = [
 export function AboutImpact() {
   return (
     <>
-      <Section id="impact" className="scroll-mt-24">
+      <NavyBand id="impact">
         <SectionTitle
           eyebrow="Notre impact"
           title="Bilan 2025"
@@ -120,7 +121,7 @@ export function AboutImpact() {
               Rapport annuel complet sur demande <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="rounded-2xl border border-border bg-brand-soft/50 p-6 md:p-8">
+          <div className="rounded-2xl border border-border bg-primary/5 p-6 md:p-8">
             <div className="eyebrow mb-2">Office Management Foundation</div>
             <p className="mb-5 text-sm text-muted-foreground">
               Rendre le développement professionnel accessible à tous, partout au Congo.
@@ -128,7 +129,7 @@ export function AboutImpact() {
             <FeatureCards items={FOUNDATION} columns={2} />
           </div>
         </div>
-      </Section>
+      </NavyBand>
 
       <Section id="vision-2030" className="scroll-mt-24">
         <SectionTitle

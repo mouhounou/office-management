@@ -47,7 +47,7 @@
   "/galerie": "/realisations#galerie",
   "/salle-de-presse": "/blog#presse",
   "/mediatheque": "/blog#telechargements",
-  "/evenements": "/blog#evenements",
+  "/evenements": "/blog",
   "/telechargements": "/blog#telechargements",
   "/faq-interactive": "/faq",
   "/rendez-vous": "/contact#rendez-vous",

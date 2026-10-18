@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { OffresSpeciales } from "@/components/sections/offres/OffresSpeciales";
+import { NavyBand } from "@/components/sections/NavyBand";
 import { PacksPme } from "@/components/sections/offres/PacksPme";
 import { poles, type Pack } from "@/components/sections/offres/poles";
 import { Clock, CheckCircle2, ArrowRight, Star, Building2, Tag } from "lucide-react";
@@ -109,21 +110,9 @@ function Offres() {
         </div>
       </section>
 
-      {poles.map((pole) => (
-        <section
-          key={pole.id}
-          id={pole.id}
-          className={
-            // Bandeau navy pleine largeur (fond du pied de page) pour rythmer la page.
-            DARK_POLES.has(pole.id)
-              ? "theme-dark relative scroll-mt-24 overflow-hidden bg-navy-deep py-20"
-              : "scroll-mt-24 py-16"
-          }
-        >
-          {DARK_POLES.has(pole.id) && (
-            <div className="pointer-events-none absolute -top-32 left-1/2 h-64 w-[42rem] -translate-x-1/2 rounded-full bg-cyan/10 blur-3xl" />
-          )}
-          <div className="relative container mx-auto px-4">
+      {poles.map((pole) => {
+        const content = (
+          <>
             <div className="flex items-center gap-4 mb-2">
               <div className="h-12 w-12 rounded-xl gradient-cyan flex items-center justify-center">
                 <pole.icon className="h-6 w-6 text-primary-foreground" />
@@ -136,9 +125,18 @@ function Offres() {
                 <PackCard key={p.name} p={p} />
               ))}
             </div>
-          </div>
-        </section>
-      ))}
+          </>
+        );
+        return DARK_POLES.has(pole.id) ? (
+          <NavyBand key={pole.id} id={pole.id}>
+            {content}
+          </NavyBand>
+        ) : (
+          <section key={pole.id} id={pole.id} className="container mx-auto px-4 py-16 scroll-mt-24">
+            {content}
+          </section>
+        );
+      })}
 
       <PacksPme />
       <OffresSpeciales />
