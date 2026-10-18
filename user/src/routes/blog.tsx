@@ -3,12 +3,22 @@ import { useState } from "react";
 import { Section, SectionTitle } from "@/components/Section";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, ArrowRight, Tag, Clock, Newspaper } from "lucide-react";
+import {
+  Calendar,
+  ArrowRight,
+  Tag,
+  Clock,
+  Newspaper,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { fetchPosts, type Post } from "@/lib/content";
 import { formatFrenchDate, postImage } from "@/lib/content-images";
 import { Evenements } from "@/components/sections/blog/Evenements";
 import { Presse } from "@/components/sections/blog/Presse";
 import { Telechargements } from "@/components/sections/blog/Telechargements";
+
+const PAGE_SIZE = 6;
 
 export const Route = createFileRoute("/blog")({
   head: () => ({
@@ -44,6 +54,16 @@ function Blog() {
   // Les catégories affichées sont celles réellement présentes dans les articles.
   const categories = ["Tous", ...Array.from(new Set(posts.map((p) => p.category)))];
   const filtered = active === "Tous" ? posts : posts.filter((p) => p.category === active);
+
+  // Pagination : 6 articles par page, remise à la première page au changement de catégorie.
+  const [page, setPage] = useState(1);
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount);
+  const visible = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const goTo = (next: number) => {
+    setPage(next);
+    document.getElementById("articles")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   const featured = posts.find((p) => p.featured) ?? posts[0];
 
   return (
@@ -131,13 +151,16 @@ function Blog() {
       ) : null}
 
       {/* CATEGORIES + GRID */}
-      <Section className="pt-0!">
+      <Section id="articles" className="pt-0! scroll-mt-24">
         <SectionTitle eyebrow="Catégories" title="Parcourir par thématique" />
         <div className="flex flex-wrap justify-center gap-2 mb-10">
           {categories.map((c) => (
             <button
               key={c}
-              onClick={() => setActive(c)}
+              onClick={() => {
+                setActive(c);
+                setPage(1);
+              }}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 active === c
                   ? "gradient-cyan text-primary-foreground glow-cyan"
@@ -150,7 +173,7 @@ function Blog() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((p) => (
+          {visible.map((p) => (
             <Link key={p.slug} to="/blog/$slug" params={{ slug: p.slug }} className="block">
               <Card className="group rounded-2xl border-border bg-card shadow-card overflow-hidden hover-lift flex flex-col h-full">
                 <div className="relative h-48 overflow-hidden">
@@ -183,6 +206,43 @@ function Blog() {
             </Link>
           ))}
         </div>
+        {pageCount > 1 && (
+          <nav
+            className="mt-12 flex items-center justify-center gap-2"
+            aria-label="Pagination des articles"
+          >
+            <button
+              onClick={() => goTo(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground/80 transition hover:border-primary/50 hover:text-primary disabled:pointer-events-none disabled:opacity-40"
+              aria-label="Page précédente"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            {Array.from({ length: pageCount }, (_, i) => i + 1).map((n) => (
+              <button
+                key={n}
+                onClick={() => goTo(n)}
+                aria-current={n === currentPage ? "page" : undefined}
+                className={`h-10 min-w-10 rounded-full px-3 text-sm font-semibold transition ${
+                  n === currentPage
+                    ? "gradient-cyan text-primary-foreground"
+                    : "border border-border bg-card text-foreground/80 hover:border-primary/50 hover:text-primary"
+                }`}
+              >
+                {n}
+              </button>
+            ))}
+            <button
+              onClick={() => goTo(currentPage + 1)}
+              disabled={currentPage === pageCount}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground/80 transition hover:border-primary/50 hover:text-primary disabled:pointer-events-none disabled:opacity-40"
+              aria-label="Page suivante"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </nav>
+        )}
         {filtered.length === 0 && (
           <p className="text-center text-muted-foreground mt-8">
             {unavailable
