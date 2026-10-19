@@ -82,7 +82,7 @@ function Blog() {
             <Newspaper className="h-3.5 w-3.5" /> Actualités & Blog RH
           </div>
           <h1 className="font-display text-4xl md:text-6xl font-extrabold leading-[1.05] mb-6">
-            Insights, actualités & <span className="text-gradient-cyan">conseils RH</span>
+            Analyses, actualités & <span className="text-gradient-cyan">conseils RH</span>
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed mb-8">
             Nos analyses pour entreprises et candidats sur les enjeux du capital humain.

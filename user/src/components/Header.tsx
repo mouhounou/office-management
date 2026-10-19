@@ -5,7 +5,6 @@ import { ArrowRight, ChevronDown, Menu, Phone, UserRound } from "lucide-react";
 
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useAccount } from "@/lib/account-context";
 import { cn } from "@/lib/utils";
@@ -199,9 +198,6 @@ export function Header() {
               <span className="block text-[11px] text-muted-foreground">Lun – Ven, 8h – 17h</span>
             </span>
           </a>
-          <div className="hidden sm:block">
-            <LanguageSwitcher />
-          </div>
           <Link
             to={member ? "/espace" : "/connexion"}
             aria-label={member ? t("nav.myAccount") : t("nav.login")}
@@ -276,10 +272,6 @@ export function Header() {
                 ))}
               </nav>
               <div className="space-y-2 border-t border-border p-4">
-                {/* Sur petit écran, le choix de la langue se fait ici. */}
-                <div className="flex justify-center sm:hidden">
-                  <LanguageSwitcher />
-                </div>
                 <Link
                   to="/devis"
                   className="flex h-11 w-full items-center justify-center gap-2 rounded-full gradient-cyan text-sm font-semibold text-primary-foreground"
