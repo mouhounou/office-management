@@ -354,3 +354,25 @@ html[data-motion] [data-reveal-stagger][data-revealed] > * .why-check {
 .ds-pop { transform-origin: center; animation: ds-pop 3.4s ease-in-out infinite; }
 @keyframes ds-raise { 0%, 30%, 100% { transform: rotate(0); } 45%, 80% { transform: rotate(-10deg); } }
 @keyframes ds-pop { 0%, 40%, 100% { opacity: 0; transform: scale(0.4); } 55%, 85% { opacity: 1; transform: scale(1); } }
+
+/* Trait horizontal qui se dessine (data-reveal="line-x"). */
+@keyframes reveal-line-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+html[data-motion] [data-reveal="line-x"]:not([data-revealed]) { opacity: 1; transform: scaleX(0); }
+html[data-motion] [data-reveal="line-x"][data-revealed] {
+  transform-origin: left;
+  animation: reveal-line-x 1.6s cubic-bezier(0.65, 0, 0.35, 1) backwards;
+}
+
+/* Orbites (components/Orbit.tsx) : l'anneau tourne, chaque pastille
+   tourne en sens inverse pour rester droite. Pause au survol. */
+@keyframes orbit-spin { to { transform: rotate(360deg); } }
+.orbit-ring { animation: orbit-spin var(--orbit-duration, 60s) linear infinite; }
+.orbit-ring .orbit-node { animation: orbit-spin var(--orbit-duration, 60s) linear infinite reverse; }
+.orbit:hover .orbit-ring,
+.orbit:hover .orbit-ring .orbit-node { animation-play-state: paused; }
+.spin-slow { animation: orbit-spin 18s linear infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .orbit-ring, .orbit-ring .orbit-node, .spin-slow { animation: none; }
+}
+.ds-shake { animation: ds-shake 2.4s ease-in-out infinite; }
+@keyframes ds-shake { 0%, 100% { transform: translateY(0); } 25% { transform: translateY(-5px); } 50% { transform: translateY(3px); } 75% { transform: translateY(-2px); } }
