@@ -3,17 +3,11 @@ import { useState } from "react";
 import { Section, SectionTitle } from "@/components/Section";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Calendar,
-  ArrowRight,
-  Tag,
-  Clock,
-  Newspaper,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Calendar, ArrowRight, Tag, Clock, Newspaper } from "lucide-react";
 import { fetchPosts, type Post } from "@/lib/content";
 import { formatFrenchDate, postImage } from "@/lib/content-images";
+import { PostCard } from "@/components/blog/PostCard";
+import { Pagination, paginate } from "@/components/Pagination";
 import { Presse } from "@/components/sections/blog/Presse";
 import { Telechargements } from "@/components/sections/blog/Telechargements";
 
@@ -56,9 +50,7 @@ function Blog() {
 
   // Pagination : 6 articles par page, remise à la première page au changement de catégorie.
   const [page, setPage] = useState(1);
-  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const currentPage = Math.min(page, pageCount);
-  const visible = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const { pageCount, page: currentPage, items: visible } = paginate(filtered, page, PAGE_SIZE);
   const goTo = (next: number) => {
     setPage(next);
     document.getElementById("articles")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -82,7 +74,7 @@ function Blog() {
             <Newspaper className="h-3.5 w-3.5" /> Actualités & Blog RH
           </div>
           <h1 className="font-display text-4xl md:text-6xl font-extrabold leading-[1.05] mb-6">
-            Insights, actualités & <span className="text-gradient-cyan">conseils RH</span>
+            Analyses, actualités & <span className="text-gradient-cyan">conseils RH</span>
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed mb-8">
             Nos analyses pour entreprises et candidats sur les enjeux du capital humain.
@@ -170,77 +162,29 @@ function Blog() {
           ))}
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
           {visible.map((p) => (
-            <Link key={p.slug} to="/blog/$slug" params={{ slug: p.slug }} className="block">
-              <Card className="group rounded-2xl border-border bg-card shadow-card overflow-hidden hover-lift flex flex-col h-full">
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={postImage(p.imageUrl, p.category)}
-                    alt={p.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-background/80 backdrop-blur text-xs font-semibold text-primary">
-                    {p.category}
-                  </div>
-                </div>
-                <div className="p-6 flex flex-col flex-1">
-                  <h3 className="font-display text-lg font-bold mb-3 group-hover:text-primary transition-colors">
-                    {p.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-4 flex-1">{p.excerpt}</p>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />{" "}
-                      {formatFrenchDate(p.publishedAt ?? p.createdAt)}
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-primary font-semibold">
-                      Lire <ArrowRight className="h-3 w-3" />
-                    </span>
-                  </div>
-                </div>
-              </Card>
-            </Link>
+            <PostCard key={p.slug} post={p} />
           ))}
         </div>
-        {pageCount > 1 && (
-          <nav
-            className="mt-12 flex items-center justify-center gap-2"
-            aria-label="Pagination des articles"
-          >
-            <button
-              onClick={() => goTo(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground/80 transition hover:border-primary/50 hover:text-primary disabled:pointer-events-none disabled:opacity-40"
-              aria-label="Page précédente"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            {Array.from({ length: pageCount }, (_, i) => i + 1).map((n) => (
-              <button
-                key={n}
-                onClick={() => goTo(n)}
-                aria-current={n === currentPage ? "page" : undefined}
-                className={`h-10 min-w-10 rounded-full px-3 text-sm font-semibold transition ${
-                  n === currentPage
-                    ? "gradient-cyan text-primary-foreground"
-                    : "border border-border bg-card text-foreground/80 hover:border-primary/50 hover:text-primary"
-                }`}
-              >
-                {n}
-              </button>
+        <Pagination
+          page={currentPage}
+          pageCount={pageCount}
+          onChange={goTo}
+          label="Pagination des articles"
+        />
+        {/* Sans JavaScript (et pour la pré-génération) : tous les articles. */}
+        <noscript>
+          <ul className="mt-10 columns-1 gap-8 text-sm sm:columns-2 lg:columns-3">
+            {posts.map((p) => (
+              <li key={p.slug} className="mb-2">
+                <a href={`/blog/${p.slug}`} className="text-brand-strong hover:underline">
+                  {p.title}
+                </a>
+              </li>
             ))}
-            <button
-              onClick={() => goTo(currentPage + 1)}
-              disabled={currentPage === pageCount}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground/80 transition hover:border-primary/50 hover:text-primary disabled:pointer-events-none disabled:opacity-40"
-              aria-label="Page suivante"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </button>
-          </nav>
-        )}
+          </ul>
+        </noscript>
         {filtered.length === 0 && (
           <p className="text-center text-muted-foreground mt-8">
             {unavailable

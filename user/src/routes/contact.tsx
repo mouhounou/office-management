@@ -35,6 +35,9 @@ import {
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/contact")({
+  // ?sujet=… préremplit le sujet du message (ex. demande d'un document).
+  validateSearch: (search: Record<string, unknown>): { sujet?: string } =>
+    typeof search.sujet === "string" && search.sujet ? { sujet: search.sujet.slice(0, 160) } : {},
   head: () => ({
     meta: [
       { title: "Contact — Office Management" },
@@ -86,6 +89,7 @@ function scrollToId(id: string) {
 }
 
 function Contact() {
+  const { sujet } = Route.useSearch();
   const prefill = useMemberPrefill();
   const [done, setDone] = useState(false);
   const [sending, setSending] = useState(false);
@@ -300,8 +304,10 @@ function Contact() {
                     <div>
                       <Label className="mb-2 block">Sujet</Label>
                       <Input
+                        key={sujet}
                         name="subject"
                         required
+                        defaultValue={sujet}
                         placeholder="Demande de devis, inscription, ..."
                       />
                     </div>

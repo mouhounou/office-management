@@ -35,6 +35,9 @@ import { CeoSignature } from "@/components/CeoSignature";
 import { fetchPosts, type Post } from "@/lib/content";
 import { formatFrenchDate, postImage } from "@/lib/content-images";
 import { cn } from "@/lib/utils";
+import { CountUp } from "@/components/CountUp";
+import { SectorsMarquee } from "@/components/home/SectorsMarquee";
+import { ServicesShowcase } from "@/components/home/ServicesShowcase";
 import hero from "@/assets/hero.jpg";
 import training from "@/assets/training.jpg";
 import technical from "@/assets/technical.jpg";
@@ -218,7 +221,10 @@ function Accueil() {
             </div>
           </div>
 
-          <div className="mt-16 grid max-w-3xl grid-cols-2 gap-6 border-t border-white/15 pt-8 md:grid-cols-4">
+          <div
+            className="mt-16 grid max-w-3xl grid-cols-2 gap-6 border-t border-white/15 pt-8 md:grid-cols-4"
+            data-reveal-stagger
+          >
             {HERO_FEATURES.map((feature) => (
               <div key={feature.label} className="flex items-center gap-3">
                 <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/5">
@@ -233,7 +239,7 @@ function Accueil() {
 
       {/* SERVICES ------------------------------------------------------------- */}
       <section className="container mx-auto px-4 py-20 md:py-24">
-        <div className="mb-12 grid items-end gap-6 lg:grid-cols-2">
+        <div className="mb-12 grid items-end gap-6 lg:grid-cols-2" data-reveal>
           <div>
             <div className="eyebrow mb-4">Nos services</div>
             <h2 className="font-display text-3xl leading-tight font-bold md:text-4xl lg:text-5xl">
@@ -247,39 +253,7 @@ function Accueil() {
           </p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((service) => (
-            <Link
-              key={service.title}
-              to={service.to}
-              hash={service.hash}
-              className="group overflow-hidden rounded-2xl border border-border bg-card shadow-card transition hover:-translate-y-1"
-            >
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={service.image}
-                  alt=""
-                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                  loading="lazy"
-                  width={640}
-                  height={384}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/40 to-transparent" />
-              </div>
-              <div className="relative px-6 pt-10 pb-6">
-                <span className="absolute -top-7 left-6 flex h-14 w-14 items-center justify-center rounded-full gradient-cyan text-white ring-4 ring-card">
-                  <service.icon className="h-6 w-6" />
-                </span>
-                <h3 className="font-display text-lg font-bold">{service.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{service.desc}</p>
-                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-                  En savoir plus{" "}
-                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <ServicesShowcase services={SERVICES} />
       </section>
 
       {/* POURQUOI NOUS ---------------------------------------------------------- */}
@@ -294,7 +268,7 @@ function Accueil() {
               Méthode éprouvée, formateurs expérimentés et suivi personnalisé : nous combinons
               expertise, réactivité et connaissance du terrain pour des résultats durables.
             </p>
-            <div className="mt-8 grid grid-cols-3 gap-4">
+            <div className="mt-8 grid grid-cols-3 gap-4" data-reveal-stagger>
               {[
                 { value: "500+", label: "Apprenants formés", icon: GraduationCap },
                 { value: "120+", label: "Entreprises partenaires", icon: Building2 },
@@ -307,7 +281,7 @@ function Accueil() {
                   <stat.icon className="h-7 w-7 shrink-0 text-cyan-glow" />
                   <div>
                     <div className="font-display text-2xl font-extrabold md:text-3xl">
-                      {stat.value}
+                      <CountUp value={stat.value} />
                     </div>
                     <div className="text-xs text-muted-foreground">{stat.label}</div>
                   </div>
@@ -336,7 +310,10 @@ function Accueil() {
       </section>
 
       {/* SUIVI + RÉSEAU ---------------------------------------------------------- */}
-      <section className="container mx-auto grid gap-6 px-4 py-20 md:py-24 lg:grid-cols-2">
+      <section
+        className="container mx-auto grid gap-6 px-4 py-20 md:py-24 lg:grid-cols-2"
+        data-reveal-stagger
+      >
         <div className="rounded-3xl border border-border bg-card p-8 shadow-card md:p-10">
           <div className="eyebrow mb-4">Votre espace client</div>
           <h2 className="font-display text-3xl font-bold">Suivez vos demandes en temps réel</h2>
@@ -401,7 +378,7 @@ function Accueil() {
               Un vivier de candidats qualifiés et des partenaires dans tous les secteurs : nous
               trouvons la bonne personne, au bon moment.
             </p>
-            <div className="mt-8 grid grid-cols-3 gap-4">
+            <div className="mt-8 grid grid-cols-3 gap-4" data-reveal-stagger>
               {[
                 { value: "300+", label: "Placements réussis", icon: UserCheck },
                 { value: "44", label: "Formations au catalogue", icon: FileText },
@@ -409,7 +386,9 @@ function Accueil() {
               ].map((stat) => (
                 <div key={stat.label}>
                   <stat.icon className="mb-2 h-5 w-5 text-primary" />
-                  <div className="font-display text-2xl font-extrabold">{stat.value}</div>
+                  <div className="font-display text-2xl font-extrabold">
+                    <CountUp value={stat.value} />
+                  </div>
                   <div className="text-xs text-muted-foreground">{stat.label}</div>
                 </div>
               ))}
@@ -421,44 +400,28 @@ function Accueil() {
       <Testimonials />
 
       {/* SECTEURS ---------------------------------------------------------------- */}
-      <section className="container mx-auto px-4 py-20 md:py-24">
-        <div className="mx-auto mb-12 max-w-2xl text-center">
-          <div className="eyebrow mb-4">Secteurs</div>
-          <h2 className="font-display text-3xl font-bold md:text-4xl">
-            Des solutions RH pour chaque <span className="text-gradient-cyan">secteur</span>
-          </h2>
-          <p className="mt-3 text-muted-foreground">
-            Nous accompagnons les entreprises de tous les secteurs, avec des profils et des
-            formations adaptés.
-          </p>
+      <section className="overflow-hidden py-20 md:py-24">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto mb-12 max-w-2xl text-center" data-reveal>
+            <div className="eyebrow mb-4">Secteurs</div>
+            <h2 className="font-display text-3xl font-bold md:text-4xl">
+              Des solutions RH pour chaque <span className="text-gradient-cyan">secteur</span>
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              Nous accompagnons les entreprises de tous les secteurs, avec des profils et des
+              formations adaptés.
+            </p>
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 md:grid-cols-5">
-          {SECTORS.map((sector, index) => (
-            <Link
-              key={sector.label}
-              to="/services"
-              hash="secteurs"
-              className="group flex flex-col items-center gap-3 text-center"
-            >
-              <span
-                className={cn(
-                  "flex h-16 w-16 items-center justify-center rounded-full transition group-hover:-translate-y-1 group-hover:shadow-card",
-                  ["gradient-cyan text-white", "bg-navy text-white", "bg-accent text-primary"][
-                    index % 3
-                  ],
-                )}
-              >
-                <sector.icon className="h-7 w-7" />
-              </span>
-              <span className="text-sm font-medium">{sector.label}</span>
-            </Link>
-          ))}
-        </div>
+        <SectorsMarquee sectors={SECTORS} />
       </section>
 
       {/* MOT DU PDG -------------------------------------------------------------- */}
       <section className="container mx-auto px-4 pb-20 md:pb-24">
-        <div className="grid items-center gap-10 overflow-hidden rounded-3xl border border-border bg-card shadow-card lg:grid-cols-[0.9fr_1.4fr]">
+        <div
+          className="grid items-center gap-10 overflow-hidden rounded-3xl border border-border bg-card shadow-card lg:grid-cols-[0.9fr_1.4fr]"
+          data-reveal
+        >
           <img
             src={ceo}
             alt="Hassan Monlay I AKIANA — PDG d'Office Management"
@@ -520,7 +483,7 @@ function Accueil() {
 
       {/* BLOG ------------------------------------------------------------------- */}
       <section className="container mx-auto px-4 py-20 md:py-24">
-        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-4" data-reveal>
           <div>
             <div className="eyebrow mb-4">Actualités</div>
             <h2 className="font-display text-3xl font-bold md:text-4xl">
@@ -542,7 +505,7 @@ function Accueil() {
             Les articles arrivent bientôt.
           </p>
         ) : (
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-3" data-reveal-stagger>
             {posts.map((post) => (
               <Link
                 key={post.id}

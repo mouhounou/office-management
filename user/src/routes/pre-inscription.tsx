@@ -4,11 +4,27 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
-import { GraduationCap, CheckCircle2, Send, User, IdCard, BookOpen, ShieldCheck, Clock, BadgeCheck } from "lucide-react";
+import {
+  GraduationCap,
+  CheckCircle2,
+  Send,
+  User,
+  IdCard,
+  BookOpen,
+  ShieldCheck,
+  Clock,
+  BadgeCheck,
+} from "lucide-react";
 import { errorMessage } from "@/lib/api";
 import { useMemberPrefill } from "@/lib/account-context";
 import { submitPreRegistration } from "@/lib/submissions";
@@ -17,13 +33,65 @@ export const Route = createFileRoute("/pre-inscription")({
   head: () => ({
     meta: [
       { title: "Pré-inscription formation — Office Management" },
-      { name: "description", content: "Formulaire de pré-inscription aux formations professionnelles : informations personnelles, formation choisie, durée et date de début." },
+      {
+        name: "description",
+        content:
+          "Formulaire de pré-inscription aux formations professionnelles : informations personnelles, formation choisie, durée et date de début.",
+      },
       { property: "og:title", content: "Pré-inscription — Office Management" },
       { property: "og:description", content: "Inscrivez-vous à nos formations certifiantes." },
     ],
   }),
+  // Depuis une fiche formation : ?formation=…&categorie=…&duree=…
+  validateSearch: (search: Record<string, unknown>): PreRegistrationSearch => {
+    const text = (value: unknown) =>
+      typeof value === "string" && value ? value.slice(0, 180) : undefined;
+    return {
+      ...(text(search.formation) && { formation: text(search.formation) }),
+      ...(text(search.categorie) && { categorie: text(search.categorie) }),
+      ...(text(search.duree) && { duree: text(search.duree) }),
+    };
+  },
   component: PreInscription,
 });
+
+type PreRegistrationSearch = { formation?: string; categorie?: string; duree?: string };
+
+const plain = (value: string) =>
+  value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
+/** Domaine du catalogue → formation de la liste d'inscription la plus proche. */
+const CATEGORY_TRAINING: Record<string, (typeof TRAININGS)[number]> = {
+  "Ressources Humaines & Administration": "Gestion des Ressources Humaines",
+  "Comptabilité & Gestion": "Assistant Comptable",
+  "Informatique & Bureautique": "Informatique Bureautique",
+  "Logistique & Transit": "Logistique",
+  "QHSE & Industrie": "QHSE",
+  Entrepreneuriat: "Entrepreneuriat",
+  "Formations Techniques": "Formations Techniques",
+};
+
+/**
+ * La liste d'inscription (12 intitulés, imposés par l'API) est plus courte que
+ * le catalogue : on retient l'intitulé cité dans le titre (« Excel avancé »,
+ * « SAGE »…), sinon celui du domaine.
+ */
+function trainingFor(title?: string, category?: string) {
+  if (title) {
+    const t = plain(title);
+    const byTitle = TRAININGS.find((training) => t.includes(plain(training)));
+    if (byTitle) return byTitle;
+    if (t.includes("sage")) return "SAGE 100 i7";
+    if (t.includes("excel")) return "Excel Avancé";
+    if (t.includes("anglais")) return "Anglais Professionnel";
+    if (t.includes("secretariat")) return "Secrétariat Bureautique";
+    if (t.includes("management") || t.includes("leadership")) return "Management";
+  }
+  return category ? CATEGORY_TRAINING[category] : undefined;
+}
 
 const TRAININGS = [
   "Assistant Comptable",
@@ -70,13 +138,33 @@ function PreInscription() {
 
   // Compte client connecté : coordonnées pré-remplies (sans écraser une saisie).
   const prefill = useMemberPrefill();
+  const search = Route.useSearch();
+  // Formation choisie sur une fiche : affichée après l'hydratation (la page
+  // pré-générée ne la connaît pas).
+  const [chosen, setChosen] = useState<string>();
+  // Après l'hydratation (la page pré-générée n'a pas de paramètres).
   useEffect(() => {
-    if (prefill.key !== "anonyme") setData((d) => ({ ...d, full_name: d.full_name || prefill.name, email: d.email || prefill.email, phone: d.phone || prefill.phone }));
+    setChosen(search.formation);
+    const training = trainingFor(search.formation, search.categorie);
+    setData((d) => ({
+      ...d,
+      ...(training && !d.training ? { training } : {}),
+      ...(search.duree && !d.duration ? { duration: search.duree } : {}),
+    }));
+  }, [search.formation, search.categorie, search.duree]);
+  useEffect(() => {
+    if (prefill.key !== "anonyme")
+      setData((d) => ({
+        ...d,
+        full_name: d.full_name || prefill.name,
+        email: d.email || prefill.email,
+        phone: d.phone || prefill.phone,
+      }));
   }, [prefill]);
 
   const set = <K extends keyof FormData>(k: K, v: FormData[K]) => {
-    setData(d => ({ ...d, [k]: v }));
-    setErrors(e => ({ ...e, [k]: undefined }));
+    setData((d) => ({ ...d, [k]: v }));
+    setErrors((e) => ({ ...e, [k]: undefined }));
   };
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -130,8 +218,19 @@ function PreInscription() {
               <CheckCircle2 className="h-10 w-10 text-primary-foreground" />
             </div>
             <h1 className="font-display text-3xl font-bold mb-3">Pré-inscription enregistrée !</h1>
-            <p className="text-muted-foreground mb-8">Notre équipe pédagogique reviendra vers vous sous 48h ouvrées pour confirmer votre inscription.</p>
-            <Button onClick={() => { setDone(false); setData({}); }} className="gradient-cyan text-primary-foreground font-semibold hover:opacity-90">Nouvelle inscription</Button>
+            <p className="text-muted-foreground mb-8">
+              Notre équipe pédagogique reviendra vers vous sous 48h ouvrées pour confirmer votre
+              inscription.
+            </p>
+            <Button
+              onClick={() => {
+                setDone(false);
+                setData({});
+              }}
+              className="gradient-cyan text-primary-foreground font-semibold hover:opacity-90"
+            >
+              Nouvelle inscription
+            </Button>
           </div>
         </Card>
       </Section>
@@ -145,7 +244,10 @@ function PreInscription() {
         <div className="absolute inset-0 -z-10 gradient-hero" />
         <div className="absolute inset-0 -z-10 bg-grid" />
         <div className="pointer-events-none absolute -top-24 -left-20 h-96 w-96 rounded-full bg-primary/20 blur-3xl animate-float" />
-        <div className="pointer-events-none absolute bottom-0 -right-20 h-96 w-96 rounded-full bg-cyan-glow/15 blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
+        <div
+          className="pointer-events-none absolute bottom-0 -right-20 h-96 w-96 rounded-full bg-cyan-glow/15 blur-3xl animate-float"
+          style={{ animationDelay: "1.5s" }}
+        />
 
         <div className="relative container mx-auto px-4 text-center max-w-3xl animate-fade-in-up">
           <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 mb-6 text-xs font-medium uppercase tracking-widest text-primary">
@@ -157,6 +259,11 @@ function PreInscription() {
           <p className="text-lg text-muted-foreground leading-relaxed">
             Remplissez ce formulaire pour réserver votre place. Confirmation sous 48h.
           </p>
+          {chosen && (
+            <p className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm text-white backdrop-blur">
+              Formation choisie : <strong className="font-semibold">{chosen}</strong>
+            </p>
+          )}
         </div>
       </section>
 
@@ -168,9 +275,21 @@ function PreInscription() {
               <h2 className="font-display text-lg font-bold mb-4">Pourquoi se pré-inscrire ?</h2>
               <ul className="space-y-4">
                 {[
-                  { icon: Clock, t: "Réponse sous 48h", d: "Notre équipe pédagogique vous recontacte rapidement." },
-                  { icon: BadgeCheck, t: "Formations certifiantes", d: "Des diplômes et attestations reconnus." },
-                  { icon: ShieldCheck, t: "100% confidentiel", d: "Vos données sont chiffrées et protégées." },
+                  {
+                    icon: Clock,
+                    t: "Réponse sous 48h",
+                    d: "Notre équipe pédagogique vous recontacte rapidement.",
+                  },
+                  {
+                    icon: BadgeCheck,
+                    t: "Formations certifiantes",
+                    d: "Des diplômes et attestations reconnus.",
+                  },
+                  {
+                    icon: ShieldCheck,
+                    t: "100% confidentiel",
+                    d: "Vos données sont chiffrées et protégées.",
+                  },
                 ].map((b) => (
                   <li key={b.t} className="flex gap-3">
                     <div className="h-10 w-10 rounded-xl gradient-cyan flex items-center justify-center shrink-0">
@@ -185,122 +304,250 @@ function PreInscription() {
               </ul>
             </Card>
             <Card className="glass p-5 text-sm text-muted-foreground">
-              Une question ? Appelez-nous au <a href="tel:+242069480905" className="text-primary font-semibold">06 948 09 05</a>.
+              Une question ? Appelez-nous au{" "}
+              <a href="tel:+242069480905" className="text-primary font-semibold">
+                06 948 09 05
+              </a>
+              .
             </Card>
           </aside>
 
           {/* Formulaire */}
           <Card className="gradient-card border-border p-8 md:p-10">
-          <form onSubmit={onSubmit} className="space-y-8" noValidate>
-            <div>
-              <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2"><User className="h-4 w-4 text-primary" /> Informations personnelles</h2>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <Label className="mb-2 block">Nom complet *</Label>
-                  <Input maxLength={120} value={data.full_name ?? ""} onChange={e => set("full_name", e.target.value)} className={errors.full_name ? "border-destructive" : ""} />
-                  {errors.full_name && <p className="text-xs text-destructive mt-1.5">{errors.full_name}</p>}
-                </div>
-                <div>
-                  <Label className="mb-2 block">Profession *</Label>
-                  <Input maxLength={120} value={data.profession ?? ""} onChange={e => set("profession", e.target.value)} placeholder="Ex : étudiant, comptable" className={errors.profession ? "border-destructive" : ""} />
-                  {errors.profession && <p className="text-xs text-destructive mt-1.5">{errors.profession}</p>}
-                </div>
-                <div>
-                  <Label className="mb-2 block">Date de naissance *</Label>
-                  <Input type="date" value={data.date_of_birth ?? ""} onChange={e => set("date_of_birth", e.target.value)} className={errors.date_of_birth ? "border-destructive" : ""} />
-                  {errors.date_of_birth && <p className="text-xs text-destructive mt-1.5">{errors.date_of_birth}</p>}
-                </div>
-                <div>
-                  <Label className="mb-2 block">Lieu de naissance *</Label>
-                  <Input maxLength={120} value={data.place_of_birth ?? ""} onChange={e => set("place_of_birth", e.target.value)} placeholder="Ville, pays" className={errors.place_of_birth ? "border-destructive" : ""} />
-                  {errors.place_of_birth && <p className="text-xs text-destructive mt-1.5">{errors.place_of_birth}</p>}
-                </div>
-                <div>
-                  <Label className="mb-2 block">Email *</Label>
-                  <Input type="email" maxLength={255} value={data.email ?? ""} onChange={e => set("email", e.target.value)} className={errors.email ? "border-destructive" : ""} />
-                  {errors.email && <p className="text-xs text-destructive mt-1.5">{errors.email}</p>}
-                </div>
-                <div>
-                  <Label className="mb-2 block">Téléphone *</Label>
-                  <Input maxLength={30} value={data.phone ?? ""} onChange={e => set("phone", e.target.value)} placeholder="+242 ..." className={errors.phone ? "border-destructive" : ""} />
-                  {errors.phone && <p className="text-xs text-destructive mt-1.5">{errors.phone}</p>}
-                </div>
-                <div className="sm:col-span-2">
-                  <Label className="mb-2 block">Quartier de résidence *</Label>
-                  <Input maxLength={120} value={data.neighborhood ?? ""} onChange={e => set("neighborhood", e.target.value)} placeholder="Ex : Mpita, Pointe-Noire" className={errors.neighborhood ? "border-destructive" : ""} />
-                  {errors.neighborhood && <p className="text-xs text-destructive mt-1.5">{errors.neighborhood}</p>}
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2"><IdCard className="h-4 w-4 text-primary" /> Pièce d'identité</h2>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <Label className="mb-2 block">Type de pièce *</Label>
-                  <Select value={data.id_document_type} onValueChange={(v) => set("id_document_type", v as typeof ID_TYPES[number])}>
-                    <SelectTrigger className={errors.id_document_type ? "border-destructive" : ""}>
-                      <SelectValue placeholder="Choisir..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {ID_TYPES.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                  {errors.id_document_type && <p className="text-xs text-destructive mt-1.5">{errors.id_document_type}</p>}
-                </div>
-                <div>
-                  <Label className="mb-2 block">Numéro de pièce *</Label>
-                  <Input maxLength={60} value={data.id_document_number ?? ""} onChange={e => set("id_document_number", e.target.value)} className={errors.id_document_number ? "border-destructive" : ""} />
-                  {errors.id_document_number && <p className="text-xs text-destructive mt-1.5">{errors.id_document_number}</p>}
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2"><BookOpen className="h-4 w-4 text-primary" /> Formation</h2>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div className="sm:col-span-2">
-                  <Label className="mb-2 block">Formation choisie *</Label>
-                  <Select value={data.training} onValueChange={(v) => set("training", v as typeof TRAININGS[number])}>
-                    <SelectTrigger className={errors.training ? "border-destructive" : ""}>
-                      <SelectValue placeholder="Choisir une formation..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {TRAININGS.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                  {errors.training && <p className="text-xs text-destructive mt-1.5">{errors.training}</p>}
-                </div>
-                <div>
-                  <Label className="mb-2 block">Durée *</Label>
-                  <Input maxLength={50} value={data.duration ?? ""} onChange={e => set("duration", e.target.value)} placeholder="Ex : 3 mois" className={errors.duration ? "border-destructive" : ""} />
-                  {errors.duration && <p className="text-xs text-destructive mt-1.5">{errors.duration}</p>}
-                </div>
-                <div>
-                  <Label className="mb-2 block">Date de début souhaitée *</Label>
-                  <Input type="date" value={data.start_date ?? ""} onChange={e => set("start_date", e.target.value)} className={errors.start_date ? "border-destructive" : ""} />
-                  {errors.start_date && <p className="text-xs text-destructive mt-1.5">{errors.start_date}</p>}
-                </div>
-                <div className="sm:col-span-2">
-                  <Label className="mb-2 block">Type de financement *</Label>
-                  <Select value={data.financing_type} onValueChange={(v) => set("financing_type", v as typeof FINANCING[number])}>
-                    <SelectTrigger className={errors.financing_type ? "border-destructive" : ""}>
-                      <SelectValue placeholder="Choisir..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {FINANCING.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                  {errors.financing_type && <p className="text-xs text-destructive mt-1.5">{errors.financing_type}</p>}
+            <form onSubmit={onSubmit} className="space-y-8" noValidate>
+              <div>
+                <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
+                  <User className="h-4 w-4 text-primary" /> Informations personnelles
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <Label className="mb-2 block">Nom complet *</Label>
+                    <Input
+                      maxLength={120}
+                      value={data.full_name ?? ""}
+                      onChange={(e) => set("full_name", e.target.value)}
+                      className={errors.full_name ? "border-destructive" : ""}
+                    />
+                    {errors.full_name && (
+                      <p className="text-xs text-destructive mt-1.5">{errors.full_name}</p>
+                    )}
+                  </div>
+                  <div>
+                    <Label className="mb-2 block">Profession *</Label>
+                    <Input
+                      maxLength={120}
+                      value={data.profession ?? ""}
+                      onChange={(e) => set("profession", e.target.value)}
+                      placeholder="Ex : étudiant, comptable"
+                      className={errors.profession ? "border-destructive" : ""}
+                    />
+                    {errors.profession && (
+                      <p className="text-xs text-destructive mt-1.5">{errors.profession}</p>
+                    )}
+                  </div>
+                  <div>
+                    <Label className="mb-2 block">Date de naissance *</Label>
+                    <Input
+                      type="date"
+                      value={data.date_of_birth ?? ""}
+                      onChange={(e) => set("date_of_birth", e.target.value)}
+                      className={errors.date_of_birth ? "border-destructive" : ""}
+                    />
+                    {errors.date_of_birth && (
+                      <p className="text-xs text-destructive mt-1.5">{errors.date_of_birth}</p>
+                    )}
+                  </div>
+                  <div>
+                    <Label className="mb-2 block">Lieu de naissance *</Label>
+                    <Input
+                      maxLength={120}
+                      value={data.place_of_birth ?? ""}
+                      onChange={(e) => set("place_of_birth", e.target.value)}
+                      placeholder="Ville, pays"
+                      className={errors.place_of_birth ? "border-destructive" : ""}
+                    />
+                    {errors.place_of_birth && (
+                      <p className="text-xs text-destructive mt-1.5">{errors.place_of_birth}</p>
+                    )}
+                  </div>
+                  <div>
+                    <Label className="mb-2 block">Email *</Label>
+                    <Input
+                      type="email"
+                      maxLength={255}
+                      value={data.email ?? ""}
+                      onChange={(e) => set("email", e.target.value)}
+                      className={errors.email ? "border-destructive" : ""}
+                    />
+                    {errors.email && (
+                      <p className="text-xs text-destructive mt-1.5">{errors.email}</p>
+                    )}
+                  </div>
+                  <div>
+                    <Label className="mb-2 block">Téléphone *</Label>
+                    <Input
+                      maxLength={30}
+                      value={data.phone ?? ""}
+                      onChange={(e) => set("phone", e.target.value)}
+                      placeholder="+242 ..."
+                      className={errors.phone ? "border-destructive" : ""}
+                    />
+                    {errors.phone && (
+                      <p className="text-xs text-destructive mt-1.5">{errors.phone}</p>
+                    )}
+                  </div>
+                  <div className="sm:col-span-2">
+                    <Label className="mb-2 block">Quartier de résidence *</Label>
+                    <Input
+                      maxLength={120}
+                      value={data.neighborhood ?? ""}
+                      onChange={(e) => set("neighborhood", e.target.value)}
+                      placeholder="Ex : Mpita, Pointe-Noire"
+                      className={errors.neighborhood ? "border-destructive" : ""}
+                    />
+                    {errors.neighborhood && (
+                      <p className="text-xs text-destructive mt-1.5">{errors.neighborhood}</p>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <Button type="submit" disabled={submitting} className="w-full gradient-cyan text-primary-foreground glow-cyan">
-              <Send className="h-4 w-4 mr-2" />{submitting ? "Envoi en cours..." : "Valider ma pré-inscription"}
-            </Button>
-            <p className="text-xs text-center text-muted-foreground">Vos informations restent strictement confidentielles.</p>
-          </form>
+              <div>
+                <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
+                  <IdCard className="h-4 w-4 text-primary" /> Pièce d'identité
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <Label className="mb-2 block">Type de pièce *</Label>
+                    {/* « v && » : la valeur vide renvoyée par le select natif caché de Radix
+                      quand la valeur change par programme (préremplissage) est ignorée. */}
+                    <Select
+                      value={data.id_document_type ?? ""}
+                      onValueChange={(v) =>
+                        v && set("id_document_type", v as (typeof ID_TYPES)[number])
+                      }
+                    >
+                      <SelectTrigger
+                        className={errors.id_document_type ? "border-destructive" : ""}
+                      >
+                        <SelectValue placeholder="Choisir..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ID_TYPES.map((p) => (
+                          <SelectItem key={p} value={p}>
+                            {p}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.id_document_type && (
+                      <p className="text-xs text-destructive mt-1.5">{errors.id_document_type}</p>
+                    )}
+                  </div>
+                  <div>
+                    <Label className="mb-2 block">Numéro de pièce *</Label>
+                    <Input
+                      maxLength={60}
+                      value={data.id_document_number ?? ""}
+                      onChange={(e) => set("id_document_number", e.target.value)}
+                      className={errors.id_document_number ? "border-destructive" : ""}
+                    />
+                    {errors.id_document_number && (
+                      <p className="text-xs text-destructive mt-1.5">{errors.id_document_number}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
+                  <BookOpen className="h-4 w-4 text-primary" /> Formation
+                </h2>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="sm:col-span-2">
+                    <Label className="mb-2 block">Formation choisie *</Label>
+                    <Select
+                      value={data.training ?? ""}
+                      onValueChange={(v) => v && set("training", v as (typeof TRAININGS)[number])}
+                    >
+                      <SelectTrigger className={errors.training ? "border-destructive" : ""}>
+                        <SelectValue placeholder="Choisir une formation..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {TRAININGS.map((p) => (
+                          <SelectItem key={p} value={p}>
+                            {p}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.training && (
+                      <p className="text-xs text-destructive mt-1.5">{errors.training}</p>
+                    )}
+                  </div>
+                  <div>
+                    <Label className="mb-2 block">Durée *</Label>
+                    <Input
+                      maxLength={50}
+                      value={data.duration ?? ""}
+                      onChange={(e) => set("duration", e.target.value)}
+                      placeholder="Ex : 3 mois"
+                      className={errors.duration ? "border-destructive" : ""}
+                    />
+                    {errors.duration && (
+                      <p className="text-xs text-destructive mt-1.5">{errors.duration}</p>
+                    )}
+                  </div>
+                  <div>
+                    <Label className="mb-2 block">Date de début souhaitée *</Label>
+                    <Input
+                      type="date"
+                      value={data.start_date ?? ""}
+                      onChange={(e) => set("start_date", e.target.value)}
+                      className={errors.start_date ? "border-destructive" : ""}
+                    />
+                    {errors.start_date && (
+                      <p className="text-xs text-destructive mt-1.5">{errors.start_date}</p>
+                    )}
+                  </div>
+                  <div className="sm:col-span-2">
+                    <Label className="mb-2 block">Type de financement *</Label>
+                    <Select
+                      value={data.financing_type ?? ""}
+                      onValueChange={(v) =>
+                        v && set("financing_type", v as (typeof FINANCING)[number])
+                      }
+                    >
+                      <SelectTrigger className={errors.financing_type ? "border-destructive" : ""}>
+                        <SelectValue placeholder="Choisir..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FINANCING.map((p) => (
+                          <SelectItem key={p} value={p}>
+                            {p}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.financing_type && (
+                      <p className="text-xs text-destructive mt-1.5">{errors.financing_type}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={submitting}
+                className="w-full gradient-cyan text-primary-foreground glow-cyan"
+              >
+                <Send className="h-4 w-4 mr-2" />
+                {submitting ? "Envoi en cours..." : "Valider ma pré-inscription"}
+              </Button>
+              <p className="text-xs text-center text-muted-foreground">
+                Vos informations restent strictement confidentielles.
+              </p>
+            </form>
           </Card>
         </div>
       </Section>
