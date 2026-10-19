@@ -179,58 +179,102 @@ function Accueil() {
     <>
       {/* HÉROS ---------------------------------------------------------------- */}
       <section className="theme-dark relative isolate overflow-hidden bg-navy-deep">
+        {/* Fond : photo très estompée, halo cyan et trame. */}
         <img
           src={hero}
           alt=""
-          className="absolute inset-0 -z-20 h-full w-full object-cover"
+          className="absolute inset-0 -z-20 h-full w-full object-cover opacity-20"
           width={1920}
           height={1080}
           fetchPriority="high"
         />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-deep via-navy-deep/85 to-navy-deep/20" />
-        <div className="absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-navy-deep to-transparent" />
-        {/* Diagonale cyan, rappel de la maquette */}
-        <div className="pointer-events-none absolute -right-24 -bottom-10 -z-10 hidden h-64 w-[38rem] -rotate-[28deg] gradient-cyan opacity-90 md:block" />
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-navy-deep via-navy-deep/95 to-navy/80" />
+        <div className="pointer-events-none absolute -top-40 right-0 -z-10 h-[32rem] w-[32rem] rounded-full bg-cyan/20 blur-3xl" />
+        <div className="absolute inset-0 -z-10 bg-grid opacity-[0.07]" />
 
-        <div className="container mx-auto px-4 pt-20 pb-10 md:pt-28">
-          <div className="max-w-2xl animate-fade-in-up">
-            <div className="eyebrow mb-5">Cabinet RH à Pointe-Noire</div>
-            <h1 className="font-display text-4xl leading-[1.05] font-extrabold sm:text-5xl lg:text-6xl">
-              Former les talents.
-              <span className="block text-gradient-cyan">Faire grandir les entreprises.</span>
-            </h1>
-            <p className="mt-5 text-xl font-semibold">Formation. Recrutement. Conseil.</p>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
-              Office Management accompagne les entreprises et les particuliers au Congo : formations
-              certifiantes, personnel qualifié, prestations techniques et conseil RH, avec un suivi
-              clair à chaque étape.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/devis"
-                className="inline-flex h-12 items-center gap-2 rounded-full gradient-cyan px-6 font-semibold text-primary-foreground glow-cyan transition hover:opacity-90"
-              >
-                Demander un devis <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                to="/pre-inscription"
-                className="inline-flex h-12 items-center gap-2 rounded-full border border-white/40 px-6 font-semibold text-white transition hover:bg-white/10"
-              >
-                <GraduationCap className="h-4 w-4" /> Pré-inscription formation
-              </Link>
+        <div className="container mx-auto px-4 pt-16 pb-12 md:pt-24 lg:pb-16">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+            <div className="animate-fade-in-up">
+              <div className="eyebrow mb-5">Cabinet RH à Pointe-Noire</div>
+              <h1 className="font-display text-4xl leading-[1.05] font-extrabold sm:text-5xl xl:text-6xl">
+                Former les talents.
+                <span className="block text-gradient-cyan">Faire grandir les entreprises.</span>
+              </h1>
+              <p className="mt-5 text-lg font-semibold text-white/90 sm:text-xl">
+                Formation. Recrutement. Conseil.
+              </p>
+              <p className="mt-3 max-w-xl text-base leading-relaxed text-muted-foreground">
+                Office Management accompagne les entreprises et les particuliers au Congo :
+                formations certifiantes, personnel qualifié, prestations techniques et conseil RH,
+                avec un suivi clair à chaque étape.
+              </p>
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <Link
+                  to="/devis"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full gradient-cyan px-6 font-semibold text-primary-foreground glow-cyan transition hover:opacity-90"
+                >
+                  Demander un devis <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/pre-inscription"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 font-semibold text-white backdrop-blur transition hover:bg-white/10"
+                >
+                  <GraduationCap className="h-4 w-4" /> Pré-inscription formation
+                </Link>
+              </div>
+            </div>
+
+            {/* Photo encadrée, accent cyan derrière, chiffres qui flottent. */}
+            <div className="relative mx-auto w-full max-w-md lg:max-w-none">
+              <div className="pointer-events-none absolute inset-0 -z-10 translate-x-3 translate-y-3 rounded-[2rem] gradient-cyan opacity-80 sm:translate-x-5 sm:translate-y-5" />
+              <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl sm:aspect-[16/11] lg:aspect-auto lg:h-[min(540px,64vh)]">
+                <img
+                  src={hero}
+                  alt="Consultant d'Office Management en rendez-vous client"
+                  className="h-full w-full object-cover object-[70%_center]"
+                  width={1200}
+                  height={1500}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/70 via-transparent to-transparent" />
+              </div>
+              <div className="absolute top-6 -left-2 flex items-center gap-3 rounded-2xl border border-white/15 bg-navy-deep/80 px-4 py-3 shadow-xl backdrop-blur ds-float sm:-left-6">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full gradient-cyan">
+                  <GraduationCap className="h-5 w-5 text-white" />
+                </span>
+                <span className="leading-tight">
+                  <span className="block font-display text-xl font-extrabold text-white">
+                    <CountUp value="500+" />
+                  </span>
+                  <span className="text-xs text-white/70">Apprenants formés</span>
+                </span>
+              </div>
+              <div className="absolute right-2 bottom-6 flex items-center gap-3 rounded-2xl border border-white/15 bg-white px-4 py-3 shadow-xl ds-float ds-delay-2 sm:-right-4 lg:right-3 xl:-right-4">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-navy">
+                  <Star className="h-5 w-5 text-cyan-glow" />
+                </span>
+                <span className="leading-tight">
+                  <span className="block font-display text-xl font-extrabold text-navy-deep">
+                    <CountUp value="95 %" />
+                  </span>
+                  <span className="text-xs text-navy/60">Taux de satisfaction</span>
+                </span>
+              </div>
             </div>
           </div>
 
+          {/* Avantages, dans une barre vitrée. */}
           <div
-            className="mt-16 grid max-w-3xl grid-cols-2 gap-6 border-t border-white/15 pt-8 md:grid-cols-4"
+            className="mt-14 grid grid-cols-2 gap-x-4 gap-y-5 rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur md:grid-cols-4 md:p-6"
             data-reveal-stagger
           >
             {HERO_FEATURES.map((feature) => (
               <div key={feature.label} className="flex items-center gap-3">
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/5">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/5">
                   <feature.icon className="h-5 w-5 text-cyan-glow" />
                 </span>
-                <span className="text-sm leading-tight font-medium">{feature.label}</span>
+                <span className="text-sm leading-tight font-medium text-white">
+                  {feature.label}
+                </span>
               </div>
             ))}
           </div>
