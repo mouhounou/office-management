@@ -16,6 +16,7 @@ import ceo from "@/assets/ceo-akiana.jpg";
 import team from "@/assets/team.jpg";
 import { CeoSignature } from "@/components/CeoSignature";
 import { Section, SectionTitle } from "@/components/Section";
+import { ValuesShowcase } from "@/components/sections/a-propos/ValuesShowcase";
 import { AboutCommitments } from "@/components/sections/a-propos/AboutCommitments";
 import { AboutGovernance } from "@/components/sections/a-propos/AboutGovernance";
 import { AboutHistory } from "@/components/sections/a-propos/AboutHistory";
@@ -217,25 +218,7 @@ function About() {
           title="Des valeurs vécues au quotidien"
           subtitle="Six principes ancrés dans chacune de nos missions, illustrés par des pratiques concrètes."
         />
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {values.map((v, i) => (
-            <div
-              key={v.t}
-              className="hover-lift rounded-2xl border border-border bg-card p-7 shadow-card"
-            >
-              <div className="mb-5 flex items-center justify-between">
-                <span className="flex h-11 w-11 items-center justify-center rounded-full gradient-cyan text-primary-foreground">
-                  <v.i className="h-5 w-5" />
-                </span>
-                <span className="font-display text-4xl font-extrabold text-primary/15">
-                  0{i + 1}
-                </span>
-              </div>
-              <h3 className="mb-2 font-display text-lg font-bold">{v.t}</h3>
-              <p className="text-sm leading-relaxed text-muted-foreground">{v.d}</p>
-            </div>
-          ))}
-        </div>
+        <ValuesShowcase values={values} />
       </Section>
 
       <AboutCommitments />

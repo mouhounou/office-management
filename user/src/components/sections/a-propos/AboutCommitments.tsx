@@ -2,9 +2,7 @@ import {
   BadgeCheck,
   BarChart3,
   Building2,
-  CheckCircle2,
   ClipboardCheck,
-  FileCheck,
   GraduationCap,
   Repeat,
   ShieldCheck,
@@ -16,7 +14,8 @@ import {
 } from "lucide-react";
 
 import { Section, SectionTitle } from "@/components/Section";
-import { FeatureCards } from "@/components/sections/FeatureCards";
+import { GraduationScene } from "@/components/formations/GraduationScene";
+import { HandshakeScene } from "@/components/sections/a-propos/Scenes";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 /**
@@ -60,22 +59,48 @@ const LEARNERS = [
   { title: "Insertion professionnelle", text: "L'accès à notre réseau de partenaires recruteurs." },
 ];
 
-function CheckList({ items }: { items: { title: string; text: string }[] }) {
+/** Liste qui se coche au défilement, à côté d'une scène animée. */
+function CheckList({
+  items,
+  scene,
+}: {
+  items: { title: string; text: string }[];
+  scene: React.ReactNode;
+}) {
   return (
-    <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {items.map((c) => (
-        <li
-          key={c.title}
-          className="flex items-start gap-3 rounded-2xl border border-border bg-card p-5 shadow-card"
-        >
-          <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-          <div>
-            <div className="font-display text-sm font-bold">{c.title}</div>
-            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{c.text}</p>
-          </div>
-        </li>
-      ))}
-    </ul>
+    <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.15fr] lg:gap-14">
+      <div
+        className="theme-dark relative overflow-hidden rounded-3xl bg-gradient-to-br from-navy-deep via-navy to-[oklch(0.34_0.08_235)] p-6 shadow-card"
+        data-reveal="left"
+      >
+        <div className="pointer-events-none absolute -top-16 -right-10 h-48 w-48 rounded-full bg-cyan/25 blur-3xl" />
+        <div className="absolute inset-0 bg-grid opacity-20" />
+        <div className="relative aspect-[13/10]">{scene}</div>
+      </div>
+      <ul className="grid gap-x-6 gap-y-1 sm:grid-cols-2" data-reveal-stagger>
+        {items.map((c) => (
+          <li
+            key={c.title}
+            className="flex items-start gap-3 rounded-2xl px-3 py-3 transition hover:bg-card hover:shadow-card"
+          >
+            <svg viewBox="0 0 24 24" className="mt-0.5 h-6 w-6 shrink-0" aria-hidden>
+              <circle cx="12" cy="12" r="11" className="fill-primary/10" />
+              <path
+                d="M7 12.5l3.2 3.2L17 9"
+                className="why-check fill-none stroke-primary"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <div>
+              <div className="font-display text-sm font-bold">{c.title}</div>
+              <p className="mt-0.5 text-sm leading-relaxed text-muted-foreground">{c.text}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
@@ -153,10 +178,10 @@ export function AboutCommitments() {
             </TabsList>
           </div>
           <TabsContent value="entreprises" forceMount className="data-[state=inactive]:hidden">
-            <CheckList items={BUSINESS} />
+            <CheckList items={BUSINESS} scene={<HandshakeScene />} />
           </TabsContent>
           <TabsContent value="apprenants" forceMount className="data-[state=inactive]:hidden">
-            <CheckList items={LEARNERS} />
+            <CheckList items={LEARNERS} scene={<GraduationScene />} />
           </TabsContent>
         </Tabs>
       </Section>
@@ -167,25 +192,58 @@ export function AboutCommitments() {
           title="Une démarche qualité structurée et mesurable"
           subtitle="Une reconnaissance officielle et des processus rigoureux, gages de sérieux et de résultats."
         />
-        <FeatureCards items={BADGES} columns={4} />
-        <div className="mt-10 rounded-2xl border border-border bg-card p-6 shadow-card md:p-8">
-          <div className="eyebrow mb-6">Nos processus qualité</div>
-          <ol className="grid gap-x-8 gap-y-6 md:grid-cols-2 lg:grid-cols-3">
-            {PROCESS.map((p, i) => (
-              <li key={p.title} className="flex items-start gap-4">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full gradient-cyan text-primary-foreground">
-                  <p.icon className="h-5 w-5" />
+        {/* Sceaux de reconnaissance */}
+        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-reveal-stagger>
+          {BADGES.map((b) => (
+            <li key={b.title} className="group flex flex-col items-center text-center">
+              <span className="relative mb-4 flex h-28 w-28 items-center justify-center">
+                <span className="spin-slow absolute inset-0 rounded-full border-2 border-dashed border-primary/40" />
+                <span className="absolute inset-2 rounded-full bg-brand-soft transition duration-500 group-hover:scale-105" />
+                <span className="relative flex h-16 w-16 items-center justify-center rounded-full gradient-cyan text-white shadow-lg transition duration-500 group-hover:rotate-[-8deg]">
+                  <b.icon className="h-7 w-7" />
                 </span>
-                <div>
-                  <div className="font-display text-sm font-bold">
-                    <span className="mr-1.5 text-brand-strong">0{i + 1}</span>
-                    {p.title}
+              </span>
+              <h3 className="font-display text-base font-bold">{b.title}</h3>
+              <p className="mt-1 max-w-[16rem] text-sm leading-relaxed text-muted-foreground">
+                {b.text}
+              </p>
+            </li>
+          ))}
+        </ul>
+
+        {/* Processus qualité : frise en six étapes */}
+        <div className="mt-16">
+          <div className="eyebrow mb-8 justify-center" data-reveal>
+            Nos processus qualité
+          </div>
+          <div className="relative">
+            <div
+              aria-hidden
+              data-reveal="line-x"
+              className="absolute top-7 right-[8%] left-[8%] hidden h-0.5 origin-left bg-gradient-to-r from-primary via-primary/50 to-primary/20 lg:block"
+            />
+            <div
+              aria-hidden
+              data-reveal="line"
+              className="absolute top-2 bottom-2 left-7 w-0.5 origin-top bg-gradient-to-b from-primary via-primary/50 to-transparent lg:hidden"
+            />
+            <ol className="relative grid gap-6 lg:grid-cols-6 lg:gap-4" data-reveal-stagger>
+              {PROCESS.map((p, i) => (
+                <li key={p.title} className="flex gap-4 lg:flex-col lg:items-center lg:text-center">
+                  <span className="relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full gradient-cyan text-white shadow-lg ring-4 ring-background">
+                    <p.icon className="h-6 w-6" />
+                    <span className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-navy-deep font-display text-[10px] font-bold text-white">
+                      0{i + 1}
+                    </span>
+                  </span>
+                  <div className="pt-1 lg:pt-0">
+                    <div className="font-display text-sm font-bold">{p.title}</div>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{p.text}</p>
                   </div>
-                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{p.text}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </Section>
     </>
