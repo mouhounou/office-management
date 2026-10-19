@@ -82,6 +82,7 @@ function Inscription() {
 
   return (
     <AuthShell
+      compact
       title="Créer votre espace client"
       description="Gratuit, en moins d'une minute."
       footer={
