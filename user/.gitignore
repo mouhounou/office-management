@@ -34,3 +34,6 @@ dist-ssr
 # Variables locales (modèle : .env.example)
 .env
 .env.local
+
+# Généré par TanStack Router à chaque « npm run dev » / « npm run build »
+src/routeTree.gen.ts
