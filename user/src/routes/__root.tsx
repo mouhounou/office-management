@@ -14,6 +14,7 @@ import {
 import appCss from "../styles.css?url";
 import "@/i18n";
 import "@/lib/zod-fr";
+import { MOTION_BOOT_SCRIPT, startMotion } from "@/lib/motion";
 import { fetchSettings, type SiteSettings } from "@/lib/content";
 import legacyRedirects from "@/lib/legacy-redirects.json";
 
@@ -161,8 +162,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr">
+    // data-motion est posé avant l'affichage par le script ci-dessous.
+    <html lang="fr" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: MOTION_BOOT_SCRIPT }} />
         <HeadContent />
       </head>
       <body>
@@ -199,10 +202,10 @@ const APP_PATHS = [
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
-  // Le rendu serveur est toujours en français : on bascule sur la langue du
-  // visiteur après l'hydratation, sans provoquer d'écart serveur/client.
   const router = useRouter();
   useEffect(() => {
+    // Apparitions au défilement (data-reveal), voir lib/motion.ts.
+    startMotion();
     // Site statique : les pages sont pré-générées au build. On relit les
     // données de l'API (coordonnées, blog, formations) pour afficher l'état
     // à jour, sans attendre le prochain build.

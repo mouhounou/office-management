@@ -225,3 +225,49 @@ section.gradient-hero {
 .animate-fade-in-up { animation: fade-in-up 0.7s ease-out both; }
 .animate-float { animation: float 4s ease-in-out infinite; }
 .animate-pulse-glow { animation: pulse-glow 2.5s ease-in-out infinite; }
+
+/* Apparitions au défilement (lib/motion.ts) ------------------------------- */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: none; }
+}
+html[data-motion] [data-reveal]:not([data-revealed]),
+html[data-motion] [data-reveal-stagger]:not([data-revealed]) > * {
+  opacity: 0;
+  transform: translateY(28px);
+}
+html[data-motion] [data-reveal][data-revealed] {
+  animation: reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+html[data-motion] [data-reveal-stagger][data-revealed] > * {
+  animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  animation-delay: calc(var(--reveal-i, 0) * 90ms);
+}
+
+/* Bandeau défilant en continu (secteurs de l'accueil). */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track { animation: marquee var(--marquee-duration, 40s) linear infinite; }
+.marquee-reverse .marquee-track { animation-direction: reverse; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee {
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* Barre de progression de la vitrine des services. */
+@keyframes progress-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Lent zoom de l'image active (vitrine des services). */
+@keyframes ken-burns {
+  from { transform: scale(1.02); }
+  to { transform: scale(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
