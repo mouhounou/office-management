@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { fetchPosts, type Post } from "@/lib/content";
 import { formatFrenchDate, postImage } from "@/lib/content-images";
+import { PostCard } from "@/components/blog/PostCard";
 import { Presse } from "@/components/sections/blog/Presse";
 import { Telechargements } from "@/components/sections/blog/Telechargements";
 
@@ -170,38 +171,9 @@ function Blog() {
           ))}
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
           {visible.map((p) => (
-            <Link key={p.slug} to="/blog/$slug" params={{ slug: p.slug }} className="block">
-              <Card className="group rounded-2xl border-border bg-card shadow-card overflow-hidden hover-lift flex flex-col h-full">
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={postImage(p.imageUrl, p.category)}
-                    alt={p.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-background/80 backdrop-blur text-xs font-semibold text-primary">
-                    {p.category}
-                  </div>
-                </div>
-                <div className="p-6 flex flex-col flex-1">
-                  <h3 className="font-display text-lg font-bold mb-3 group-hover:text-primary transition-colors">
-                    {p.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-4 flex-1">{p.excerpt}</p>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />{" "}
-                      {formatFrenchDate(p.publishedAt ?? p.createdAt)}
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-primary font-semibold">
-                      Lire <ArrowRight className="h-3 w-3" />
-                    </span>
-                  </div>
-                </div>
-              </Card>
-            </Link>
+            <PostCard key={p.slug} post={p} />
           ))}
         </div>
         {pageCount > 1 && (

@@ -271,3 +271,38 @@ html[data-motion] [data-reveal-stagger][data-revealed] > * {
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; }
 }
+
+/* Scènes des documents (components/sections/blog/DocScenes.tsx) ---------- */
+.doc-scene * { transform-box: fill-box; }
+.ds-float { animation: ds-float 4s ease-in-out infinite; }
+.ds-twinkle { transform-origin: center; animation: ds-twinkle 2.4s ease-in-out infinite; }
+.ds-flap-left { transform-origin: right center; animation: ds-flap-left 5s ease-in-out infinite; }
+.ds-flap-right { transform-origin: left center; animation: ds-flap-right 5s ease-in-out infinite; }
+.ds-page { transform-origin: left center; animation: ds-page 4.5s ease-in-out infinite; }
+.ds-check { stroke-dasharray: 20; stroke-dashoffset: 20; animation: ds-draw 4s ease-in-out infinite; }
+.ds-sign { stroke-dasharray: 60; stroke-dashoffset: 60; animation: ds-draw 4s ease-in-out infinite 1s; }
+.ds-line { stroke-dasharray: 160; stroke-dashoffset: 160; animation: ds-draw 4.5s ease-in-out infinite; }
+.ds-pen { transform-origin: left bottom; animation: ds-pen 4s ease-in-out infinite; }
+.ds-bar { transform-origin: bottom; animation: ds-bar 3.6s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+.ds-coin { transform-origin: center; animation: ds-coin 2.2s ease-in-out infinite; }
+.ds-point { transform-origin: left center; animation: ds-point 3s ease-in-out infinite; }
+.ds-delay-1 { animation-delay: 0.35s; }
+.ds-delay-2 { animation-delay: 0.7s; }
+.ds-delay-3 { animation-delay: 1.05s; }
+
+@keyframes ds-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes ds-twinkle { 0%, 100% { opacity: 0.3; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+@keyframes ds-flap-left { 0%, 15%, 85%, 100% { transform: scaleX(1); } 45%, 60% { transform: scaleX(0.15); } }
+@keyframes ds-flap-right { 0%, 15%, 85%, 100% { transform: scaleX(1); } 45%, 60% { transform: scaleX(0.15); } }
+@keyframes ds-page { 0%, 20% { transform: scaleX(1); } 55%, 100% { transform: scaleX(-1); } }
+@keyframes ds-draw { 0%, 15% { stroke-dashoffset: var(--ds-len, 20); } 45%, 85% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: var(--ds-len, 20); } }
+.ds-sign { --ds-len: 60; }
+.ds-line { --ds-len: 160; }
+@keyframes ds-pen { 0%, 100% { transform: translate(0, 0) rotate(0); } 25% { transform: translate(-8px, 18px) rotate(-6deg); } 50% { transform: translate(-30px, 34px) rotate(4deg); } 75% { transform: translate(-14px, 40px) rotate(-4deg); } }
+@keyframes ds-bar { 0% { transform: scaleY(0.15); } 40%, 80% { transform: scaleY(1); } 100% { transform: scaleY(0.15); } }
+@keyframes ds-coin { 0%, 100% { transform: translateY(0) scaleX(1); } 50% { transform: translateY(-10px) scaleX(0.6); } }
+@keyframes ds-point { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-8deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .doc-scene * { animation: none !important; stroke-dashoffset: 0 !important; }
+}
