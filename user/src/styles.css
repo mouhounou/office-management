@@ -306,3 +306,9 @@ html[data-motion] [data-reveal-stagger][data-revealed] > * {
 @media (prefers-reduced-motion: reduce) {
   .doc-scene * { animation: none !important; stroke-dashoffset: 0 !important; }
 }
+.ds-toss { transform-origin: center; animation: ds-toss 3.2s cubic-bezier(0.33, 0, 0.3, 1) infinite; }
+@keyframes ds-toss {
+  0%, 100% { transform: translateY(8px) rotate(0); }
+  45% { transform: translateY(-6px) rotate(-14deg); }
+  60% { transform: translateY(-4px) rotate(10deg); }
+}

@@ -29,6 +29,7 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AProposRouteImport } from './routes/a-propos'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EspaceIndexRouteImport } from './routes/espace.index'
+import { Route as FormationsSlugRouteImport } from './routes/formations_.$slug'
 import { Route as EspaceSecuriteRouteImport } from './routes/espace.securite'
 import { Route as EspaceProfilRouteImport } from './routes/espace.profil'
 import { Route as EspaceNouvelleDemandeRouteImport } from './routes/espace.nouvelle-demande'
@@ -136,6 +137,11 @@ const EspaceIndexRoute = EspaceIndexRouteImport.update({
   path: '/',
   getParentRoute: () => EspaceRoute,
 } as any)
+const FormationsSlugRoute = FormationsSlugRouteImport.update({
+  id: '/formations_/$slug',
+  path: '/formations/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EspaceSecuriteRoute = EspaceSecuriteRouteImport.update({
   id: '/securite',
   path: '/securite',
@@ -191,6 +197,7 @@ export interface FileRoutesByFullPath {
   '/espace/nouvelle-demande': typeof EspaceNouvelleDemandeRoute
   '/espace/profil': typeof EspaceProfilRoute
   '/espace/securite': typeof EspaceSecuriteRoute
+  '/formations/$slug': typeof FormationsSlugRoute
   '/espace/': typeof EspaceIndexRoute
   '/espace/demandes/': typeof EspaceDemandesIndexRoute
   '/espace/demandes/$kind/$id': typeof EspaceDemandesKindIdRoute
@@ -218,6 +225,7 @@ export interface FileRoutesByTo {
   '/espace/nouvelle-demande': typeof EspaceNouvelleDemandeRoute
   '/espace/profil': typeof EspaceProfilRoute
   '/espace/securite': typeof EspaceSecuriteRoute
+  '/formations/$slug': typeof FormationsSlugRoute
   '/espace': typeof EspaceIndexRoute
   '/espace/demandes': typeof EspaceDemandesIndexRoute
   '/espace/demandes/$kind/$id': typeof EspaceDemandesKindIdRoute
@@ -247,6 +255,7 @@ export interface FileRoutesById {
   '/espace/nouvelle-demande': typeof EspaceNouvelleDemandeRoute
   '/espace/profil': typeof EspaceProfilRoute
   '/espace/securite': typeof EspaceSecuriteRoute
+  '/formations_/$slug': typeof FormationsSlugRoute
   '/espace/': typeof EspaceIndexRoute
   '/espace/demandes/': typeof EspaceDemandesIndexRoute
   '/espace/demandes/$kind/$id': typeof EspaceDemandesKindIdRoute
@@ -277,6 +286,7 @@ export interface FileRouteTypes {
     | '/espace/nouvelle-demande'
     | '/espace/profil'
     | '/espace/securite'
+    | '/formations/$slug'
     | '/espace/'
     | '/espace/demandes/'
     | '/espace/demandes/$kind/$id'
@@ -304,6 +314,7 @@ export interface FileRouteTypes {
     | '/espace/nouvelle-demande'
     | '/espace/profil'
     | '/espace/securite'
+    | '/formations/$slug'
     | '/espace'
     | '/espace/demandes'
     | '/espace/demandes/$kind/$id'
@@ -332,6 +343,7 @@ export interface FileRouteTypes {
     | '/espace/nouvelle-demande'
     | '/espace/profil'
     | '/espace/securite'
+    | '/formations_/$slug'
     | '/espace/'
     | '/espace/demandes/'
     | '/espace/demandes/$kind/$id'
@@ -358,6 +370,7 @@ export interface RootRouteChildren {
   ServicesRoute: typeof ServicesRoute
   VerifierEmailRoute: typeof VerifierEmailRoute
   BlogSlugRoute: typeof BlogSlugRoute
+  FormationsSlugRoute: typeof FormationsSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -502,6 +515,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EspaceIndexRouteImport
       parentRoute: typeof EspaceRoute
     }
+    '/formations_/$slug': {
+      id: '/formations_/$slug'
+      path: '/formations/$slug'
+      fullPath: '/formations/$slug'
+      preLoaderRoute: typeof FormationsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/espace/securite': {
       id: '/espace/securite'
       path: '/securite'
@@ -589,6 +609,7 @@ const rootRouteChildren: RootRouteChildren = {
   ServicesRoute: ServicesRoute,
   VerifierEmailRoute: VerifierEmailRoute,
   BlogSlugRoute: BlogSlugRoute,
+  FormationsSlugRoute: FormationsSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -61,6 +61,11 @@ export async function fetchFormations(category?: string): Promise<Formation[]> {
   return data.items;
 }
 
+export async function fetchFormation(slug: string): Promise<Formation> {
+  const { data } = await api.get<{ item: Formation }>(`/formations/${slug}`);
+  return data.item;
+}
+
 export async function fetchPosts(category?: string): Promise<Post[]> {
   const { data } = await api.get<{ items: Post[]; total: number }>("/posts", {
     params: { limit: 100, ...(category && category !== "Tous" ? { category } : {}) },
@@ -89,9 +94,7 @@ export async function fetchSettings(): Promise<SiteSettings> {
  * l'aide affichée dans le back-office.
  */
 export type PostBlock =
-  | { type: "h"; text: string }
-  | { type: "p"; text: string }
-  | { type: "ul"; items: string[] };
+  { type: "h"; text: string } | { type: "p"; text: string } | { type: "ul"; items: string[] };
 
 export function parseContent(content: string): PostBlock[] {
   const blocks: PostBlock[] = [];

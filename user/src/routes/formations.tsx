@@ -5,14 +5,6 @@ import { Button } from "@/components/ui/button";
 import {
   Award,
   CheckCircle2,
-  Users,
-  Calculator,
-  Monitor,
-  ShoppingBag,
-  Truck,
-  ShieldCheck,
-  Languages,
-  Code2,
   Rocket,
   GraduationCap,
   Sparkles,
@@ -22,15 +14,6 @@ import {
   UserCheck,
 } from "lucide-react";
 import sageHero from "@/assets/formation-sage-2.jpg";
-import imgRH from "@/assets/consultant-rh.jpg";
-import imgCompta from "@/assets/formation-sage-1.jpg";
-import imgInfo from "@/assets/formation-sage-2.jpg";
-import imgCommerce from "@/assets/team.jpg";
-import imgLogistique from "@/assets/technical.jpg";
-import imgQHSE from "@/assets/equipe-couloir.jpg";
-import imgLangues from "@/assets/reunion-conseil.jpg";
-import imgDigital from "@/assets/hero.jpg";
-import imgEntrepreneuriat from "@/assets/training.jpg";
 
 import { AcademiesStrip } from "@/components/sections/formations/AcademiesStrip";
 import { CertificationsSection } from "@/components/sections/formations/CertificationsSection";
@@ -38,24 +21,8 @@ import { FormateursSection } from "@/components/sections/formations/FormateursSe
 import { LaureatsSection } from "@/components/sections/formations/LaureatsSection";
 import { RoiCalculator } from "@/components/sections/formations/RoiCalculator";
 import { fetchFormations, type Formation } from "@/lib/content";
-import { formationImage } from "@/lib/content-images";
-
-/**
- * Icône associée à chaque catégorie du catalogue. Les intitulés et programmes
- * sont administrés dans le back-office ; seule l'illustration reste locale.
- */
-const CATEGORY_ICONS: Record<string, typeof Users> = {
-  "Ressources Humaines & Administration": Users,
-  "Comptabilité & Gestion": Calculator,
-  "Informatique & Bureautique": Monitor,
-  "Commerce & Marketing": ShoppingBag,
-  "Logistique & Transit": Truck,
-  "QHSE & Industrie": ShieldCheck,
-  "Langues & Communication": Languages,
-  "Digital & Innovation": Code2,
-  Entrepreneuriat: Rocket,
-  "Formations Techniques": GraduationCap,
-};
+import { FormationCatalogue } from "@/components/formations/FormationCatalogue";
+import { GraduationScene } from "@/components/formations/GraduationScene";
 
 type CategoryGroup = { title: string; items: Formation[] };
 
@@ -215,65 +182,8 @@ function Formations() {
           subtitle="Cinq académies, un même standard d'excellence — et le détail de chaque programme, domaine par domaine."
         />
         <AcademiesStrip />
-        {groups.length === 0 && (
-          <p className="rounded-2xl border border-border bg-card p-6 text-center text-sm text-muted-foreground shadow-card">
-            Le catalogue détaillé est momentanément indisponible.{" "}
-            <Link to="/contact" className="font-medium text-brand-strong">
-              Contactez-nous
-            </Link>{" "}
-            pour connaître les prochaines sessions.
-          </p>
-        )}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {groups.map((cat) => (
-            <Card
-              key={cat.title}
-              className="group gradient-card border-border overflow-hidden hover-lift flex flex-col"
-            >
-              <div className="relative h-44 overflow-hidden">
-                <img
-                  src={formationImage(cat.items[0]?.imageUrl, cat.title)}
-                  alt={cat.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                  width={640}
-                  height={360}
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-background via-background/40 to-transparent" />
-                <div className="absolute top-3 left-3 h-11 w-11 rounded-xl gradient-cyan flex items-center justify-center glow-cyan">
-                  {(() => {
-                    const Icon = CATEGORY_ICONS[cat.title] ?? GraduationCap;
-                    return <Icon className="h-5 w-5 text-primary-foreground" />;
-                  })()}
-                </div>
-                <div className="absolute top-3 right-3 rounded-full bg-background/70 backdrop-blur px-2.5 py-1 text-[11px] font-semibold text-primary">
-                  {cat.items.length} formations
-                </div>
-                <h3 className="absolute bottom-3 left-4 right-4 font-display text-lg font-bold leading-tight">
-                  {cat.title}
-                </h3>
-              </div>
-              <div className="p-6 flex-1 flex flex-col">
-                <ul className="space-y-2 text-sm text-muted-foreground flex-1">
-                  {cat.items.slice(0, 5).map((it) => (
-                    <li key={it.id} className="flex items-start gap-2">
-                      <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> {it.title}
-                    </li>
-                  ))}
-                  {cat.items.length > 5 && (
-                    <li className="text-xs text-primary font-medium pl-6">
-                      + {cat.items.length - 5} autres formations
-                    </li>
-                  )}
-                </ul>
-                <Button asChild size="sm" className="mt-5 gradient-cyan text-primary-foreground">
-                  <Link to="/pre-inscription">
-                    S'inscrire <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </Card>
-          ))}
+        <div className="mt-14">
+          <FormationCatalogue formations={formations} />
         </div>
       </Section>
 
@@ -283,7 +193,10 @@ function Formations() {
           eyebrow="Pourquoi nous choisir"
           title="Des formations pensées pour l'emploi"
         />
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto">
+        <div
+          className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto"
+          data-reveal-stagger
+        >
           {advantages.map((a) => (
             <Card
               key={a.t}
@@ -303,39 +216,53 @@ function Formations() {
       <LaureatsSection />
       <RoiCalculator />
 
-      {/* CTA */}
+      {/* APPEL À L'ACTION */}
       <Section className="pt-0!">
-        <Card className="gradient-card border-primary/30 p-10 md:p-14 text-center relative overflow-hidden">
-          <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 bg-primary/25 blur-3xl rounded-full" />
-          <div className="relative max-w-2xl mx-auto">
-            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-              Prêt à monter en compétences ?
-            </h2>
-            <p className="text-muted-foreground mb-8">
-              Lancez votre pré-inscription en quelques minutes, ou demandez un programme sur mesure
-              pour vos équipes.
-            </p>
-            <div className="flex flex-wrap justify-center gap-3">
-              <Button
-                asChild
-                size="lg"
-                className="gradient-cyan text-primary-foreground font-semibold hover:opacity-90 glow-cyan"
-              >
-                <Link to="/pre-inscription">
-                  Démarrer ma pré-inscription <ArrowRight className="ml-2 h-4 w-4" />
+        <div
+          className="theme-dark relative overflow-hidden rounded-3xl bg-navy-deep px-6 py-10 sm:px-10 md:py-14"
+          data-reveal
+        >
+          <div className="pointer-events-none absolute -top-24 -left-16 h-72 w-72 rounded-full bg-cyan/20 blur-3xl" />
+          <div className="pointer-events-none absolute -right-16 -bottom-24 h-64 w-64 rounded-full border-[20px] border-cyan/15" />
+          <div className="relative grid items-center gap-8 md:grid-cols-[1.4fr_1fr]">
+            <div className="text-center md:text-left">
+              <div className="eyebrow mb-4 justify-center md:justify-start">Prochaine session</div>
+              <h2 className="font-display text-3xl font-bold text-white md:text-4xl">
+                Prêt à monter en <span className="text-gradient-cyan">compétences</span> ?
+              </h2>
+              <p className="mt-3 max-w-xl text-white/70">
+                Pré-inscription en quelques minutes, réponse sous 48 h. Pour vos équipes, nous
+                construisons un programme sur mesure, en présentiel ou en ligne.
+              </p>
+              <ul className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-white/80 md:justify-start">
+                {["Présentiel ou en ligne", "Réponse sous 48 h", "Attestation ou certificat"].map(
+                  (item) => (
+                    <li key={item} className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-cyan-glow" /> {item}
+                    </li>
+                  ),
+                )}
+              </ul>
+              <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
+                <Link
+                  to="/pre-inscription"
+                  className="inline-flex h-12 items-center gap-2 rounded-full gradient-cyan px-6 text-sm font-semibold text-white shadow-lg transition hover:opacity-90"
+                >
+                  Démarrer ma pré-inscription <ArrowRight className="h-4 w-4" />
                 </Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="border-primary/40 hover:bg-primary/10"
-              >
-                <Link to="/contact">Poser une question</Link>
-              </Button>
+                <Link
+                  to="/devis"
+                  className="inline-flex h-12 items-center gap-2 rounded-full border border-white/25 px-6 text-sm font-semibold text-white transition hover:bg-white/10"
+                >
+                  Former mon équipe
+                </Link>
+              </div>
+            </div>
+            <div className="mx-auto h-56 w-full max-w-xs md:h-72 md:max-w-sm">
+              <GraduationScene />
             </div>
           </div>
-        </Card>
+        </div>
       </Section>
     </>
   );
