@@ -239,6 +239,33 @@ html[data-motion] [data-reveal-stagger]:not([data-revealed]) > * {
 html[data-motion] [data-reveal][data-revealed] {
   animation: reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
+/* Variantes : data-reveal="left" / "right" (glisse depuis le côté),
+   data-reveal="line" (trait qui se dessine de haut en bas). */
+@keyframes reveal-left {
+  from { opacity: 0; transform: translateX(-48px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes reveal-right {
+  from { opacity: 0; transform: translateX(48px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes reveal-line {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+html[data-motion] [data-reveal="left"]:not([data-revealed]) { transform: translateX(-48px); }
+html[data-motion] [data-reveal="right"]:not([data-revealed]) { transform: translateX(48px); }
+html[data-motion] [data-reveal="line"]:not([data-revealed]) { opacity: 1; transform: scaleY(0); }
+html[data-motion] [data-reveal="left"][data-revealed] {
+  animation: reveal-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+html[data-motion] [data-reveal="right"][data-revealed] {
+  animation: reveal-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+html[data-motion] [data-reveal="line"][data-revealed] {
+  transform-origin: top;
+  animation: reveal-line 1.6s cubic-bezier(0.65, 0, 0.35, 1) backwards;
+}
 html[data-motion] [data-reveal-stagger][data-revealed] > * {
   animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
   animation-delay: calc(var(--reveal-i, 0) * 90ms);
@@ -312,3 +339,18 @@ html[data-motion] [data-reveal-stagger][data-revealed] > * {
   45% { transform: translateY(-6px) rotate(-14deg); }
   60% { transform: translateY(-4px) rotate(10deg); }
 }
+
+/* Coches de « Pourquoi nous choisir » : elles se dessinent après l'apparition
+   de leur ligne. Sans animation, elles sont simplement visibles. */
+html[data-motion] .why-check { stroke-dasharray: 18; stroke-dashoffset: 18; }
+html[data-motion] [data-reveal-stagger][data-revealed] > * .why-check {
+  animation: why-check 0.5s ease-out forwards;
+  animation-delay: calc(var(--reveal-i, 0) * 90ms + 450ms);
+}
+@keyframes why-check { to { stroke-dashoffset: 0; } }
+
+/* Scène de la salle de classe. */
+.ds-raise { transform-origin: left bottom; animation: ds-raise 3.4s ease-in-out infinite; }
+.ds-pop { transform-origin: center; animation: ds-pop 3.4s ease-in-out infinite; }
+@keyframes ds-raise { 0%, 30%, 100% { transform: rotate(0); } 45%, 80% { transform: rotate(-10deg); } }
+@keyframes ds-pop { 0%, 40%, 100% { opacity: 0; transform: scale(0.4); } 55%, 85% { opacity: 1; transform: scale(1); } }

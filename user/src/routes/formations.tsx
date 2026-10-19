@@ -1,17 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Section, SectionTitle } from "@/components/Section";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   Award,
   CheckCircle2,
-  Rocket,
   GraduationCap,
-  Sparkles,
   ArrowRight,
   BadgeCheck,
   MonitorPlay,
-  UserCheck,
 } from "lucide-react";
 import sageHero from "@/assets/formation-sage-2.jpg";
 
@@ -23,6 +19,7 @@ import { RoiCalculator } from "@/components/sections/formations/RoiCalculator";
 import { fetchFormations, type Formation } from "@/lib/content";
 import { FormationCatalogue } from "@/components/formations/FormationCatalogue";
 import { GraduationScene } from "@/components/formations/GraduationScene";
+import { WhyFormations } from "@/components/formations/WhyFormations";
 
 type CategoryGroup = { title: string; items: Formation[] };
 
@@ -76,15 +73,6 @@ const SECTION_LINKS = [
   { hash: "formateurs", label: "Formateurs" },
   { hash: "laureats", label: "Lauréats" },
   { hash: "roi", label: "Calculateur ROI" },
-];
-
-const advantages = [
-  { icon: BadgeCheck, t: "Formations pratiques et professionnelles" },
-  { icon: UserCheck, t: "Encadrement par des experts" },
-  { icon: Award, t: "Certificats et diplômes reconnus" },
-  { icon: Rocket, t: "Stages et accompagnement professionnel" },
-  { icon: MonitorPlay, t: "Disponibles en présentiel et en ligne" },
-  { icon: Sparkles, t: "Programmes actualisés selon le marché" },
 ];
 
 function Formations() {
@@ -187,29 +175,7 @@ function Formations() {
         </div>
       </Section>
 
-      {/* AVANTAGES */}
-      <Section className="pt-0!">
-        <SectionTitle
-          eyebrow="Pourquoi nous choisir"
-          title="Des formations pensées pour l'emploi"
-        />
-        <div
-          className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto"
-          data-reveal-stagger
-        >
-          {advantages.map((a) => (
-            <Card
-              key={a.t}
-              className="gradient-card border-border p-5 flex items-center gap-4 hover-lift"
-            >
-              <div className="h-11 w-11 rounded-xl gradient-cyan flex items-center justify-center shrink-0">
-                <a.icon className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <span className="text-sm font-medium">{a.t}</span>
-            </Card>
-          ))}
-        </div>
-      </Section>
+      <WhyFormations />
 
       <CertificationsSection />
       <FormateursSection />
